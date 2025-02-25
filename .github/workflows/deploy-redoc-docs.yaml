@@ -17,4 +17,4 @@ jobs:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_dir: swagger-ui
         force_orphan: true
-        exclude_assets: '.github,.gitignore,README.md,make.sh,openapi.json'
+        exclude_assets: '.github,.gitignore,README.md,make.sh'
