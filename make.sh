@@ -2,6 +2,11 @@
 
 set -e  # Exit if a command fails
 
+if [ ! -f "package.json" ]; then
+  echo "Error: package.json not found. Are you in the correct directory?"
+  exit 1
+fi
+
 echo "Installing dependencies..."
 npm install
 
