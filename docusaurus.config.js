@@ -1,7 +1,7 @@
 module.exports = {
-  title: "My API Docs",
-  url: "https://<your-github-username>.github.io",
-  baseUrl: "/<your-repo-name>/",
+  title: "API Documentation",
+  url: "https://smitesh-cfx.github.io",
+  baseUrl: "/api-doc/",
   presets: [
     [
       "classic",
