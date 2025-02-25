@@ -1,4 +1,4 @@
-name: Build docs
+name: Deploy Swagger UI Docs
 on:
   push:
     branches:
@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build docs
+    - name: Build Swagger UI Docs
       run: ./make.sh
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3 # https://github.com/peaceiris/actions-gh-pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        publish_dir: .
+        publish_dir: swagger-ui
         force_orphan: true
-        exclude_assets: '.github,openapi,.redocly.yaml,LICENSE,README.md,make.sh'
-        cname: https://smitesh-cfx.github.io/api-doc
+        exclude_assets: '.github,.gitignore,README.md,make.sh,openapi.json'
