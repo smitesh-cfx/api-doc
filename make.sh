@@ -1,16 +1,6 @@
 #!/bin/bash
-
-echo "Starting build process..."
-
-# Install dependencies
+echo "Setting up Docusaurus"
+npx create-docusaurus@latest api-doc classic
+cd api-doc
 npm install
-
-# Build the Docusaurus site
 npm run build
-
-# Move OpenAPI JSON to static folder (if not already there)
-mkdir -p static
-cp openapi.json static/
-
-# Done
-echo "Build completed successfully!"
