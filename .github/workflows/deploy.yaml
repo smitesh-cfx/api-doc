@@ -18,12 +18,10 @@ jobs:
       with:
         node-version: 18
 
-    - name: Initialize Docusaurus if missing
+    - name: Ensure Docusaurus is installed
       run: |
         if [ ! -f "package.json" ]; then
-          npx create-docusaurus@latest api-doc classic --skip-install
-          mv api-doc/* .
-          rm -rf api-doc
+          npx create-docusaurus@latest . classic --skip-install
         fi
 
     - name: Install dependencies
