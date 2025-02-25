@@ -28,4 +28,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}  # Using the default token for authentication
-        publish_dir: .
+        publish_dir: ./build
