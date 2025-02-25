@@ -1,15 +1,14 @@
 #!/bin/bash
 
-echo "Setting up Docusaurus"
+set -e  # Exit if a command fails
 
-# Check if Docusaurus is already initialized
-if [ ! -f "package.json" ]; then
-  echo "Docusaurus project not found! Make sure it's initialized."
-  exit 1
-fi
-
-# Install dependencies
+echo "Installing dependencies..."
 npm install
 
-# Build the site
+echo "Generating API documentation from OpenAPI JSON..."
+npm run docusaurus openapi:generate
+
+echo "Building Docusaurus site..."
 npm run build
+
+echo "Build complete!"
