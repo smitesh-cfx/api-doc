@@ -3,7 +3,7 @@ name: Deploy Docusaurus
 on:
   push:
     branches:
-      - main  # Change if using a different branch
+      - main  # This is your source branch
 
 jobs:
   build:
@@ -27,5 +27,5 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}  # Using the default token for authentication
+        publish_dir: .
