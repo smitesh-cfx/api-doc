@@ -2,11 +2,8 @@
 
 echo "Setting up Docusaurus"
 
-# Create Docusaurus project in non-interactive mode
-npx create-docusaurus@latest api-doc classic --use npm --skip-install
-
-# Change directory
-cd api-doc || exit
+# Initialize Docusaurus in the current directory
+npx create-docusaurus@latest . classic --skip-install
 
 # Install dependencies
 npm install
