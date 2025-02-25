@@ -3,7 +3,7 @@ name: Deploy API Docs to GitHub Pages
 on:
   push:
     branches:
-      - main  # Update this if using a different branch
+      - main
 
 jobs:
   deploy:
@@ -20,13 +20,17 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Change to Docusaurus directory
+        run: cd api-doc
+
       - name: Run build script
         run: |
           chmod +x make.sh
           ./make.sh
+        working-directory: api-doc
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./api-doc/build
