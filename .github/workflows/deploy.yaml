@@ -18,12 +18,6 @@ jobs:
       with:
         node-version: 18
 
-    - name: Ensure Docusaurus is installed
-      run: |
-        if [ ! -f "package.json" ]; then
-          npx create-docusaurus@latest . classic --skip-install
-        fi
-
     - name: Install dependencies
       run: npm install
 
