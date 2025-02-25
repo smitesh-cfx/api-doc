@@ -1,0 +1,23 @@
+/* Change the font */
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Change the background color */
+.redoc-container {
+    background-color: #f8f9fa; /* Light gray */
+}
+
+/* Customize header text */
+h1, h2, h3 {
+    color: #2c3e50; /* Dark Blue */
+}
+
+/* Change link colors */
+a {
+    color: #007bff; /* Blue */
+}
+
+a:hover {
+    color: #0056b3; /* Darker blue */
+}
