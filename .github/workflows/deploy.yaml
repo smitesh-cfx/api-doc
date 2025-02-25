@@ -1,9 +1,9 @@
-name: Deploy Docusaurus to GitHub Pages
+name: Deploy API Docs to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # Update this if using a different branch
 
 jobs:
   deploy:
