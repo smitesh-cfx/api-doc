@@ -2,8 +2,11 @@
 
 echo "Setting up Docusaurus"
 
-# Initialize Docusaurus in the current directory
-npx create-docusaurus@latest . classic --skip-install
+# Check if Docusaurus is already initialized
+if [ ! -f "package.json" ]; then
+  echo "Docusaurus project not found, initializing..."
+  npx create-docusaurus@latest . classic --skip-install
+fi
 
 # Install dependencies
 npm install
