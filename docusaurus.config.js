@@ -1,13 +1,14 @@
 module.exports = {
   title: 'API Documentation',
   tagline: 'API docs using Docusaurus',
-  url: 'https://your-github-username.github.io',
-  baseUrl: '/api-docs/', // Adjust this for GitHub Pages
+  url: 'https://smitesh-cfx.github.io', // Change to your GitHub Pages URL
+  baseUrl: '/api-docs/', // Ensure this matches your GitHub repo name
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'your-github-username',
-  projectName: 'api-docs',
+  organizationName: 'smitesh-cfx', // Your GitHub username
+  projectName: 'api-docs', // Your repo name
+
   presets: [
     [
       'classic',
@@ -19,13 +20,7 @@ module.exports = {
       },
     ],
   ],
-  plugins: [
-    [
-      'docusaurus-plugin-redoc',
-      {
-        spec: 'static/openapi.json',
-        route: '/api-docs',
-      },
-    ],
-  ],
+  
+  // ✅ Remove Redoc if you want Swagger UI
+  plugins: [],
 };
