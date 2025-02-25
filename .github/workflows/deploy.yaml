@@ -3,10 +3,7 @@ name: Deploy Docusaurus
 on:
   push:
     branches:
-      - main  # Trigger deployment when changes are pushed to main
-
-permissions:
-  contents: write  # Required for GitHub Actions to push to gh-pages
+      - main
 
 jobs:
   build:
@@ -21,18 +18,14 @@ jobs:
       with:
         node-version: 18
 
-    - name: Install dependencies
-      run: npm install  # Ensure all dependencies are installed
-
     - name: Ensure make.sh is executable
       run: chmod +x make.sh
 
     - name: Run build script
-      run: ./make.sh  # This should execute Docusaurus build
+      run: ./make.sh
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}  # Uses GitHub's built-in token
-        publish_branch: gh-pages  # Deploy to gh-pages branch
-        publish_dir: ./build  # Docusaurus generates output in 'build' folder
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./api-doc/build
