@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_gw_log_archival_updates",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking gateway log archival operations including event_type (destination-copy), original_bytes, compressed_bytes, severity, and archival status",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-4fe54247-rda_system_gw_log_archival_updates"
+}

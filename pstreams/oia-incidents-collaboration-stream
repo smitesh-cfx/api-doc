@@ -1,0 +1,23 @@
+{
+  "name": "oia-incidents-collaboration-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "messageid"
+    ],
+    "_mappings": {
+      "properties": {
+        "createdat": {
+          "type": "date"
+        },
+        "updatedat": {
+          "type": "date"
+        }
+      }
+    },
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-23f2f83a-oia-incidents-collaboration-stream"
+}

@@ -1,0 +1,195 @@
+{
+  "name": "aiops-org-configuration-app",
+  "description": "AIOps Organization Configuration",
+  "label": "AIOps Organization Configuration",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "version": "25.2.7.1",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "template_variables": {
+    "USER_PROJECTS": {
+      "contextId": "USER_PROJECTS"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Organizations",
+      "widgets": [
+        {
+          "title": "Organizations",
+          "widget_type": "tabular",
+          "stream": "rda_system_organizations",
+          "remote_searchable": true,
+          "ts_column": "createdAt",
+          "duration_hours": 8760000,
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "extra_filter": "projectId in {{USER_PROJECTS}}",
+          "columns": {
+            "customerName": {
+              "title": "Customer Name",
+              "key": true
+            },
+            "tag1": {
+              "title": "Customer Tag1",
+              "visible": false,
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "key": true,
+              "hidden": true
+            },
+            "customerId": {
+              "title": "customerId",
+              "key": true,
+              "visible": false
+            },
+            "projectId": {
+              "title": "projectId",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "customerTag",
+              "label": "Customer Tag",
+              "expr": "str(tag1)",
+              "visible": true,
+              "key": true
+            },
+            {
+              "id": "customerDescription",
+              "label": "Customer Description",
+              "expr": "str(description)",
+              "visible": false,
+              "key": true
+            }
+          ],
+          "actions": [
+            {
+              "appName": "user-dashboard/correlation-suppression-policies-configuration",
+              "permission": "rda:page:view",
+              "identifier": "corr_supp_policies_configuration",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Configure",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customerName",
+                    "paramId": "customerName"
+                  },
+                  {
+                    "paramKey": "projectId",
+                    "paramId": "project_id"
+                  },
+                  {
+                    "paramKey": "customerTag",
+                    "paramId": "customer_tag"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "corr_supp_policies_configuration"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Organizations",
+      "widgets": [
+        {
+          "title": "Organizations",
+          "widget_type": "tabular",
+          "stream": "rda_system_organizations",
+          "remote_searchable": true,
+          "ts_column": "createdAt",
+          "duration_hours": 8760000,
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "extra_filter": "projectId in {{USER_PROJECTS}}",
+          "columns": {
+            "customerName": {
+              "title": "Customer Name",
+              "key": true
+            },
+            "tag1": {
+              "title": "Customer Tag1",
+              "visible": false,
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "key": true,
+              "hidden": true
+            },
+            "customerId": {
+              "title": "customerId",
+              "key": true,
+              "visible": false
+            },
+            "projectId": {
+              "title": "projectId",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "customerTag",
+              "label": "Customer Tag",
+              "expr": "str(tag1)",
+              "visible": true,
+              "key": true
+            },
+            {
+              "id": "customerDescription",
+              "label": "Customer Description",
+              "expr": "str(description)",
+              "visible": false,
+              "key": true
+            }
+          ],
+          "actions": [
+            {
+              "appName": "user-dashboard/correlation-suppression-policies-configuration",
+              "permission": "rda:page:view",
+              "identifier": "corr_supp_policies_configuration",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Configure",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customerName",
+                    "paramId": "customerName"
+                  },
+                  {
+                    "paramKey": "projectId",
+                    "paramId": "project_id"
+                  },
+                  {
+                    "paramKey": "customerTag",
+                    "paramId": "customer_tag"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "corr_supp_policies_configuration"
+        }
+      ]
+    }
+  ]
+}

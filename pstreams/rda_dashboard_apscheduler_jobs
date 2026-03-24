@@ -1,0 +1,12 @@
+{
+  "name": "rda_dashboard_apscheduler_jobs",
+  "datastore_type": "SQL",
+  "read_only": true,
+  "attrs": {
+    "system_defined": "yes"
+  },
+  "status": "Read Only",
+  "description": "System-defined SQL-based persistent stream storing dashboard APScheduler job scheduling records from PostgreSQL database including job_id, next_run_time, job_state, and schedule configuration",
+  "database_name": "1aef62f5872d416a8dd237483bfa58c9_scheduling",
+  "table_name": "dashboard_apscheduler_view_jobs"
+}

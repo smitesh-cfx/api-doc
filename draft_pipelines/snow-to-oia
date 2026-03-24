@@ -1,0 +1,208 @@
+
+ ## snow-to-oia
+@c:new-block
+ --> @exec:get-input
+ ## sourceName
+
+ --> *dm:filter (u_cfx_source == 'Alert Group')
+ --> @dm:skip-pipeline-if-shape row_count = 0
+ --> @dm:add-missing-columns columns = 'sourceName,payload,u_cfx_source'
+ --> @dm:eval sourceName="sourceName if sourceName else u_cfx_source"
+ --> @dm:save name="temp-input-data"
+ ## prepare empty-datasets to avoid runtime errors. some datasets are prepared based on conditional filters
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:save name="temp-input-payload"
+ --> @dm:save name="temp-input-teamincident"
+ --> @dm:save name="temp-teamincidents"
+ --> @dm:save name="temp-input-teamincident-irm"
+ ## Prepare all required fields
+
+ --> @c:new-block
+ --> @dm:recall name="temp-input-data"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:add-missing-columns columns = 'priority,severity,urgency,state,impact,number,work_notes'
+ ## --> @dm:explode-json column = 'payload' & prefix_parent_key="yes"
+
+ ## Sometime, we are not seeing payload from the input
+
+ --> @dm:copy-columns to="payload_comments" & from="comments"
+ --> @dm:copy-columns to="payload_comments_and_work_notes" & from="comments_and_work_notes"
+ --> @dm:copy-columns to="payload_number" & from="number"
+ --> @dm:copy-columns to="payload_work_notes" & from="work_notes"
+ --> @dm:copy-columns to="payload_state" & from="state"
+ --> @dm:copy-columns to="payload_impact" & from="impact"
+ --> @dm:copy-columns to="payload_priority" & from="priority"
+ --> @dm:copy-columns to="payload_severity" & from="severity"
+ --> @dm:copy-columns to="payload_urgency" & from="urgency"
+ --> @dm:copy-columns to="payload_close_notes" & from="close_notes"
+ --> @dm:copy-columns to="payload_closed_at" & from="closed_at"
+ --> @dm:copy-columns to="payload_closed_by" & from="closed_by"
+ --> @dm:copy-columns to="payload_sys_updated_by" & from="sys_updated_by"
+ --> @dm:copy-columns to="payload_resolved_at" & from="resolved_at"
+ --> @dm:copy-columns to="payload_sys_updated_on" & from="sys_updated_on"
+ --> @dm:copy-columns to="payload_resolved_by" & from="resolved_by"
+ --> @dm:copy-columns to="payload_close_code" & from="close_code"
+ --> @dm:selectcolumns include="payload|close|resolved|sys|urgency|severity|priority|impact|state|work|number|source"
+ --> @dm:save name="temp-input-data"
+ ## Apply filters on Input-Data
+
+ --> @c:new-block
+ --> @dm:recall name="temp-input-data"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:check-columns must_contain="payload_number" & action="skip-block"
+ ## Any extra filter like Company etc...apply here to further narrow down
+
+ ## To AVOID Update-LOOP, lets check work_notes and look for [code] in it. This means, this update is triggered by CFX and Snow is looping it back.
+
+ --> *dm:filter payload_work_notes is null or (payload_work_notes == '' or payload_work_notes not contains 'code')
+ ## We need to differentiate between Snow initiated ones and CFX ones.
+
+ --> @dm:to_type columns = 'payload_state,payload_impact,payload_priority,payload_severity,payload_urgency' & type  = 'int'
+ ## Resolved or Closed or Cancelled
+
+ --> *dm:filter payload_number != '' and (payload_state > 5)
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'Source Data'" & stage="'Webhook Data'" & status_comments="'Ticket ' + payload_number + ', State:' + str(payload_state)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Revisit HACK TODO    ## Pick Latest Record per each Incident/Ticket
+
+ --> @dm:dedup columns="payload_number" & keep="last"
+ --> @dm:save name="temp-input-payload"
+ --> @dm:save name="sto-input-payload"
+ ## Get the mapping CFX number for the external-ticket
+
+ --> @c:data-loop dataset="temp-input-payload" & columns="payload_number,sys_id"
+ --> @dm:empty
+ --> @dm:addrow name="oia-incidents-external-tickets-stream" & max_rows="10"
+ ## Columns: | team_id | customer_id | project_id  | incident_id  | collab_type | ticket_number | shared_time | ticket_id  | link |
+
+ --> #dm:query-persistent-stream ticket_number is '$payload_number' & collab_type is 'ServiceNow' & ticket_id is '$sys_id'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:check-columns must_contain="ticket_number" & action="skip-block"
+ --> *dm:filter ticket_number is not null and incident_id is not null
+ ## helps in join. Unique for every record received
+
+ --> @dm:save name="temp-teamincidents" & append="yes"
+ ## Enrich InputData with TeamIncident
+
+ --> @c:new-block
+ --> @dm:recall name="temp-teamincidents"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Revisit HACK TODO Why dups are coming
+
+ --> @dm:dedup columns="ticket_number" & keep="last"
+ --> @dm:save name="temp-teamincidents"
+ --> @dm:save name="sto-teamincidents"
+ --> @dm:recall name="temp-input-payload"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:enrich dict='temp-teamincidents' & dict_key_cols='ticket_number' & src_key_cols='payload_number' & enrich_cols='incident_id,project_id,ticket_id,team_id,team_name,collab_type,customer_id'
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'External-To-CFX'" & stage="'External-to-CFX Mapping'" & status_comments="'External:' + ticket_number + ',CFX:' + incident_id + ',Team:' + team_name" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## InputData + TeamIncident
+
+ --> @dm:save name="temp-input-teamincident"
+ --> @dm:save name="sto-input-teamincident"
+ ## Get the CFX IRM Record
+
+ --> @c:data-loop dataset="temp-input-teamincident" & columns="project_id,incident_id,ticket_number,ticket_id"
+ ## get latest IRM record for this incident
+
+ --> @dm:empty
+ ## Change-Here: Enter corresponding db name. make sure we have mysql bot
+
+ --> @dm:addrow table="incident" & dbname="4f0e13b909c44cd8b503962c22029ffb_cfxdimensions_app_irm_service"
+ --> #mysql:read incidentId is '$incident_id' & roomId is '$project_id'
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Returns: incidentid, roomid, customerid, priority, state, resolved_user, resolved_at, resolution_code, closed_user, closed_at, sourceKey
+
+ --> @dm:check-columns must_contain="incidentid" & action="skip-block"
+ --> @dm:selectcolumns include="incident|room|customer|project|resolved|resolution_code|closed|state|source|priority"
+ --> @dm:rename-columns irm_closed_at = "closed_at"
+ --> @dm:rename-columns irm_closed_user = "closed_user"
+ --> @dm:rename-columns irm_resolved_user = "resolved_user"
+ --> @dm:rename-columns irm_resolved_at = "resolved_at"
+ --> @dm:rename-columns irm_priority = "priority"
+ --> @dm:rename-columns irm_state = "state"
+ --> @dm:rename-columns irm_resolution_code = "resolution_code"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'IRM-CFXIncident'" & stage="'IRM-CFXIncident'" & status_comments="'External:$ticket_number' + ',CFX:' + incidentid + ',State:' + irm_state" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## PAYLOAD + TeamIncident + IRM - on a single record
+
+ --> @dm:save name="temp-irm-record"
+ --> @dm:recall name="temp-input-teamincident"
+ --> @dm:enrich dict='temp-irm-record' & src_key_cols='project_id,incident_id' & dict_key_cols='roomid,incidentid' & enrich_cols='customerid,irm_resolved_user,irm_resolved_at,irm_resolution_code,irm_closed_user,irm_closed_at,irm_state,source,sourceKey,irm_priority'
+ ## InputData + TeamIncident + IRM Record
+
+ --> @dm:save name="temp-input-teamincident-irm" & append="yes"
+ --> @c:new-block
+ --> @dm:recall name="temp-input-teamincident-irm"
+ ## revisit HACK TODO
+
+ --> @dm:dedup columns="ticket_number" & keep="last"
+ --> @dm:save name="temp-input-teamincident-irm"
+ ## Lets update AlertProc & IRM record
+
+ --> @c:data-loop dataset="temp-input-teamincident-irm" & columns="project_id,incident_id,ticket_number,ticket_id,sourceKey"
+ --> @dm:recall name="temp-input-teamincident-irm"
+ --> *dm:filter project_id='$project_id' and incident_id='$incident_id' and ticket_number='$ticket_number'
+ ## External to CFX Mapping
+
+ --> @dm:to_type columns = 'payload_state,payload_impact,payload_priority,payload_severity,payload_urgency' & type  = 'int'
+ --> @dm:eval payload_state_str="'Open' if (payload_state == 1) else ('In Progress' if (payload_state == 2) else ('On Hold' if (payload_state == 3) else ('Resolved' if (payload_state == 6) else ('Closed' if (payload_state == 7) else ('Canceled' if (payload_state == 8) else 'Open')))))"
+ --> @dm:copy-columns to="state" & from="payload_state_str"
+ --> @dm:eval resolved_user = "payload_resolved_by if (payload_state_str == 'Resolved' and payload_resolved_by != '') else ( payload_sys_updated_by if (payload_state_str == 'Resolved') else irm_resolved_user)"
+ --> @dm:copy-columns to="resolved_by" & from="resolved_user"
+ --> @dm:eval resolved_at = "payload_resolved_at if (payload_state_str == 'Resolved' and payload_resolved_at != '') else ( payload_sys_updated_on if (payload_state_str == 'Resolved') else irm_resolved_at)"
+ --> @dm:change-time-format columns="resolved_at" & from_format="datetimestr" & to_format="ms"
+ --> @dm:eval closed_user = "payload_closed_by if (payload_state_str == 'Closed' and payload_closed_by != '') else ( payload_sys_updated_by if (payload_state_str == 'Closed') else irm_closed_user)"
+ --> @dm:eval closed_at = "payload_closed_at if (payload_state_str == 'Closed' and payload_closed_at != '') else ( payload_sys_updated_on if (payload_state_str == 'Closed') else irm_closed_at)"
+ --> @dm:change-time-format columns="closed_at" & from_format="datetimestr" & to_format="ms"
+ --> @dm:eval comments="payload_close_notes if (payload_close_notes != '' and (payload_state_str == 'Resolved' or payload_state_str == 'Closed')) else payload_comments"
+ --> @dm:eval resolution_code="payload_close_code if (payload_close_code != '' and (payload_state_str == 'Resolved' or payload_state_str == 'Closed')) else irm_resolution_code"
+ --> @dm:eval priority="'1 - Critical' if (payload_priority == 1) else ('2 - High' if (payload_priority == 2) else ('3 - Moderate' if (payload_priority == 3) else ('4 - Low' if (payload_priority == 4) else (priority))))"
+ ## Ready for IRM update.
+
+ --> @dm:save name="temp-irm-ready"
+ ## Update the Corresponding Alerts
+
+ --> @dm:copy-columns to="alertid" & from="sourceKey"
+ --> @agent:agent-alertproc:alertprocagent:clearAlerts alert_id="alertid" and cleared_notes="comments" and cleared_by="resolved_user"
+ --> @dm:eval incidentid="'$incident_id'"
+ --> @dm:eval projectid="'$project_id'"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'AlertProc-Clear-Alerts'" & stage="'AlertProc-Clear'" & status_comments="'External:$ticket_number' + ',CFX:$incident_id' + ',SourceKey:$sourceKey'" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## If you want to update any more - add here.
+
+ --> @dm:recall name="temp-irm-ready"
+ --> @dm:selectcolumns include="roomid|incidentid|state|resolved|priority|comments|resolution_code"
+ --> @agent:agent-irm:irmagent:updateIncidents
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'IRM Updated'" & stage="'Updated Record'" & status_comments="'External:$ticket_number' + ',CFX:' + incidentid + ',State:' + state + ',Priority:' + priority" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Notify Collab
+
+ --> @dm:recall name="temp-irm-ready"
+ --> @dm:copy-columns to="projectId" & from="project_id"
+ --> @dm:copy-columns to="source_system" & from="sourceName"
+ --> @dm:eval notification_subject="'Successfully updated Incident ' + incident_id"
+ --> @dm:eval notification_message="'Successfully updated Incident ' + incident_id"
+ --> @dm:eval summary="'Successfully Updated Incident ' + incident_id + ' with updates from External Ticket $ticket_number, System:' + sourceName"
+ --> @dm:map to="creator" & func="fixed" & value="RDA"
+ --> @dm:copy-columns to="notification_message" & from="summary"
+ --> @dm:selectcolumns include="notification_message|customerid|roomid|projectId|incidentid|summary|creator|notification_subject"
+ --> @rn:write-stream compression="auto" & name="oia-incident-collab-message-stream"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'snow-to-oia'" & step="'Collab Notified'" & stage="'Collab Notified'" & status_comments="'Incident:$incident_id. External:$ticket_number' " & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"

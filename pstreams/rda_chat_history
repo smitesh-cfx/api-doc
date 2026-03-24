@@ -1,0 +1,11 @@
+{
+  "name": "rda_chat_history",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 31,
+    "search_case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f4ec6549-rda_chat_history"
+}

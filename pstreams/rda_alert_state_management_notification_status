@@ -1,0 +1,12 @@
+{
+  "name": "rda_alert_state_management_notification_status",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking alert notification delivery status including notification method, recipient, delivery status, delivery timestamp, and failure reasons",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-83fc2518-rda_alert_state_management_notification_status"
+}

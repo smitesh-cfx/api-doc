@@ -1,0 +1,11 @@
+folder: System
+name: delete_expired_schedules
+description: test pipeline
+data_path: pipelines/data/delete_expired_schedules/2024_07_26_1/data.json
+usecase: ''
+category: ''
+sources: {}
+artifacts: []
+version: '2024_07_26_1'
+file_type: json
+checksum: 43cfc756

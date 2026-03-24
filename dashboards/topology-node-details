@@ -1,0 +1,51 @@
+{
+  "name": "topology-node-details",
+  "label": "Node Details for Topology",
+  "live_edit": false,
+  "description": "Node Details for Topology ",
+  "version": "25.6.20",
+  "enabled": true,
+  "exportable": false,
+  "dashboard_style": "auto",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Node Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Summary",
+          "widget_type": "portal_summary",
+          "reportId": "rda.saas.topology.node_details.report",
+          "show_display_attributes": true,
+          "max_width": 4,
+          "height": 5,
+          "min_width": 4,
+          "widget_id": "182229d8"
+        }
+      ]
+    }
+  ],
+  "dashboard_type": "dashboard",
+  "pstream_dashboards": [
+    {
+      "title": "Node Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Summary",
+          "widget_type": "portal_summary",
+          "reportId": "rda.saas.topology.node_details.report",
+          "show_display_attributes": true,
+          "max_width": 4,
+          "height": 5,
+          "min_width": 4,
+          "widget_id": "182229d8"
+        }
+      ]
+    }
+  ]
+}

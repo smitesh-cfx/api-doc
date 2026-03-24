@@ -1,0 +1,11 @@
+folder: Default
+name: file_upload_incidents_clustering
+description: ''
+data_path: draft-pipelines/data/file_upload_incidents_clustering/2026_03_18_1/data.json
+usecase: ''
+category: null
+sources: []
+artifacts: []
+version: '2026_03_18_1'
+file_type: json
+checksum: 9ae5f0d7

@@ -1,0 +1,11 @@
+{
+  "name": "oia-external-tickets-debug",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "case_insensitive": true,
+    "retention_days": "1"
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-a4017d7b-oia-external-tickets-debug"
+}

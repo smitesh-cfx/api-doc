@@ -1,0 +1,19 @@
+{
+  "name": "ml-regression-seasonality",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "experimentName",
+      "jobName",
+      "versionName",
+      "pipelineType",
+      "seasonality",
+      "timestamp"
+    ],
+    "retention_days": 365,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-011e736c-ml-regression-seasonality"
+}

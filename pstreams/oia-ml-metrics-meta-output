@@ -1,0 +1,31 @@
+{
+  "name": "oia-ml-metrics-meta-output",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "asset_id",
+      "metric_id",
+      "timestamp"
+    ],
+    "drop_columns": [],
+    "_mappings": {
+      "properties": {
+        "metric_timestamp": {
+          "type": "date"
+        },
+        "value": {
+          "type": "double"
+        },
+        "anomaly_score": {
+          "type": "double"
+        }
+      }
+    },
+    "default_values": {},
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-14adf596-oia-ml-metrics-meta-output"
+}

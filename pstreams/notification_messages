@@ -1,0 +1,13 @@
+{
+  "name": "notification_messages",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "case_insensitive": true,
+    "unique_keys": [
+      "notification_id"
+    ]
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-5a7f6c6b-notification_messages"
+}

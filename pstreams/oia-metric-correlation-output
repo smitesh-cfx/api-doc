@@ -1,0 +1,13 @@
+{
+  "name": "oia-metric-correlation-output",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "drop_columns": [],
+    "default_values": {},
+    "retention_days": 7,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-2a1da552-oia-metric-correlation-output"
+}

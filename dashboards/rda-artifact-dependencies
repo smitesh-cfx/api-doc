@@ -1,0 +1,188 @@
+{
+  "name": "rda-artifact-dependencies",
+  "label": "Artifact Dependencies",
+  "description": "RDA Artifact Dependencies",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "stream": "rda_artifact_dependencies",
+  "dashboard_filters": {
+    "time_filter": false,
+    "group_filters": [
+      {
+        "stream": "rda_artifact_dependencies",
+        "title": "To Type",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "to_artifact_type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "rda_artifact_dependencies",
+        "title": "To Artifact",
+        "duration_hours": 87600,
+        "limit": 200,
+        "group_by": [
+          "to_artifact_name"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "rda_artifact_dependencies",
+        "title": "From Type",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "from_artifact_type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "rda_artifact_dependencies",
+        "title": "From Artifact",
+        "duration_hours": 87600,
+        "limit": 200,
+        "group_by": [
+          "from_artifact_name"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ],
+    "columns_filter": [
+      {
+        "id": "to_artifact_type",
+        "label": "To Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "to_artifact_name",
+        "label": "To Artifact",
+        "type": "TEXT"
+      },
+      {
+        "id": "from_artifact_type",
+        "label": "From Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "from_artifact_name",
+        "label": "From Artifact",
+        "type": "TEXT"
+      },
+      {
+        "id": "_RDA_Id",
+        "label": "_RDA_ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "count_",
+        "label": "Count_",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Artifact Dependencies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Artifact Dependencies",
+          "widget_type": "tabular",
+          "stream": "rda_artifact_dependencies",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "to_artifact_type",
+            "to_artifact_name",
+            "from_artifact_type",
+            "from_artifact_name"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "from_artifact_type": {
+              "title": "From Type"
+            },
+            "from_artifact_name": {
+              "title": "From Artifact"
+            },
+            "to_artifact_type": {
+              "title": "To Type"
+            },
+            "to_artifact_name": {
+              "title": "To Artifact"
+            }
+          },
+          "actions": [],
+          "widget_id": "01dc3a55"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Artifact Dependencies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Artifact Dependencies",
+          "widget_type": "tabular",
+          "stream": "rda_artifact_dependencies",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "to_artifact_type",
+            "to_artifact_name",
+            "from_artifact_type",
+            "from_artifact_name"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "from_artifact_type": {
+              "title": "From Type"
+            },
+            "from_artifact_name": {
+              "title": "From Artifact"
+            },
+            "to_artifact_type": {
+              "title": "To Type"
+            },
+            "to_artifact_name": {
+              "title": "To Artifact"
+            }
+          },
+          "actions": [],
+          "widget_id": "01dc3a55"
+        }
+      ]
+    }
+  ]
+}

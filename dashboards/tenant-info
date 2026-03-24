@@ -1,0 +1,45 @@
+{
+  "name": "tenant-info",
+  "description": "MSP Info",
+  "label": "MSP Info",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "template_variables": null,
+  "version": "23.2.7.1",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Information",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "MSP Details",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.details.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "1e85b253"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Information",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "MSP Details",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.details.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "1e85b253"
+        }
+      ]
+    }
+  ]
+}

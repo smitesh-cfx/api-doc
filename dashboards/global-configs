@@ -1,0 +1,68 @@
+{
+  "name": "global-configs",
+  "label": "Configurations",
+  "description": "Configurations",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "exportable": false,
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Configurations",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Configs",
+          "widget_type": "tabular",
+          "api-endpoint": {
+            "service-name": "cfx-app-controller",
+            "namespace": "io.cfx.dimensions.app",
+            "methodName": "invokeAppApi:getGlobalConfigsData",
+            "version": "*",
+            "useReportContext": true,
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {},
+                "filters": []
+              }
+            ]
+          },
+          "widget_id": "bae3b366"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Configurations",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Configs",
+          "widget_type": "tabular",
+          "api-endpoint": {
+            "service-name": "cfx-app-controller",
+            "namespace": "io.cfx.dimensions.app",
+            "methodName": "invokeAppApi:getGlobalConfigsData",
+            "version": "*",
+            "useReportContext": true,
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {},
+                "filters": []
+              }
+            ]
+          },
+          "widget_id": "bae3b366"
+        }
+      ]
+    }
+  ]
+}

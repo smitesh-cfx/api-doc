@@ -1,0 +1,15 @@
+{
+  "name": "llm_model_costs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "llm_name"
+    ],
+    "system_defined": "no",
+    "retention_days": 60
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-2a41da6e-llm_model_costs"
+}

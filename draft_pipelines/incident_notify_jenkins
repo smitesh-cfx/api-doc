@@ -1,0 +1,27 @@
+
+ ## Name: incident_notify_jenkins
+@dm:empty
+ --> @agent:agent-irm:irmagent:getIncidentDetails roomId='$ROOM_ID' and incidentId='$INCIDENT_ID'
+ --> @dm:map to="jenkins_job" & func="fixed" & value="$jenkins_job"
+ --> @dm:map to="alertid" & func="fixed" & value="$alert_id"
+ --> @dm:map to="incident_url" & func="fixed" & value="$incident_url"
+ --> @dm:map to="jenkins_fields_usr" & func="fixed" & value="$jenkins_fields_usr"
+ --> @dm:map to="jenkins_fields_tkn" & func="fixed" & value="$jenkins_fields_tkn"
+ --> @dm:save name='temp-incident_details'
+ --> *dm:filter jenkins_job is not None
+ --> @dm:skip-pipeline-if-shape row_count = 0
+ --> @dm:eval jenkins_job = "jenkins_job.replace('\'',chr(34))"
+ --> @dm:eval jenkins_fields_url = "json_loads(jenkins_job)['job_url']"
+ --> *dm:filter jenkins_fields_url is not None
+ --> @dm:skip-pipeline-if-shape row_count = 0
+ --> @dm:eval jenkins_fields_params = "json_dumps(json_loads(jenkins_job)['params'])"
+ --> @dm:map to="pipeline_name" & func="fixed" & value="incident_notify_jenkins"
+ --> @dm:save name="temp-jenkins-fields"
+ --> @c:data-loop dataset= "temp-jenkins-fields" & columns = "jenkins_fields_url,jenkins_fields_tkn,jenkins_fields_usr,incidentid,jenkins_fields_params,customerid,roomid,summary,createdby"
+ --> @dm:empty
+ --> @dm:addrow customerid="$customerid" & roomid="$roomid" & incidentid="$incidentid"  & creator="$createdby"
+ --> @restclient:write method = 'post' and url = '$jenkins_fields_url' and username='$jenkins_fields_usr' and password='$jenkins_fields_tkn' and encoding='json' and envelope='json=$jenkins_fields_params'
+ --> @dm:eval notification_message="'Incident $incidentid shared with $jenkins_fields_url successfully'"
+ --> @dm:map to="notification_subject" & func="fixed" & value="Notification Message from Jenkins-RDAPipeline"
+ --> @rn:write-stream name="oia-incident-collab-message-stream"
+ --> @dm:map to="pipeline_name" & func="fixed" & value="incident_notify_jenkins"

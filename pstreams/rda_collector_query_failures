@@ -1,0 +1,13 @@
+{
+  "name": "rda_collector_query_failures",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "flatten_json": false,
+    "flatten_object_with_dot_notation": true
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream logging collector query execution failures including query strings, error messages, stream names, and failure timestamps for query debugging",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-11b065b3-rda_collector_query_failures"
+}

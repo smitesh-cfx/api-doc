@@ -1,0 +1,184 @@
+{
+  "name": "rda-packs-customer-list",
+  "label": "Customer List RDA Packs",
+  "description": "RDA Packs: Customer List",
+  "dashboard_folder": "System",
+  "enabled": false,
+  "stream": "rda_system_organizations",
+  "extra_filter": "customerName is not 'cfx_rda_quarantine'",
+  "dashboard_type": "dashboard",
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "Last 12 months"
+    ],
+    "columns_filter": [
+      {
+        "id": "customerName",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "tag1",
+        "label": "Tag",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "RDA Packs Customer List",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Customer List",
+          "widget_type": "tabular",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "customerName",
+            "tag1",
+            "customerId"
+          ],
+          "sorting": [
+            {
+              "createdAt": "desc"
+            }
+          ],
+          "ts_column": "createdAt",
+          "paginated": true,
+          "height": 10,
+          "max_width": 12,
+          "min_width": 12,
+          "stream": "rda_system_organizations",
+          "extra_filter": "customerName is not 'cfx_rda_quarantine'",
+          "columns": {
+            "customerName": {
+              "title": "Name",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            },
+            "tag1": {
+              "title": "Tag",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            },
+            "customerId": {
+              "title": "Customer ID",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-customer-all",
+              "drillDownLinkField": "customerName",
+              "identifier": "launch.dashboard.view-pack-detail",
+              "selectionType": "SINGLE",
+              "title": "Manage",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "tag1",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "tag1",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customerId",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "type": "GO_TO_APP_STATE"
+            }
+          ],
+          "widget_id": "c863bafb"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "RDA Packs Customer List",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Customer List",
+          "widget_type": "tabular",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "customerName",
+            "tag1",
+            "customerId"
+          ],
+          "sorting": [
+            {
+              "createdAt": "desc"
+            }
+          ],
+          "ts_column": "createdAt",
+          "paginated": true,
+          "height": 10,
+          "max_width": 12,
+          "min_width": 12,
+          "stream": "rda_system_organizations",
+          "extra_filter": "customerName is not 'cfx_rda_quarantine'",
+          "columns": {
+            "customerName": {
+              "title": "Name",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            },
+            "tag1": {
+              "title": "Tag",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            },
+            "customerId": {
+              "title": "Customer ID",
+              "type": "TEXT",
+              "key": true,
+              "hidden": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-customer-all",
+              "drillDownLinkField": "customerName",
+              "identifier": "launch.dashboard.view-pack-detail",
+              "selectionType": "SINGLE",
+              "title": "Manage",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "tag1",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "tag1",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customerId",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "type": "GO_TO_APP_STATE"
+            }
+          ],
+          "widget_id": "c863bafb"
+        }
+      ]
+    }
+  ]
+}

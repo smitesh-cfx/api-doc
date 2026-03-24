@@ -1,0 +1,911 @@
+{
+  "name": "user_activity_trend",
+  "label": "User Activity Trend",
+  "description": "User Activity: Insights",
+  "dashboard_folder": "System",
+  "version": "1.0.0",
+  "enabled": false,
+  "stream": "rda_system_audit_logs",
+  "dashboard_type": "template",
+  "live_edit": true,
+  "template_variables": {
+    "NOW": {
+      "contextId": [
+        "NOW"
+      ]
+    },
+    "DAY_1_AGO": {
+      "contextId": [
+        "DAY_1_AGO"
+      ]
+    },
+    "DAY_2_AGO": {
+      "contextId": [
+        "DAY_2_AGO"
+      ]
+    },
+    "DAY_3_AGO": {
+      "contextId": [
+        "DAY_3_AGO"
+      ]
+    },
+    "DAY_4_AGO": {
+      "contextId": [
+        "DAY_4_AGO"
+      ]
+    },
+    "TODAY": {
+      "contextId": "TODAY"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": false,
+    "default_time_filter_labels": [
+      "All Time"
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "User Activity",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<center><h2>User Login Trend ({{TODAY}})</h2></center>",
+          "min_width": 12,
+          "max_width": 12,
+          "height": 1,
+          "widget_id": "f7aa1ce2"
+        },
+        {
+          "title": "3 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "d73e52ec"
+        },
+        {
+          "title": "2 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "b7d6799e"
+        },
+        {
+          "title": "1 Day Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "16977fb1"
+        },
+        {
+          "title": "Today (Since 12am UTC)",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp after '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "67980803"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and  timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "954ed85a"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and  timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "38eed328"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "1296858c"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": " artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp after '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "c6cc3720"
+        },
+        {
+          "widget_type": "label",
+          "label": "<table width='100%' height='100%' border=0><tr><td width='100%' height='100%' class='bg-red-darken-4'><center><h2><div style='color: #ffffff;'>User Login Failure Trend ({{TODAY}})</div></h2></center></td></tr></table>",
+          "min_width": 12,
+          "max_width": 12,
+          "height": 1,
+          "widget_id": "c6a601f0"
+        },
+        {
+          "title": "3 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "2cc3e981"
+        },
+        {
+          "title": "2 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "fa3ca118"
+        },
+        {
+          "title": "1 Day Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "4128985e"
+        },
+        {
+          "title": "Today (Since 12am UTC)",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp after '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "67f20b92"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and  timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "5e0b24ce"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and  timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "5e32e262"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "c549816a"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": " artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp after '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "518d606a"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "User Activity",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<center><h2>User Login Trend ({{TODAY}})</h2></center>",
+          "min_width": 12,
+          "max_width": 12,
+          "height": 1,
+          "widget_id": "f7aa1ce2"
+        },
+        {
+          "title": "3 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "d73e52ec"
+        },
+        {
+          "title": "2 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "b7d6799e"
+        },
+        {
+          "title": "1 Day Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "16977fb1"
+        },
+        {
+          "title": "Today (Since 12am UTC)",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp after '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "67980803"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and  timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "954ed85a"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and  timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "38eed328"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "1296858c"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": " artifact_type = 'UserActivity' and operation = 'LOGIN' and timestamp after '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Count"
+              }
+            ]
+          },
+          "widget_id": "c6cc3720"
+        },
+        {
+          "widget_type": "label",
+          "label": "<table width='100%' height='100%' border=0><tr><td width='100%' height='100%' class='bg-red-darken-4'><center><h2><div style='color: #ffffff;'>User Login Failure Trend ({{TODAY}})</div></h2></center></td></tr></table>",
+          "min_width": 12,
+          "max_width": 12,
+          "height": 1,
+          "widget_id": "c6a601f0"
+        },
+        {
+          "title": "3 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "2cc3e981"
+        },
+        {
+          "title": "2 Days Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "fa3ca118"
+        },
+        {
+          "title": "1 Day Ago",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "4128985e"
+        },
+        {
+          "title": "Today (Since 12am UTC)",
+          "widget_type": "custom_counter",
+          "label": "",
+          "min_width": 3,
+          "max_width": 6,
+          "height": 3,
+          "unit": "",
+          "stream": "rda_system_audit_logs",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp after '{{DAY_1_AGO}}'",
+          "ts_column": "timestamp",
+          "duration_hours": 10000000,
+          "column": "count_",
+          "agg": "sum",
+          "type": "int",
+          "widget_id": "67f20b92"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and  timestamp is during '{{DAY_4_AGO}}' to '{{DAY_3_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "5e0b24ce"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and  timestamp is during '{{DAY_3_AGO}}' to '{{DAY_2_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "5e32e262"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": "artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp is during '{{DAY_2_AGO}}' to '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "c549816a"
+        },
+        {
+          "title": "Top Users",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 3,
+          "max_rows": 10,
+          "height": 4,
+          "min_width": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "extra_filter": " artifact_type = 'UserActivity' and operation = 'LOGIN_FAILED' and timestamp after '{{DAY_1_AGO}}'",
+          "paginated": false,
+          "columns": {
+            "user_id": {
+              "title": "User ID",
+              "key": true
+            }
+          },
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "user_id"
+            ],
+            "series": [
+              {
+                "column": "count_",
+                "agg": "sum",
+                "type": "int",
+                "label": "Login Attempts"
+              }
+            ]
+          },
+          "widget_id": "518d606a"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "rda_dashboard_export_schedules",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "job_id"
+    ],
+    "flatten_json": false,
+    "retention_days": 30,
+    "retention_purge_extra_filter": "expired = 'yes'",
+    "_mappings": {
+      "properties": {
+        "start_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing dashboard export schedule definitions including job_id, export configuration, schedule frequency, export format, expiration status, and schedule metadata",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-33e1a2ab-rda_dashboard_export_schedules"
+}

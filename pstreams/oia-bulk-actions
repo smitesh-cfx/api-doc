@@ -1,0 +1,41 @@
+{
+  "name": "oia-bulk-actions",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "action_run_id"
+    ],
+    "drop_columns": [],
+    "_mappings": {
+      "properties": {
+        "submit_time": {
+          "type": "date"
+        },
+        "start_time": {
+          "type": "date"
+        },
+        "last_updated_time": {
+          "type": "date"
+        },
+        "completed_time": {
+          "type": "date"
+        },
+        "total_count": {
+          "type": "double"
+        },
+        "successful_count": {
+          "type": "double"
+        },
+        "failed_count": {
+          "type": "double"
+        }
+      }
+    },
+    "default_values": {},
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-8c1ff717-oia-bulk-actions"
+}

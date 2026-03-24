@@ -1,0 +1,23 @@
+{
+  "name": "ai_mcp_toolsets",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "no",
+    "_mappings": {
+      "properties": {
+        "tools": {
+          "type": "float"
+        }
+      }
+    },
+    "unique_keys": [
+      "ai_project_name",
+      "toolset_name",
+      "version"
+    ]
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-2b17c4b8-ai_mcp_toolsets"
+}

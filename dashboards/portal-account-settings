@@ -1,0 +1,37 @@
+{
+  "name": "portal-account-settings",
+  "label": "My Account",
+  "description": "User Account Settings",
+  "version": "22.9.22.2",
+  "enabled": true,
+  "dashboard_sections": [],
+  "dashboard_type": "app",
+  "dashboard_folder": "System",
+  "dashboard_pages": [
+    {
+      "name": "portal-account-user-preferences-page",
+      "label": "User Preferences",
+      "icon": "remedial.svg"
+    },
+    {
+      "name": "portal-account-edit-profile-page",
+      "label": "Edit Profile",
+      "icon": "customer.svg"
+    },
+    {
+      "name": "portal-account-change-password-page",
+      "label": "Change Password",
+      "icon": "credentials.svg"
+    },
+    {
+      "name": "portal-account-api-access-page",
+      "label": "API Access Key",
+      "icon": "rda.svg"
+    },
+    {
+      "name": "portal-account-notifications-page",
+      "label": "Notifications",
+      "icon": "notification.svg"
+    }
+  ]
+}

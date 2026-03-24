@@ -1,0 +1,13 @@
+{
+  "name": "rda_system_worker_logs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 2,
+    "timestamp": "timestamp"
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream capturing worker pod log messages and events for debugging and operational monitoring",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-44c64cae-rda_system_worker_logs"
+}

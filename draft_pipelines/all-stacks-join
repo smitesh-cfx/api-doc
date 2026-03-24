@@ -1,0 +1,51 @@
+@dm:empty
+ --> @dm:addrow target_attribute = 'storage_array_volume_export_path' and source_attribute = 'ntap_array_nfs_export_path' and target_filter="node_type == 'Datastore' and storage_array_volume_export_path is not None and storage_array_volume_export_path !=''" and source_filter = "node_type == 'Volume' and ntap_array_nfs_export_path is not None and ntap_array_nfs_export_path != ''" and link_type = 'runs' and comment=''
+ --> @dm:save name='vcenter_netapp_stack_join_df_v2_rev.1'
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow target_attribute = 'storage_array_ip' and source_attribute = 'ntap_array_interface_ip' and target_filter="node_type == 'Datastore' and storage_array_ip is not None and storage_array_ip != ''" and source_filter = "node_type == 'NIC' and ntap_array_interface_ip is not None and ntap_array_interface_ip != ''" and link_type = 'runs' and comment=''
+ --> @dm:save name='vcenter_netapp_stack_join_df_v2_rev.2'
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow target_attribute = "app_comp_ip_address" and source_attribute = "vm_ip_address" and target_filter="node_type == 'Webserver' or node_type=='Database'" and source_filter = "node_type == 'VM'" and link_type = "runs-on" and comment=""
+ --> @dm:save name='appd_vcenter_stack_join_df'
+ --> @c:new-block
+ --> @dm:stack-load name='netapp_array_7mode_topology_stackv2'
+ --> @dm:stack-join target_stack='vcenter_topology_stacks' and filter='vcenter_netapp_stack_join_df_v2_rev.1' and name='vcenter_netappVolume_stack_join'
+ --> @dm:stack-save name = 'vcenter_netappVolume_stack_join'
+ --> @c:new-block
+ --> @dm:stack-load name='netapp_array_7mode_topology_stackv2'
+ --> @dm:stack-join target_stack='vcenter_netappVolume_stack_join' and filter='vcenter_netapp_stack_join_df_v2_rev.2' and name='vcenter_netappVolume_netAppNIC_stack_join'
+ --> @dm:stack-save name = 'vcenter_netappVolume_netAppNIC_stack_join'
+ --> @c:new-block
+ --> @dm:stack-load name='vcenter_netappVolume_netAppNIC_stack_join'
+ --> @dm:stack-join target_stack='appdynamics_topology_stacks' and filter='appd_vcenter_stack_join_df' and name='appd_vcenter_netappVolume_netAppNIC_stack_join'
+ --> @dm:stack-save name = 'appd_vcenter_netappVolume_netAppNIC_stack_join'
+ --> @c:new-block
+ --> @dm:stack-load name='appd_vcenter_netappVolume_netAppNIC_stack_join'
+ --> @dm:selectcolumns include = 'data'
+ --> @dm:explode-json column = 'data' and include_exploded_columns='stack'
+ --> @dm:save name='temp-stack'
+ --> @dm:create-persistent-stream name = 'full_stack_nodes' and retention_days=0 and unique_cols= "node_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "full_stack_nodes" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ --> @dm:create-persistent-stream name = 'full_stack_edges' and retention_days=0 and unique_cols= "left_id,right_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "full_stack_edges" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ --> @c:new-block
+ --> @dm:recall name='temp-stack'
+ --> @dm:explode-json column = 'stack' and include_exploded_columns='nodes'
+ --> @dm:explode-json column = 'nodes'
+ --> @dm:add-missing-columns columns = 'iconURL' & value = 'Not Available'
+ --> @rn:write-stream name="full_stack_nodes"
+ --> @c:new-block
+ --> @dm:recall name='temp-stack'
+ --> @dm:explode-json column = 'stack' and include_exploded_columns='relationships'
+ --> @dm:explode-json column = 'relationships'
+ --> @rn:write-stream name="full_stack_edges"

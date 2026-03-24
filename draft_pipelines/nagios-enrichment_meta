@@ -1,0 +1,11 @@
+folder: Default
+name: nagios-enrichment
+description: ''
+data_path: draft-pipelines/data/nagios-enrichment/2026_03_18_1/data.json
+usecase: ''
+category: null
+sources: []
+artifacts: []
+version: '2026_03_18_1'
+file_type: json
+checksum: 76cff00d

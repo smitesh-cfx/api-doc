@@ -1,0 +1,32 @@
+{
+  "name": "oia-metrics-data",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "asset_id",
+      "metric_id",
+      "metric_source",
+      "metric_timestamp"
+    ],
+    "drop_columns": [],
+    "_mappings": {
+      "properties": {
+        "metric_timestamp": {
+          "type": "date"
+        },
+        "value": {
+          "type": "double"
+        },
+        "anomaly_score": {
+          "type": "double"
+        }
+      }
+    },
+    "default_values": {},
+    "retention_days": 90,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-08d2fd46-oia-metrics-data"
+}

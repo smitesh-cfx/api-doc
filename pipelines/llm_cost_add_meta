@@ -1,0 +1,17 @@
+folder: AI
+name: llm_cost_add
+description: test pipeline
+data_path: pipelines/data/llm_cost_add/2025.12.12.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+artifacts:
+- artifact_type: rda-network-stream
+  artifact_name: llm_model_costs
+  access: write
+version: 2025.12.12.1
+file_type: json
+checksum: d988ad7d

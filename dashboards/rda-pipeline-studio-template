@@ -1,0 +1,52 @@
+{
+  "name": "rda-pipeline-studio-template",
+  "label": "Pipeline Edit",
+  "description": "Graphical User Interface for RDA Pipeline Edit",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_style": "auto",
+  "dashboard_folder": "System",
+  "template_variables": {
+    "REPORT_TYPE": {
+      "default": "rda.saas.pipeline.add.studio",
+      "contextId": "report_type"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Pipeline Edit",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Pipeline Edit",
+          "widget_type": "portal_html",
+          "widget_template": "saas/pipeline-studio",
+          "reportId": "{{REPORT_TYPE}}",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "14658c25"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Pipeline Edit",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Pipeline Edit",
+          "widget_type": "portal_html",
+          "widget_template": "saas/pipeline-studio",
+          "reportId": "{{REPORT_TYPE}}",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "14658c25"
+        }
+      ]
+    }
+  ]
+}
