@@ -8,7 +8,6 @@
   "dashboard_type": "dashboard",
   "dashboard_folder": "default",
   "dashboard_style": "auto",
-  "stream": "rda_github_push_stream",
   "dashboard_filters": {
     "time_filter": false,
     "columns_filter": [],
