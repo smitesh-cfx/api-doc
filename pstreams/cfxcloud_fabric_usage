@@ -1,0 +1,14 @@
+{
+  "name": "cfxcloud_fabric_usage",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking CloudFabrix fabric platform usage metrics and analytics",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-92fa6958-cfxcloud_fabric_usage"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "oia-selected-metrics",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "asset_id",
+      "metric_id",
+      "metric_source"
+    ],
+    "drop_columns": [],
+    "default_values": {},
+    "retention_days": 60,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-9ce20861-oia-selected-metrics"
+}

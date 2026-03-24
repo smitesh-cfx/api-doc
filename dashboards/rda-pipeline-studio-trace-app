@@ -1,0 +1,32 @@
+{
+  "name": "rda-pipeline-studio-trace-app",
+  "label": "RDA Pipeline Trace",
+  "description": "View RDA Pipeline Traces",
+  "version": "23.2.7.1",
+  "enabled": true,
+  "status_poller": {},
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [],
+    "group_filters": []
+  },
+  "dashboard_sections": [
+    {
+      "title": "new dashboard"
+    }
+  ],
+  "dashboard_type": "app",
+  "dashboard_folder": "System",
+  "dashboard_pages": [
+    {
+      "name": "rda-pipeline-studio-trace",
+      "label": "Pipeline Traces",
+      "icon": "history.svg"
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "new dashboard"
+    }
+  ]
+}

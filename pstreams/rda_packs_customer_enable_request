@@ -1,0 +1,12 @@
+{
+  "name": "rda_packs_customer_enable_request",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 7
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking customer pack enablement requests including request_id, customer_id, pack_id, request_status, and enablement workflow state",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-cf02816e-rda_packs_customer_enable_request"
+}

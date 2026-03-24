@@ -1,0 +1,37 @@
+
+ ## ### Dataset Enrichment #####
+@exec:get-input
+ ## Explode input payload elements that are translated into a JSON dictionary
+
+ --> @dm:explode-json column="payloadDictionary"
+ --> @dm:save name="temp-events"
+ ## Clear the previous enrichment definitions dataset
+
+ --> @dm:empty columns="datasetname,condition,enrichcolumns,enrichcolumnsas,filter"
+ --> @dm:save name="temp-enrichments"
+ ## Get unique enrichment datasets to process from the events
+
+ --> @c:new-block
+ --> @dm:recall name="temp-events"
+ --> @dm:explode-json column="enrichment_datasets"
+ --> @dm:check-columns must_contain="datasetname,condition,enrichcolumns" and action="skip-block"
+ --> @dm:selectcolumns include="datasetname|condition|enrichcolumns|enrichcolumnsas|filter"
+ --> @dm:add-missing-columns columns="enrichcolumnsas,filter"
+ --> @dm:save name="temp-enrichments"
+ ## Perform enrichment from each dataset
+
+ --> @c:data-loop dataset="temp-enrichments" and columns="datasetname,condition,enrichcolumns,enrichcolumnsas,filter"
+ --> @dm:recall name="temp-events"
+ --> *exec:if-condition ${filter}
+ --> @dm:enrich-conditional dict is "${datasetname}" and condition is "${condition}" and enrich_cols is "${enrichcolumns}" and cache is yes and cache_refresh_seconds is 120 and return_status is yes
+ --> @dm:map from is 'meta_enrich_status' and to is "Dataset: ${datasetname}"
+ --> @dm:selectcolumns exclude="meta_enrich_status"
+ --> @dm:save name="temp-events"
+ --> @exec:end-if
+ ## Publish the processed alerts to the stream
+
+ --> @c:new-block
+ --> @dm:recall name="temp-events"
+ ## Write output data to stream specified in the input event
+
+ --> @rn:write-stream-by-row stream_column="stream_name"

@@ -1,0 +1,479 @@
+{
+  "name": "rda-mgmt-page-tenant-datasets",
+  "label": "Datasets",
+  "description": " Datasets Management Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "stream": "rda_datasets_meta",
+  "dashboard_filters": {
+    "time_filter": true,
+    "group_filters": [
+      {
+        "stream": "rda_datasets_meta",
+        "title": "Folder",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "folder"
+        ],
+        "ts_column": "saved_time",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "rda_datasets_meta",
+        "title": "Format",
+        "duration_hours": 87600,
+        "limit": 200,
+        "group_by": [
+          "format"
+        ],
+        "ts_column": "saved_time",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ],
+    "columns_filter": [
+      {
+        "id": "saved_time",
+        "label": "Dataset Saved",
+        "type": "DATETIME"
+      },
+      {
+        "id": "mem_size_mb",
+        "label": "Size (MB)",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_rows",
+        "label": "Rows",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_columns",
+        "label": "Columns",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "_RDA_Id",
+        "label": "_RDA_ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "count_",
+        "label": "Count_",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "folder",
+        "label": "Folder",
+        "type": "TEXT"
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "type": "TEXT"
+      },
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "schema",
+        "label": "Schema",
+        "type": "TEXT"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Datasets",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "pie_chart",
+          "title": "Datasets by Folders",
+          "stream": "rda_datasets_meta",
+          "ts_column": "saved_time",
+          "duration_hours": 87600,
+          "limit": 25,
+          "min_width": 6,
+          "height": 4,
+          "max_width": 6,
+          "column": "count_",
+          "agg": "value_count",
+          "group_by": [
+            "folder"
+          ],
+          "type": "int",
+          "widget_id": "fc127433"
+        },
+        {
+          "widget_type": "pie_chart",
+          "title": "Datasets by Format",
+          "stream": "rda_datasets_meta",
+          "ts_column": "saved_time",
+          "duration_hours": 87600,
+          "limit": 25,
+          "min_width": 6,
+          "height": 4,
+          "max_width": 6,
+          "column": "count_",
+          "agg": "value_count",
+          "group_by": [
+            "format"
+          ],
+          "type": "int",
+          "widget_id": "b8935e20"
+        },
+        {
+          "title": "Datasets",
+          "widget_type": "tabular",
+          "stream": "rda_datasets_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "folder",
+            "format",
+            "schema"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "folder": {
+              "title": "Folder"
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "format": {
+              "title": "Format"
+            },
+            "mem_size_mb": {
+              "title": "Size (MB)"
+            },
+            "num_rows": {
+              "title": "Rows"
+            },
+            "num_columns": {
+              "title": "Columns"
+            },
+            "saved_time": {
+              "title": "Dataset Saved",
+              "type": "DATETIME"
+            },
+            "schema": {
+              "title": "Schema"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Metadata",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-metadata",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": true,
+                "params": [
+                  {
+                    "formId": "rda.saas.dataset.metadata"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Data",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-metadata",
+              "paginated": true,
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.head100"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Data Types",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-datatypes",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.datatypes"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "Manage Data",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-manage-data",
+              "paginated": true,
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.data.table"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "Export",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-export",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dataset.export"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "a3031615"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Datasets",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "pie_chart",
+          "title": "Datasets by Folders",
+          "stream": "rda_datasets_meta",
+          "ts_column": "saved_time",
+          "duration_hours": 87600,
+          "limit": 25,
+          "min_width": 6,
+          "height": 4,
+          "max_width": 6,
+          "column": "count_",
+          "agg": "value_count",
+          "group_by": [
+            "folder"
+          ],
+          "type": "int",
+          "widget_id": "fc127433"
+        },
+        {
+          "widget_type": "pie_chart",
+          "title": "Datasets by Format",
+          "stream": "rda_datasets_meta",
+          "ts_column": "saved_time",
+          "duration_hours": 87600,
+          "limit": 25,
+          "min_width": 6,
+          "height": 4,
+          "max_width": 6,
+          "column": "count_",
+          "agg": "value_count",
+          "group_by": [
+            "format"
+          ],
+          "type": "int",
+          "widget_id": "b8935e20"
+        },
+        {
+          "title": "Datasets",
+          "widget_type": "tabular",
+          "stream": "rda_datasets_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "folder",
+            "format",
+            "schema"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "folder": {
+              "title": "Folder"
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "format": {
+              "title": "Format"
+            },
+            "mem_size_mb": {
+              "title": "Size (MB)"
+            },
+            "num_rows": {
+              "title": "Rows"
+            },
+            "num_columns": {
+              "title": "Columns"
+            },
+            "saved_time": {
+              "title": "Dataset Saved",
+              "type": "DATETIME"
+            },
+            "schema": {
+              "title": "Schema"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Metadata",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-metadata",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": true,
+                "params": [
+                  {
+                    "formId": "rda.saas.dataset.metadata"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Data",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-metadata",
+              "paginated": true,
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.head100"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "View Data Types",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-view-datatypes",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.datatypes"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "Manage Data",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-manage-data",
+              "paginated": true,
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.dataset.data.table"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "title": "Export",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dataset-export",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dataset.export"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "a3031615"
+        }
+      ]
+    }
+  ]
+}

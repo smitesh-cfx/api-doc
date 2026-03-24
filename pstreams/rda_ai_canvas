@@ -1,0 +1,16 @@
+{
+  "name": "rda_ai_canvas",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "conversation_id",
+      "widget_id"
+    ],
+    "system_defined": "no",
+    "retention_days": 60
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-bd7f305b-rda_ai_canvas"
+}

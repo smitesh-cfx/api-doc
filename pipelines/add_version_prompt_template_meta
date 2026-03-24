@@ -1,0 +1,14 @@
+folder: AI
+name: add_version_prompt_template
+description: test pipeline
+data_path: pipelines/data/add_version_prompt_template/2026.3.5/data.json
+usecase: ''
+category: ''
+sources: {}
+artifacts:
+- artifact_type: dataset
+  artifact_name: ai_mcp_prompt_template
+  access: write
+version: 2026.3.5
+file_type: json
+checksum: 122cf315

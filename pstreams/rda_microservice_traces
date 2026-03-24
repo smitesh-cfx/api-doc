@@ -1,0 +1,13 @@
+{
+  "name": "rda_microservice_traces",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 1,
+    "timestamp": "timestamp"
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream capturing inter-service communication traces including source service, destination service, request_type, subject_type (auto/direct), timeout, duration_millis, and status for distributed tracing",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-7a90f72e-rda_microservice_traces"
+}

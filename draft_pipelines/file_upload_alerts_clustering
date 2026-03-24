@@ -1,0 +1,2 @@
+@dm:recall name='fileupload_alerts'
+ --> @cfxusml:logclustering columns='message' and min_cluster_size = 30 and remove_vars = 'yes' and entityid_column = 'Id' and job_name='FileUpload Alerts'

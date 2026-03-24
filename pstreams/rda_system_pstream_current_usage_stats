@@ -1,0 +1,33 @@
+{
+  "name": "rda_system_pstream_current_usage_stats",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "name"
+    ],
+    "_mappings": {
+      "properties": {
+        "docs_count": {
+          "type": "integer"
+        },
+        "shards_failed": {
+          "type": "integer"
+        },
+        "shards_successful": {
+          "type": "integer"
+        },
+        "shards_total": {
+          "type": "integer"
+        },
+        "size_in_mb": {
+          "type": "float"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream containing current persistent stream usage metrics including name, datastore_type, docs_count, size_in_mb, shards status, read_only flag, and index_name for real-time monitoring",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3a5649aa-rda_system_pstream_current_usage_stats"
+}

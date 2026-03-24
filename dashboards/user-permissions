@@ -1,0 +1,106 @@
+{
+  "name": "user-permissions",
+  "label": "User Permissions",
+  "description": "User Permissions",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "RDA Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "RDA",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.rda.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "2d42c959"
+        }
+      ]
+    },
+    {
+      "title": "AIOps Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "AIOps",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.oia.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "cc89a6d1"
+        }
+      ]
+    },
+    {
+      "title": "Asset Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Asset",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.aia.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "f03021c4"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "RDA Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "RDA",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.rda.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "2d42c959"
+        }
+      ]
+    },
+    {
+      "title": "AIOps Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "AIOps",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.oia.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "cc89a6d1"
+        }
+      ]
+    },
+    {
+      "title": "Asset Permissions",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Asset",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.aia.permissions.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "paginated": true,
+          "widget_id": "f03021c4"
+        }
+      ]
+    }
+  ]
+}

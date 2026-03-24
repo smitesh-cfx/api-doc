@@ -1,0 +1,47 @@
+{
+  "name": "uimenus-dashboard",
+  "label": "UI Menus Management",
+  "description": "ui menus dashboard",
+  "version": "23.1.2",
+  "enabled": true,
+  "dashboard_style": "auto",
+  "dashboard_folder": "System",
+  "exportable": false,
+  "status_poller": {},
+  "dashboard_filters": {},
+  "dashboard_sections": [
+    {
+      "title": "User Settings",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "app-rda/menu-config",
+          "reportId": "rda.saas.uimenu.studio",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "6aa7b66f"
+        }
+      ]
+    }
+  ],
+  "dashboard_type": "dashboard",
+  "pstream_dashboards": [
+    {
+      "title": "User Settings",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "app-rda/menu-config",
+          "reportId": "rda.saas.uimenu.studio",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "6aa7b66f"
+        }
+      ]
+    }
+  ]
+}

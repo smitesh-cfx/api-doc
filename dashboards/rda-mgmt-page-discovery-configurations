@@ -1,0 +1,168 @@
+{
+  "name": "rda-mgmt-page-discovery-configurations",
+  "label": "Discovery Configurations",
+  "description": "Discovery Configurations",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": true,
+    "columns_filter": [
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Discovery Cofigurations",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Discovery Configurations",
+          "widget_type": "tabular",
+          "duration_hours": 87600,
+          "stream": "rda_discovery_configurations_meta",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "type": "Type",
+            "description": "Description",
+            "folder": "Folder",
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            }
+          },
+          "custom_columns": [],
+          "actions": [
+            {
+              "permission": "rda:discovery_configuration:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:rda.saas.discoveryconfiguration.view",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.discoveryconfiguration.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:discovery_configuration:update",
+              "title": "Update",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:rda.saas.discoveryconfiguration.update",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.discoveryconfiguration.update"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "d5b2wsd5"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Discovery Cofigurations",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Discovery Configurations",
+          "widget_type": "tabular",
+          "duration_hours": 87600,
+          "stream": "rda_discovery_configurations_meta",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "type": "Type",
+            "description": "Description",
+            "folder": "Folder",
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            }
+          },
+          "custom_columns": [],
+          "actions": [
+            {
+              "permission": "rda:discovery_configuration:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:rda.saas.discoveryconfiguration.view",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.discoveryconfiguration.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:discovery_configuration:update",
+              "title": "Update",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:rda.saas.discoveryconfiguration.update",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.discoveryconfiguration.update"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "d5b2wsd5"
+        }
+      ]
+    }
+  ]
+}

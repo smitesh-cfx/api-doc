@@ -1,0 +1,44 @@
+{
+  "name": "portal-user-preferences",
+  "label": "User Preferences",
+  "description": "Portal User Settings",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "User Settings",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "saas/UserPreference",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "6aa7b66d"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "User Settings",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "saas/UserPreference",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "6aa7b66d"
+        }
+      ]
+    }
+  ]
+}

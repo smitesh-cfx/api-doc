@@ -1,0 +1,50 @@
+{
+  "name": "rda-pstream-stats-template",
+  "label": "Persistent Stream Stats",
+  "description": "Persistent Stream Stats",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "template_variables": {
+    "PSTREAM_NAME": {
+      "contextId": "pstream_name"
+    },
+    "TS_COLUMN": {
+      "contextId": "ts_column"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Stats",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Details",
+          "widget_type": "pstream_details",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "widget_id": "2da925b3"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Stats",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Details",
+          "widget_type": "pstream_details",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "widget_id": "2da925b3"
+        }
+      ]
+    }
+  ]
+}

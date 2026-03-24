@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_worker_trace_summary",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream containing aggregated worker trace summaries with site_name, bot execution counts, bot failure counts, and timestamp for performance monitoring",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-a307437f-rda_system_worker_trace_summary"
+}

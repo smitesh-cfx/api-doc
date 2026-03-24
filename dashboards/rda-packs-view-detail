@@ -1,0 +1,54 @@
+{
+  "name": "rda-packs-view-detail",
+  "label": "View Pack Details",
+  "context_label_id": "view_detail_page_label",
+  "description": "View Pack details",
+  "enabled": false,
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_type": "template",
+  "template_variables": {
+    "PACK_NAME": {
+      "contextId": "sluggified_name"
+    },
+    "PACK_VERSION": {
+      "contextId": "sluggified_verion"
+    }
+  },
+  "computedContext": {
+    "sluggified_verion": {
+      "expr": "sluggify(pack_version)",
+      "defaultValue": "None"
+    },
+    "sluggified_name": {
+      "expr": "sluggify(pack_name)",
+      "defaultValue": "None"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Pack Details",
+      "widgets": [
+        {
+          "widget_type": "markdown",
+          "folder": "{{PACK_NAME}}/{{PACK_VERSION}}",
+          "objectName": "description_{{PACK_NAME}}_{{PACK_VERSION}}",
+          "widget_id": "efcf2a8a"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Pack Details",
+      "widgets": [
+        {
+          "widget_type": "markdown",
+          "folder": "{{PACK_NAME}}/{{PACK_VERSION}}",
+          "objectName": "description_{{PACK_NAME}}_{{PACK_VERSION}}",
+          "widget_id": "efcf2a8a"
+        }
+      ]
+    }
+  ]
+}

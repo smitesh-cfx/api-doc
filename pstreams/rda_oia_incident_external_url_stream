@@ -1,0 +1,15 @@
+{
+  "name": "rda_oia_incident_external_url_stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "short_id"
+    ],
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing OIA incident external URL references and mappings for linking incidents to external ticketing systems and incident management platforms",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-658ff997-rda_oia_incident_external_url_stream"
+}

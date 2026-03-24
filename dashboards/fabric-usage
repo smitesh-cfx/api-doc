@@ -1,0 +1,47 @@
+{
+  "name": "fabric-usage",
+  "description": "Fabric Usage",
+  "label": "Fabric Usage",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "template_variables": null,
+  "version": "23.2.7.1",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Usage",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Usage",
+          "widget_type": "portal_tabular",
+          "reportId": "usage.daily.tabular",
+          "height": 10,
+          "paginated": true,
+          "min_width": 12,
+          "widget_id": "36abdf51"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Usage",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Usage",
+          "widget_type": "portal_tabular",
+          "reportId": "usage.daily.tabular",
+          "height": 10,
+          "paginated": true,
+          "min_width": 12,
+          "widget_id": "36abdf51"
+        }
+      ]
+    }
+  ]
+}

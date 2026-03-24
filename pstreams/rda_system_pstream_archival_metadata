@@ -1,0 +1,23 @@
+{
+  "name": "rda_system_pstream_archival_metadata",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_mappings": {
+      "properties": {
+        "archive_date": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing persistent stream archival metadata including archive status, archival timestamps, archive locations, and archival configuration",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f021646f-rda_system_pstream_archival_metadata"
+}

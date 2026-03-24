@@ -1,0 +1,26 @@
+{
+  "name": "rda_system_snapshots_app",
+  "label": "RDA Artfact Snapshots Management",
+  "description": "Robotic Data Automation Administration",
+  "version": "1.0.0",
+  "enabled": true,
+  "live_edit": true,
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": []
+  },
+  "dashboard_type": "app",
+  "dashboard_folder": "System",
+  "dashboard_pages": [
+    {
+      "name": "rda_system_snapshots_main",
+      "label": "Snapshot List",
+      "icon": "Analytics.svg"
+    },
+    {
+      "name": "rda_system_snapshots_details",
+      "label": "Snapshot Manifests",
+      "icon": "Analytics.svg"
+    }
+  ]
+}

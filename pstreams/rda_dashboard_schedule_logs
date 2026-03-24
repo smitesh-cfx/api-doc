@@ -1,0 +1,12 @@
+{
+  "name": "rda_dashboard_schedule_logs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream recording dashboard schedule execution logs including schedule runs, execution results, export file paths, execution timestamps, and success/failure status",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f8c9ead8-rda_dashboard_schedule_logs"
+}

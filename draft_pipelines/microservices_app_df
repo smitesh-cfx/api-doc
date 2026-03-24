@@ -1,0 +1,663 @@
+
+ ## ## Linux Inventory Collection
+
+ ## Linux Host IP Range Feed
+@c:new-block
+ --> @dm:empty
+ --> @dm:addrow linux_ip = '10.95.133.140-10.95.133.148,10.95.133.150'
+ --> @dm:save name = 'temp-linux-ip-feed'
+ ## Linux System Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-linux-ip-feed'
+ --> @linux:system-info column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_system_info'
+ ## Linux Netstat
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:netstat column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_netstat_info'
+ ## Linux Processes
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:processes column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_process_info'
+ ## Linux Services
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:services column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_service_info'
+ ## Linux Network Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:network-config column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_network_info'
+ ## Linux Docker Containers
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:docker-containers column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_docker_containers_info'
+ ## Linux Docker Netstat
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:docker-netstat column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_docker_netstat_info'
+ ## Linux Docker Processes
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:docker-processes column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_docker_process_info'
+ ## Linux Docker Network
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter collection_status = 'Success' get source_ip as 'linux_ip'
+ --> @linux:docker-network column_name='linux_ip' & concurrent_discovery = '100'
+ --> @dm:map to = 'OS_Family' & func = 'fixed' & value = 'linux'
+ --> @dm:save name = 'linux_docker_network_info'
+ ## ####
+
+ ## Linux Host OS Inventory - Data transformation
+
+ ## Linux Host OS - System Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_system_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',Virtualization as 'Virtualization_Provider',Operating_System as 'OS_Version',Kernel as 'OS_Kernel_Version',OS_Family,Static_hostname as 'Hostname',Architecture as 'OS_Architecture',UUID as 'Host_BIOS_UUID',Manufacturer as 'Server_Vendor',Product_Name as 'Server_Model',Serial_Number as 'Server_Serial_Number',Boot_ID as 'OS_Boot_ID',Model_name as 'CPU_Model',CPU_MHz as 'CPU_Speed_MHz',CPUs as 'Total_CPUs',Sockets as 'CPU_Sockets',Cores_per_socket as 'CPU_Socket_Cores',Threads_per_core as 'Hyperthread_Cores',MemTotalkB as 'Total_Memory_KB',collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:dns_ip_to_name from_cols = 'Target_IP' & to_cols = 'Hostname_FQDN' & keep_value = 'yes'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'System'
+ --> @dm:save name = 'cfx_host_system_inventory'
+ ## Linux Host OS - Service Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_service_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',description as 'Service_Name',unit as 'Service_ID',active as 'Service_Status',MainPID as 'Service_Process_ID',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Service'
+ --> @dm:to-type columns = 'Service_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_service_inventory'
+ ## Linux Host OS - Process Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_process_info' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> @dm:fixnull-regex columns = '.*'
+ --> *dm:filter * get source_ip as 'Target_IP',exe as 'Process_Name',pid as 'Process_ID',ppid as 'Parent_Process_ID',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Process'
+ --> @dm:to-type columns = 'Process_ID,Parent_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_process_inventory'
+ ## Linux Host OS - Network Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_network_info' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter if_name != 'lo' and if_name does not contain 'veth' get source_ip as 'Target_IP',if_name as 'NIC_Name',link_ether as 'NIC_MAC_Address',inet as 'NIC_IP_Address',mtu as 'NIC_MTU',state as 'NIC_Status',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:explode column = 'NIC_IP_Address'
+ --> @dm:map from = 'NIC_IP_Address' & to = 'NIC_IP_Address_Orig'
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'split' & sep = '/'
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'slice' & toIdx = 1
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'join'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Network'
+ --> @dm:save name = 'cfx_host_network_inventory'
+ ## Linux Host OS - Docker Network Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_docker_network_info' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter if_name != 'lo' get source_ip as 'Target_IP',if_name as 'NIC_Name',link_ether as 'NIC_MAC_Address',inet as 'NIC_IP_Address',mtu as 'NIC_MTU',state as 'NIC_Status',containerId as 'Container_ID',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:explode column = 'NIC_IP_Address'
+ --> @dm:map from = 'NIC_IP_Address' & to = 'NIC_IP_Address_Orig'
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'split' & sep = '/'
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'slice' & toIdx = 1
+ --> @dm:map attr = 'NIC_IP_Address' & func = 'join'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Network'
+ --> *dm:filter NIC_IP_Address != '' & NIC_Status = 'UP'
+ --> @dm:dedup columns = 'Target_IP,NIC_IP_Address,Container_ID'
+ --> @dm:save name = 'cfx_host_docker_network_inventory'
+ ## Linux Host OS - Consolidated Network (IPv4) info
+
+ --> @c:new-block
+ --> @dm:concat names = '^cfx_host_network_inventory$|^cfx_host_docker_network_inventory$'
+ --> @dm:save name = 'cfx_host_consolidated_network_inventory'
+ ## Linux Host OS - Docker Container Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_docker_containers_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',ID as 'Container_ID',Names as 'Container_Name',Networks as 'Container_Network_Mode',StatePID as 'Container_Main_Process_ID',RunningFor as 'Container_Uptime',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:save name = 'temp-linux_docker_containers_formatted'
+ --> @c:new-block
+ --> @dm:recall name = 'linux_docker_process_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',containerId as 'Container_ID',pid as 'Container_Process_ID',ppid as 'Container_Parent_Process_ID',exe as 'Container_Process_Name',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:enrich dict = 'temp-linux_docker_containers_formatted' & src_key_cols = 'Target_IP,Container_ID' & dict_key_cols = 'Target_IP,Container_ID' & enrich_cols = 'Container_Name,Container_Main_Process_ID,Container_Network_Mode,Container_Uptime'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Container'
+ --> @dm:to-type columns = 'Container_Main_Process_ID,Container_Process_ID,Container_Parent_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_container_inventory'
+ ## ##################################
+
+ ## Linux Host - TCP/UDP Network Connections (Netstat)
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_netstat_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',state as 'Connection_State',transport_protocol as 'Connection_Protocol',program_name as 'Connection_Program',pid as 'Connection_Process_ID',local_address as 'Local_IP_Address',local_port as 'Local_Port',foreign_address as 'Remote_IP_Address',foreign_port as 'Remote_Port',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Netstat'
+ --> @dm:to-type columns = 'Connection_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_netstat_inventory'
+ ## ##
+
+ ## Linux Host OS - Docker Container Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_docker_containers_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',ID as 'Container_ID',Names as 'Container_Name',Networks as 'Container_Network_Mode',StatePID as 'Container_Main_Process_ID',RunningFor as 'Container_Uptime',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:save name = 'temp-linux_docker_containers_formatted'
+ --> @c:new-block
+ --> @dm:recall name = 'linux_docker_process_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',containerId as 'Container_ID',pid as 'Container_Process_ID',ppid as 'Container_Parent_Process_ID',exe as 'Container_Process_Name',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:enrich dict = 'temp-linux_docker_containers_formatted' & src_key_cols = 'Target_IP,Container_ID' & dict_key_cols = 'Target_IP,Container_ID' & enrich_cols = 'Container_Name,Container_Main_Process_ID,Container_Network_Mode,Container_Uptime'
+ --> @dm:enrich dict = 'cfx_host_system_inventory' & src_key_cols = 'Target_IP' & dict_key_cols = 'Target_IP' & enrich_cols = 'Host_BIOS_UUID,Hostname,Hostname_FQDN,OS_Version,OS_Architecture,Server_Vendor,Server_Model'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Container'
+ --> @dm:to-type columns = 'Container_Main_Process_ID,Container_Process_ID,Container_Parent_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_container_inventory'
+ ## Netstat + Docker Netstat
+
+ --> @c:new-block
+ --> @dm:recall name = 'linux_netstat_info' & empty_as_null = 'no'
+ --> *dm:filter * get source_ip as 'Target_IP',state as 'Connection_State',transport_protocol as 'Connection_Protocol',program_name as 'Connection_Program',pid as 'Connection_Process_ID',local_address as 'Local_IP_Address',local_port as 'Local_Port',foreign_address as 'Remote_IP_Address',foreign_port as 'Remote_Port',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Netstat'
+ --> @dm:to-type columns = 'Connection_Process_ID' & type = 'int'
+ --> @dm:enrich dict = 'linux_docker_process_info' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'source_ip,pid' & enrich_cols = 'ppid' & enrich_cols_as = 'Connection_Process_ID_Parent'
+ --> @dm:selectcolumns exclude = 'source_ip|pid'
+ --> @dm:to-type columns = 'Connection_Process_ID_Parent' & type = 'int'
+ --> @dm:save name = 'cfx_host_netstat_inventory'
+ --> @dm:recall name = 'linux_docker_netstat_info' & empty_as_null = 'no'
+ --> *dm:filter kind = 'network' get source_ip as 'Target_IP',state as 'Connection_State',transport_protocol as 'Connection_Protocol',program_name as 'Connection_Program',pid as 'Connection_Process_ID',local_address as 'Local_IP_Address',local_port as 'Local_Port',foreign_address as 'Remote_IP_Address',foreign_port as 'Remote_Port',OS_Family,collection_timestamp,collection_status,reason as 'collection_failure_reason'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Netstat'
+ --> @dm:dedup columns = 'Local_IP_Address,Local_Port,Remote_IP_Address,Remote_Port,Connection_Process_ID'
+ --> @dm:to-type columns = 'Connection_Process_ID' & type = 'int'
+ --> @dm:enrich dict = 'linux_docker_process_info' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'source_ip,pid' & enrich_cols = 'ppid' & enrich_cols_as = 'Connection_Process_ID_Parent'
+ --> @dm:selectcolumns exclude = 'source_ip|pid'
+ --> @dm:to-type columns = 'Connection_Process_ID_Parent' & type = 'int'
+ --> @dm:dedup columns = 'Target_IP,Local_IP_Address,Local_Port,Remote_IP_Address,Remote_Port'
+ --> @dm:map to = 'Inventory_Type' & func = 'fixed' & value = 'Netstat'
+ --> @dm:save name = 'cfx_host_linux_docker_netstat_inventory'
+ --> @c:new-block
+ --> @dm:concat names = '^cfx_host_netstat_inventory$|^cfx_host_linux_docker_netstat_inventory$'
+ --> @dm:enrich dict = 'cfx_host_container_inventory' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Container_Process_ID' & enrich_cols = 'Container_ID,Container_Name' & enrich_cols_as = 'Container_ID_by_PID,Container_Name_by_PID'
+ --> @dm:selectcolumns exclude = 'Container_Process_ID'
+ --> @dm:enrich dict = 'cfx_host_container_inventory' & src_key_cols = 'Target_IP,Connection_Process_ID_Parent' & dict_key_cols = 'Target_IP,Container_Process_ID' & enrich_cols = 'Container_ID,Container_Name' & enrich_cols_as = 'Container_ID_by_PPID,Container_Name_by_PPID'
+ --> @dm:selectcolumns exclude = 'Container_Process_ID'
+ --> @dm:enrich dict = 'cfx_host_container_inventory' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Container_Main_Process_ID' & enrich_cols = 'Container_ID,Container_Name' & enrich_cols_as = 'Container_ID_by_PID_2,Container_Name_by_PID_2'
+ --> @dm:selectcolumns exclude = 'Container_Main_Process_ID'
+ --> @dm:enrich dict = 'cfx_host_container_inventory' & src_key_cols = 'Target_IP,Connection_Process_ID_Parent' & dict_key_cols = 'Target_IP,Container_Main_Process_ID' & enrich_cols = 'Container_ID,Container_Name' & enrich_cols_as = 'Container_ID_by_PPID_2,Container_Name_by_PPID_2'
+ --> @dm:selectcolumns exclude = 'Container_Main_Process_ID'
+ --> @dm:fixnull columns = 'Container_ID_by_PID,Container_Name_by_PID,Container_ID_by_PPID,Container_Name_by_PPID,Container_ID_by_PID_2,Container_Name_by_PID_2,Container_ID_by_PPID_2,Container_Name_by_PPID_2'
+ --> @dm:map to = 'Container_ID' & func = 'evaluate' & expr = "Container_ID_by_PID if Container_ID_by_PPID == '' else Container_ID_by_PPID"
+ --> @dm:map to = 'Container_Name' & func = 'evaluate' & expr = "Container_Name_by_PID if Container_Name_by_PPID == '' else Container_Name_by_PPID"
+ --> @dm:map to = 'Container_ID' & func = 'evaluate' & expr = "Container_ID_by_PID_2 if Container_ID == '' else Container_ID"
+ --> @dm:map to = 'Container_ID' & func = 'evaluate' & expr = "Container_ID_by_PPID_2 if Container_ID == '' else Container_ID"
+ --> @dm:map to = 'Container_Name' & func = 'evaluate' & expr = "Container_Name_by_PID_2 if Container_Name == '' else Container_Name"
+ --> @dm:map to = 'Container_Name' & func = 'evaluate' & expr = "Container_Name_by_PPID_2 if Container_Name == '' else Container_Name"
+ --> @dm:selectcolumns exclude = '^Container_ID_by_PID$|^Container_Name_by_PID$|^Container_ID_by_PPID$|^Container_Name_by_PPID$|^Container_ID_by_PID_2$|^Container_Name_by_PID_2$|^Container_ID_by_PPID_2$|^Container_Name_by_PPID_2$'
+ --> @dm:map attr = 'Connection_State' & func = 'strip'
+ --> @dm:save name = 'cfx_host_netstat_inventory'
+ ## ### Application to Application Dependency ###########
+
+ ## Step-01 - Establish Server Port
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_inventory' & empty_as_null = 'no'
+ --> @dm:map attr = 'Connection_State' & func = 'strip'
+ --> @dm:map from = 'Local_IP_Address' & to = 'Local_IP_Address_Orig'
+ --> @dm:map to = 'Local_IP_Address' & func = 'evaluate' & expr = "Target_IP if Local_IP_Address == '127.0.0.1' or Local_IP_Address == '0.0.0.0' or Local_IP_Address == '::' or Local_IP_Address == '::1' or Local_IP_Address != Target_IP else Local_IP_Address"
+ --> *dm:filter Local_IP_Address does not contain '::'
+ --> @dm:fixnull columns = 'Connection_State'
+ --> *dm:filter Connection_State contain 'LISTEN' or (Connection_State == '' and Remote_Port == '*')
+ --> @dm:dedup columns = 'Target_IP,Local_Port,Connection_Protocol'
+ --> @dm:map to = 'Server_Port_Check' & func = 'evaluate' & expr = "'Yes' if Local_Port != '0' else 'No'"
+ --> *dm:filter * get Target_IP,Local_IP_Address,Local_Port,Local_IP_Address_Orig,Connection_Protocol,Server_Port_Check,Connection_Program,Connection_Process_ID,Connection_Process_ID_Parent,Container_ID,Container_Name
+ --> @dm:save name = 'cfx_host_netstat_server_port_dict'
+ ## Step-02 - Establish Client - Server Relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_inventory' & empty_as_null = 'no'
+ --> @dm:map attr = 'Connection_State' & func = 'strip'
+ --> @dm:fixnull columns = 'Connection_State'
+ --> *dm:filter Connection_State does not contain 'LISTEN' and (Connection_State != '' or Remote_Port != '*')
+ --> @dm:map from = 'Local_IP_Address' & to = 'Local_IP_Address_Orig'
+ --> @dm:map from = 'Remote_IP_Address' & to = 'Remote_IP_Address_Orig'
+ --> @dm:map to = 'Local_IP_Address' & func = 'evaluate' & expr = "Target_IP if Local_IP_Address == '127.0.0.1' or Local_IP_Address == '0.0.0.0' or Local_IP_Address != Target_IP or Local_IP_Address == '::1' else Local_IP_Address"
+ --> @dm:map to = 'Remote_IP_Address' & func = 'evaluate' & expr = "Target_IP if Remote_IP_Address == '127.0.0.1' or Remote_IP_Address == '0.0.0.0' or Local_IP_Address == Remote_IP_Address or Remote_IP_Address == '::1' else Remote_IP_Address"
+ --> @dm:enrich dict = 'cfx_host_consolidated_network_inventory' & src_key_cols = 'Remote_IP_Address' & dict_key_cols = 'NIC_IP_Address' & enrich_cols = 'Target_IP' & enrich_cols_as = 'Remote_IP_Address_Alias'
+ --> @dm:fixnull columns = 'Remote_IP_Address_Alias'
+ --> @dm:map to = 'Remote_IP_Address' & func = 'evaluate' & expr = "Remote_IP_Address_Alias if Remote_IP_Address_Alias != '' else Remote_IP_Address"
+ --> @dm:enrich dict = 'cfx_host_netstat_server_port_dict' & src_key_cols = 'Local_IP_Address,Local_Port,Connection_Protocol' & dict_key_cols = 'Local_IP_Address,Local_Port,Connection_Protocol' & enrich_cols = 'Server_Port_Check'
+ --> @dm:map to = 'Server_Port_Check' & func = 'evaluate' & expr = "'No' if Server_Port_Check != 'Yes' else Server_Port_Check"
+ --> @dm:map to = 'Port_Type' & func = 'evaluate' & expr = "'SERVER' if Server_Port_Check == 'Yes' else 'CLIENT'"
+ --> @dm:map to = 'Client_IP_Address' & func = 'evaluate' & expr = "Local_IP_Address if Port_Type == 'CLIENT' else Remote_IP_Address"
+ --> @dm:map to = 'Client_Port' & func = 'evaluate' & expr = "Local_Port if Port_Type == 'CLIENT' else Remote_Port"
+ --> @dm:map to = 'Server_IP_Address' & func = 'evaluate' & expr = "Local_IP_Address if Port_Type == 'SERVER' else Remote_IP_Address"
+ --> @dm:map to = 'Server_Port' & func = 'evaluate' & expr = "Local_Port if Port_Type == 'SERVER' else Remote_Port"
+ --> @dm:map to = 'Connection_Flow' & func = 'evaluate' & expr = "'Local_to_Local' if Client_IP_Address == Server_IP_Address else 'Local_to_Remote' if Port_Type == 'CLIENT' and Client_IP_Address != Server_IP_Address else 'Remote_to_Local' if Port_Type == 'SERVER' and Client_IP_Address != Server_IP_Address else 'Unknown'"
+ --> @dm:dedup columns = 'Client_IP_Address,Client_Port,Server_IP_Address,Server_Port'
+ --> @dm:map attr = 'Client_Port' & func = 'strip'
+ --> @dm:map attr = 'Server_Port' & func = 'strip'
+ --> @dm:to-type columns = 'Connection_Process_ID,Client_Port,Server_Port' & type = 'int'
+ --> @dm:selectcolumns exclude = '^NIC_IP_Address$|^Remote_IP_Address_Alias$|^Server_Port_Check$'
+ --> @dm:save name = 'cfx_host_netstat_server_client_relationship'
+ ## Step-3 - Map Process to Service relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_service_inventory' & empty_as_null = 'no'
+ --> *dm:filter Service_Process_ID != 0
+ --> @dm:to-type columns = 'Service_Process_ID' & type = 'int'
+ --> @dm:save name = 'temp-cfx_host_service_inventory'
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_process_inventory' & empty_as_null = 'no'
+ --> @dm:enrich dict = 'temp-cfx_host_service_inventory' & src_key_cols = 'Target_IP,Process_ID' & dict_key_cols = 'Target_IP,Service_Process_ID' & enrich_cols = 'Service_Name'
+ --> @dm:selectcolumns exclude = 'Service_Process_ID'
+ --> *dm:filter * get Target_IP,Process_Name,Process_ID,Parent_Process_ID,Service_Name as 'Service_Name_by_PID'
+ --> @dm:enrich dict = 'temp-cfx_host_service_inventory' & src_key_cols = 'Target_IP,Parent_Process_ID' & dict_key_cols = 'Target_IP,Service_Process_ID' & enrich_cols = 'Service_Name'
+ --> @dm:selectcolumns exclude = 'Service_Process_ID'
+ --> *dm:filter * get Target_IP,Process_Name,Process_ID,Parent_Process_ID,Service_Name_by_PID,Service_Name as 'Service_Name_by_PPID'
+ --> @dm:to-type columns = 'Process_ID,Parent_Process_ID' & type = 'int'
+ --> @dm:save name = 'cfx_host_netstat_process_service_relationship'
+ ## Step-4 - Create Client port process to service relationship dictionary
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship' & empty_as_null = 'no'
+ --> *dm:filter Port_Type = 'CLIENT' and Target_IP = Client_IP_Address get Target_IP,Client_IP_Address,Server_IP_Address,Connection_Program,Connection_State,Connection_Process_ID,Connection_Process_ID_Parent,Container_ID,Container_Name,Client_Port,Server_Port,Local_IP_Address_Orig,Remote_IP_Address_Orig
+ --> @dm:to-type columns = 'Connection_Process_ID,Connection_Process_ID_Parent' & type = 'int'
+ --> @dm:enrich dict = 'cfx_host_netstat_process_service_relationship' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Process_ID' & enrich_cols = 'Process_Name,Service_Name_by_PID'
+ --> @dm:rename-columns Client_Process_Name_by_PID = 'Process_Name' & Client_Service_Name_by_PID = 'Service_Name_by_PID'
+ ## --> @dm:map from = 'Process_Name' & to = 'Client_Process_Name_by_PID'
+
+ ## --> @dm:map from = 'Service_Name_by_PID' & to = 'Client_Service_Name_by_PID'
+
+ ## --> @dm:selectcolumns exclude = '^Process_Name$|^Service_Name_by_PID$|^Process_PID$'
+
+ --> @dm:enrich dict = 'cfx_host_netstat_process_service_relationship' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Process_ID' & enrich_cols = 'Process_Name,Service_Name_by_PPID'
+ --> @dm:rename-columns Client_Process_Name_by_PPID = 'Process_Name' & Client_Service_Name_by_PPID = 'Service_Name_by_PPID' & Client_Connection_Program = 'Connection_Program' & Client_Container_ID = 'Container_ID' & Client_Container_Name = 'Container_Name' & Client_Connection_Process_ID = 'Connection_Process_ID' & Client_Connection_Process_ID_Parent = 'Connection_Process_ID_Parent' & Client_IP_Address_Orig = 'Local_IP_Address_Orig'
+ ## --> @dm:map from = 'Process_Name' & to = 'Client_Process_Name_by_PPID'
+
+ ## --> @dm:map from = 'Service_Name_by_PPID' & to = 'Client_Service_Name_by_PPID'
+
+ ## --> @dm:map from = 'Connection_Program' & to = 'Client_Connection_Program'
+
+ ## --> @dm:map from = 'Container_ID' & to = 'Client_Container_ID'
+
+ ## --> @dm:map from = 'Container_Name' & to = 'Client_Container_Name'
+
+ ## --> @dm:map from = 'Connection_Process_ID' & to = 'Client_Connection_Process_ID'
+
+ ## --> @dm:map from = 'Connection_Process_ID_Parent' & to = 'Client_Connection_Process_ID_Parent'
+
+ ## --> @dm:map from = 'Local_IP_Address_Orig' & to = 'Client_IP_Address_Orig'
+
+ --> @dm:fixnull columns = 'Client_Service_Name_by_PID,Client_Process_Name_by_PID'
+ --> @dm:map to = 'Client_Service_Name' & func = 'fixed' & value = ''
+ --> @dm:map to = 'Client_Service_Name' & func = 'evaluate' & expr = "Client_Service_Name_by_PID if Client_Service_Name_by_PID != '' else Client_Process_Name_by_PID if Client_Process_Name_by_PID != '' else Client_Service_Name"
+ --> @dm:fixnull columns = 'Client_Service_Name_by_PPID,Client_Process_Name_by_PPID,Client_Service_Name'
+ --> @dm:map to = 'Client_Service_Name' & func = 'evaluate' & expr = "Client_Service_Name_by_PPID if Client_Service_Name_by_PPID != '' else Client_Process_Name_by_PPID if Client_Process_Name_by_PPID != '' and Client_Service_Name == '' else Client_Service_Name"
+ --> @dm:map to = 'Client_Service_Name' & func = 'evaluate' & expr = "Client_Container_Name if Client_Container_ID != '' else Client_Service_Name"
+ ## --> @dm:selectcolumns exclude = '^Process_Name$|^Service_Name_by_PPID$|Process_ID_*|^Parent_Process_ID$|^Connection_Program$|^Container_ID$|^Container_Name$|^Connection_Process_ID$|^Connection_Process_ID_Parent$'
+
+ --> *dm:filter Client_Connection_Process_ID != ''
+ --> @dm:save name = 'cfx_host_netstat_client_port_process_dict'
+ ## Step-5 - Create Server port process to service relationship dictionary
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship' & empty_as_null = 'no'
+ --> *dm:filter Port_Type = 'SERVER' and Target_IP = Server_IP_Address get Target_IP,Client_IP_Address,Server_IP_Address,Connection_Program,Connection_State,Connection_Process_ID,Connection_Process_ID_Parent,Container_ID,Container_Name,Client_Port,Server_Port,Local_IP_Address_Orig,Remote_IP_Address_Orig
+ --> @dm:to-type columns = 'Connection_Process_ID' & type = 'int'
+ --> @dm:enrich dict = 'cfx_host_netstat_process_service_relationship' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Process_ID' & enrich_cols = 'Process_Name,Service_Name_by_PID'
+ --> @dm:rename-columns Server_Process_Name_by_PID = 'Process_Name' & Server_Service_Name_by_PID = 'Service_Name_by_PID'
+ ## --> @dm:map from = 'Process_Name' & to = 'Server_Process_Name_by_PID'
+
+ ## --> @dm:map from = 'Service_Name_by_PID' & to = 'Server_Service_Name_by_PID'
+
+ ## --> @dm:selectcolumns exclude = '^Process_Name$|^Service_Name_by_PID$|^Process_PID$'
+
+ --> @dm:enrich dict = 'cfx_host_netstat_process_service_relationship' & src_key_cols = 'Target_IP,Connection_Process_ID' & dict_key_cols = 'Target_IP,Process_ID' & enrich_cols = 'Process_Name,Service_Name_by_PPID'
+ --> @dm:rename-columns Server_Process_Name_by_PPID = 'Process_Name' & Server_Service_Name_by_PPID = 'Service_Name_by_PPID' & Server_Connection_Program = 'Connection_Program' & Server_Container_ID = 'Container_ID' & Server_Container_Name = 'Container_Name' & Server_Connection_Process_ID = 'Connection_Process_ID' & Server_Connection_Process_ID_Parent = 'Connection_Process_ID_Parent' & Server_Connection_Process_ID_Parent = 'Connection_Process_ID_Parent' & Server_IP_Address_Orig = 'Local_IP_Address_Orig'
+ ## --> @dm:map from = 'Process_Name' & to = 'Server_Process_Name_by_PPID'
+
+ ## --> @dm:rename-columns Server_Service_Name_by_PPID = 'Service_Name_by_PPID'
+
+ ## --> @dm:map from = 'Service_Name_by_PPID' & to = 'Server_Service_Name_by_PPID'
+
+ ## --> @dm:rename-columns Server_Connection_Program = 'Connection_Program'
+
+ ## --> @dm:map from = 'Connection_Program' & to = 'Server_Connection_Program'
+
+ ## --> @dm:rename-columns Server_Container_ID = 'Container_ID'
+
+ ## --> @dm:map from = 'Container_ID' & to = 'Server_Container_ID'
+
+ ## --> @dm:rename-columns Server_Container_Name = 'Container_Name'
+
+ ## --> @dm:map from = 'Container_Name' & to = 'Server_Container_Name'
+
+ ## --> @dm:rename-columns Server_Connection_Process_ID = 'Connection_Process_ID'
+
+ ## --> @dm:map from = 'Connection_Process_ID' & to = 'Server_Connection_Process_ID'
+
+ ## --> @dm:rename-columns Server_Connection_Process_ID_Parent = 'Connection_Process_ID_Parent'
+
+ ## --> @dm:map from = 'Connection_Process_ID_Parent' & to = 'Server_Connection_Process_ID_Parent'
+
+ ## --> @dm:rename-columns Server_IP_Address_Orig = 'Local_IP_Address_Orig'
+
+ ## --> @dm:map from = 'Local_IP_Address_Orig' & to = 'Server_IP_Address_Orig'
+
+ --> @dm:fixnull columns = 'Server_Service_Name_by_PID,Server_Process_Name_by_PID'
+ --> @dm:map to = 'Server_Service_Name' & func = 'fixed' & value = ''
+ --> @dm:map to = 'Server_Service_Name' & func = 'evaluate' & expr = "Server_Service_Name_by_PID if Server_Service_Name_by_PID != '' else Server_Process_Name_by_PID if Server_Process_Name_by_PID != '' else Server_Service_Name"
+ --> @dm:fixnull columns = 'Server_Service_Name_by_PPID,Server_Process_Name_by_PPID,Server_Service_Name'
+ --> @dm:map to = 'Server_Service_Name' & func = 'evaluate' & expr = "Server_Service_Name_by_PPID if Server_Service_Name_by_PPID != '' else Server_Process_Name_by_PPID if Server_Process_Name_by_PPID != '' and Server_Service_Name == '' else Server_Service_Name"
+ --> @dm:map to = 'Server_Service_Name' & func = 'evaluate' & expr = "Server_Container_Name if Server_Container_ID != '' else Server_Service_Name"
+ ## --> @dm:selectcolumns exclude = '^Process_Name$|^Service_Name_by_PPID$|Process_ID_*|^Parent_Process_ID$|^Connection_Program$|^Container_ID$|^Container_Name$|^Connection_Process_ID$|^Connection_Process_ID_Parent$'
+
+ --> @dm:save name = 'cfx_host_netstat_server_port_process_dict'
+ ## Step-6 - Create Client - Server relationship enrichment with Client - Server process / service names
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship' & empty_as_null = 'no'
+ --> @dm:map from = 'Target_IP' & to = 'target_ip_address'
+ --> @dm:enrich dict = 'cfx_host_netstat_client_port_process_dict' & src_key_cols = 'Client_IP_Address,Server_IP_Address,Client_Port' & dict_key_cols = 'Target_IP,Server_IP_Address,Client_Port' & enrich_cols = 'Client_Service_Name,Client_Process_Name_by_PID,Client_Service_Name_by_PID,Client_Process_Name_by_PPID,Client_Service_Name_by_PPID,Client_Container_Name,Client_Container_ID,Client_IP_Address_Orig'
+ --> @dm:selectcolumns exclude = 'Target_IP.*'
+ --> @dm:enrich dict = 'cfx_host_netstat_server_port_process_dict' & src_key_cols = 'Server_IP_Address,Client_IP_Address,Server_Port' & dict_key_cols = 'Target_IP,Client_IP_Address,Server_Port' & enrich_cols = 'Server_Service_Name,Server_Process_Name_by_PID,Server_Service_Name_by_PID,Server_Process_Name_by_PPID,Server_Service_Name_by_PPID,Server_Container_Name,Server_Container_ID,Server_IP_Address_Orig'
+ --> @dm:selectcolumns exclude = 'Target_IP.*'
+ --> @dm:fixnull-regex columns = '.*'
+ --> @dm:map from = 'target_ip_address' & to = 'Target_IP'
+ --> @dm:selectcolumns exclude = '^target_ip_address$|^Server_Port_Check$|^Local_IP_Address$|^Local_Port$|^Port_Type$|^Remote_IP_Address$|^Remote_Port$|^Connection_Program$|^Connection_Process_ID$|^Connection_Process_ID_Parent$|^Container_ID$|^Container_Name$|^Local_IP_Address_Orig$|^Remote_IP_Address_Orig$|^$|Client_Process_Name_by_.*|Client_Service_Name_by_.*|Server_Process_Name_by_.*|Server_Service_Name_by_.*|Local_Port.*'
+ --> *dm:filter Connection_State != 'TIME_WAIT' & Connection_State != 'CLOSE_WAIT' & Connection_State != ''
+ --> @dm:dedup columns = 'Client_IP_Address,Client_Service_Name,Server_IP_Address,Server_Port'
+ --> @dm:save name = 'cfx_host_netstat_server_client_relationship_final'
+ ## ### Application Tagging #####
+
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> @dm:enrich dict = 'cfx_app_dict' & src_key_cols = 'Target_IP' & dict_key_cols = 'app_ip_address' & enrich_cols = 'app_name' & enrich_cols_as = 'Application'
+ --> @dm:fixnull columns='Client_Service_Name' & value = ''
+ --> @dm:map to = 'Client_App_Component' & func = 'fixed' & value = ''
+ --> @dm:map to = 'Client_App_Component' & func = 'evaluate' & expr = "'Webserver' if 'tomcat' in Client_Service_Name else 'Infraservice' if 'gluster' in Client_Service_Name or 'minio' in Client_Service_Name or 'kafka' in Client_Service_Name or 'zookeeper' in Client_Service_Name else 'Database' if 'mariadb' in Client_Service_Name else 'Appserver' if 'cfxdimensions' in Client_Service_Name or 'caas' in Client_Service_Name or 'provisioner' in Client_Service_Name or 'identity' in Client_Service_Name or 'alert' in Client_Service_Name or 'registry' in Client_Service_Name or 'user-preferences' in Client_Service_Name or 'reporting' in Client_Service_Name or 'locker' in Client_Service_Name or 'ingestion' in Client_Service_Name or 'webhook' in Client_Service_Name or 'datasource' in Client_Service_Name or 'scheduler' in Client_Service_Name or 'safebox' in Client_Service_Name or 'streaming' in Client_Service_Name or 'clambda' in Client_Service_Name or 'control' in Client_Service_Name or 'plugin' in Client_Service_Name or 'email' in Client_Service_Name or 'notification' in Client_Service_Name else 'Loadbalancer' if 'haproxy' in Client_Service_Name else Client_App_Component"
+ --> @dm:fixnull columns='Server_Service_Name' & value = ''
+ --> @dm:map to = 'Server_App_Component' & func = 'fixed' & value = ''
+ --> @dm:map to = 'Server_App_Component' & func = 'evaluate' & expr = "'Webserver' if 'tomcat' in Server_Service_Name else 'Infraservice' if 'gluster' in Server_Service_Name or 'minio' in Server_Service_Name or 'kafka' in Server_Service_Name or 'zookeeper' in Server_Service_Name else 'Database' if 'mariadb' in Server_Service_Name else 'Appserver' if 'cfxdimensions' in Server_Service_Name or 'caas' in Server_Service_Name or 'provisioner' in Server_Service_Name or 'identity' in Server_Service_Name or 'alert' in Server_Service_Name or 'registry' in Server_Service_Name or 'user-preferences' in Server_Service_Name or 'reporting' in Server_Service_Name or 'locker' in Server_Service_Name or 'ingestion' in Server_Service_Name or 'webhook' in Server_Service_Name or 'datasource' in Server_Service_Name or 'scheduler' in Server_Service_Name or 'safebox' in Server_Service_Name or 'streaming' in Server_Service_Name or 'clambda' in Server_Service_Name or 'control' in Server_Service_Name or 'plugin' in Server_Service_Name or 'email' in Server_Service_Name or 'notification' in Server_Service_Name else 'Loadbalancer' if 'haproxy' in Server_Service_Name else Server_App_Component"
+ --> *dm:filter * get Application,Target_IP,Server_IP_Address,Server_Service_Name,Server_Port,Client_IP_Address,Client_Port,Client_Service_Name,Client_App_Component,Server_App_Component
+ --> @dm:save name = 'cfx_host_netstat_server_client_relationship_final'
+ ## # Create ADM Nodes
+
+ ## # Application Node
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_Service_Name is not empty and Client_Service_Name is not empty get Application
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Application'
+ --> @dm:map from = 'Application' & to = 'node_label'
+ --> @dm:map from = 'Application' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label
+ --> @dm:save name = 'temp-server-application-nodes'
+ ## Server Nodes
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter * get Server_IP_Address,Application
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Compute'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Host'
+ --> @dm:map from = 'Server_IP_Address' & to = 'node_label'
+ --> @dm:map from = 'Server_IP_Address' & to = 'node_id'
+ --> @dm:save name = 'temp-server-nodes'
+ ## Client Nodes
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter * get Client_IP_Address,Application
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Compute'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Host'
+ --> @dm:map from = 'Client_IP_Address' & to = 'node_label'
+ --> @dm:map from = 'Client_IP_Address' & to = 'node_id'
+ --> @dm:save name = 'temp-client-nodes'
+ ## Server Application Nodes - Webserver (Server)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_App_Component = 'Webserver' get Server_IP_Address,Server_Service_Name,Server_Port,Server_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Webserver'
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Server_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Server_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-server-web-nodes'
+ ## Server Application Nodes - Webserver (Client)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_App_Component = 'Webserver' get Client_IP_Address,Client_Service_Name,Client_Port,Client_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Webserver'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Client_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-client-web-nodes'
+ ## Server Application Nodes - Application (Server)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_App_Component = 'Appserver' get Server_IP_Address,Server_Service_Name,Server_Port,Server_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Appserver'
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Server_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Server_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-server-app-nodes'
+ ## Server Application Nodes - Application (Client)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_App_Component = 'Appserver' get Client_IP_Address,Client_Service_Name,Client_Port,Client_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Appserver'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Client_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-client-app-nodes'
+ ## Server Application Nodes - Database (Server)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_App_Component = 'Database' get Server_IP_Address,Server_Service_Name,Server_Port,Server_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Database'
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Server_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Server_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-server-db-nodes'
+ ## Server Application Nodes - Database (Client)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_App_Component = 'Database' get Client_IP_Address,Client_Service_Name,Client_Port,Client_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Database'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Client_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-client-db-nodes'
+ ## Server Application Nodes - Infra (Server)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_App_Component = 'Infraservice' get Server_IP_Address,Server_Service_Name,Server_Port,Server_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Infraservice'
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Server_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Server_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-server-infra-nodes'
+ ## Server Application Nodes - Infra (Client)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_App_Component = 'Infraservice' get Client_IP_Address,Client_Service_Name,Client_Port,Client_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Infraservice'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Client_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-client-infra-nodes'
+ ## Server Application Nodes - Loadbalancer (Server)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Server_App_Component = 'Loadbalancer' get Server_IP_Address,Server_Service_Name,Server_Port,Server_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Loadbalancer'
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Server_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Server_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-server-lb-nodes'
+ ## Server Application Nodes - Loadbalancer (Client)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_App_Component = 'Loadbalancer' get Client_IP_Address,Client_Service_Name,Client_Port,Client_App_Component,Application,Target_IP
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Loadbalancer'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_Service_Name' & to = 'node_label'
+ --> @dm:map from = 'Client_Service_ID' & to = 'node_id'
+ --> @dm:save name = 'temp-client-lb-nodes'
+ ## ####
+
+ ## ADM - Nodes Consolidation
+
+ --> @c:new-block
+ --> @dm:concat names = 'temp-server-application-nodes|temp-server-nodes|temp-client-nodes|temp-server-web-nodes|temp-client-web-nodes|temp-server-app-nodes|temp-client-app-nodes|temp-server-db-nodes|temp-client-db-nodes|temp-server-infra-nodes|temp-client-infra-nodes|temp-server-lb-nodes|temp-client-lb-nodes'
+ --> @dm:save name = 'host-application-nodes-table'
+ --> @c:new-block
+ --> @dm:recall name = 'host-application-nodes-table' & empty_as_null = 'no'
+ --> @dm:dedup columns = 'node_id'
+ --> @dm:save name = 'host-application-nodes-final'
+ ## ## ADM - Edges
+
+ ## Host to Application Service Relationship (Host to application services) - Server
+
+ --> @c:new-block
+ --> @dm:recall name = 'host-application-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter * get Server_IP_Address as 'left',Server_Service_ID as 'right'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'runs'
+ --> *dm:filter left is not empty and right is not empty
+ --> @dm:save name = 'temp-host-to-app-server-edges'
+ ## Host to Application Service Relationship (Host to application services) - Client
+
+ --> @c:new-block
+ --> @dm:recall name = 'host-application-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter * get Client_IP_Address as 'left',Client_Service_ID as 'right'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'runs'
+ --> *dm:filter left is not empty and right is not empty
+ --> @dm:save name = 'temp-host-to-app-client-edges'
+ ## Host to Application Service Relationship (Application to application)
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx_host_netstat_server_client_relationship_final' & empty_as_null = 'no'
+ --> *dm:filter Client_Service_Name is not empty and Server_Service_Name is not empty get Server_IP_Address,Server_Service_Name,Server_App_Component,Client_IP_Address,Client_Service_Name,Client_App_Component
+ --> @dm:map from = 'Server_IP_Address,Server_Service_Name' & to = 'Server_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map from = 'Client_IP_Address,Client_Service_Name' & to = 'Client_Service_ID' & func = 'join' & sep = '_'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'connects-to'
+ --> *dm:filter * get Server_Service_ID as 'left',relation_type,Client_Service_ID as 'right'
+ --> @dm:save name = 'temp-app-to-app-edges'
+ ## Host to Application Service Relationship (Application service to Application) - Server
+
+ --> @c:new-block
+ --> @dm:recall name = 'host-application-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter Server_Service_ID is not empty get Server_Service_ID as 'left',Application as 'right'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter left is not empty and right is not empty
+ --> @dm:save name = 'temp-host-to-app-server-to-app-edges'
+ ## Host to Application Service Relationship (Application service to Application) - Client
+
+ --> @c:new-block
+ --> @dm:recall name = 'host-application-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter Client_Service_ID is not empty get Client_Service_ID as 'left',Application as 'right'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter left is not empty and right is not empty
+ --> @dm:save name = 'temp-host-to-app-server-to-app-edges'
+ ## ###
+
+ ## # Host - ADM Edges consolidation
+
+ --> @c:new-block
+ --> @dm:concat names = 'temp-host-to-app-server-edges|temp-host-to-app-client-edges|temp-app-to-app-edges|temp-host-to-app-server-to-app-edges|temp-host-to-app-server-to-app-edges'
+ --> @dm:dropnull columns = 'left,right'
+ --> @dm:map from = 'left' & to = 'left_id'
+ --> @dm:map from = 'right' & to = 'right_id'
+ --> @dm:dedup
+ --> @dm:save name = 'host-application-edges-final'
+ ## #########################################
+
+ ## # Host - Application Stacks - Topology Pipeline
+
+ ## #########################################
+
+ --> @c:new-block
+ --> @dm:stack-create topology_nodes='host-application-nodes-final' and topology_edges='host-application-edges-final' and name = 'host_app_stack'
+ --> @dm:stack-save name='host_app_stack'
+ ## #########################################
+
+ ## # Create pstreams if not existing already
+
+ ## #########################################
+
+ --> @dm:create-persistent-stream name = 'host_app_topology_nodes' and retention_days=0 and unique_cols= "node_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "host_app_topology_nodes" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ --> @dm:create-persistent-stream name = 'host_app_topology_edges' and retention_days=0 and unique_cols= "left_id,right_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "host_app_topology_edges" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ ## #####################
+
+ ## Save nodes and edges data to dynamic pstreams
+
+ ## #####################
+
+ --> @c:new-block
+ --> @dm:recall name="host-application-nodes-final"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'HostAppStack'
+ --> @dm:add-missing-columns columns = 'iconURL' & value = 'Not Available'
+ --> @rn:write-stream name="host_app_topology_nodes"
+ --> @dm:recall name="host-application-edges-final"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'HostAppStack'
+ --> @rn:write-stream name="host_app_topology_edges"

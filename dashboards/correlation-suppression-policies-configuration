@@ -1,0 +1,141 @@
+{
+  "name": "correlation-suppression-policies-configuration",
+  "description": "Correlation And Suppression Policies Configuration",
+  "label": "Correlation And Suppression Policies Configuration",
+  "enabled": false,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "version": "25.2.7.1",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "template_variables": {
+    "PROJECT_ID": {
+      "contextId": "project_id"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Correlation Policies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Correlation Policies",
+          "widget_type": "tabular",
+          "min_width": 12,
+          "height": 10,
+          "refreshRequired": false,
+          "timebased": false,
+          "api-endpoint": {
+            "service-name": "alert-processor",
+            "namespace": "io.cfx.dimensions.app",
+            "version": "*",
+            "methodName": "invokeAppApi:getGroupPolicies",
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {
+                  "projectId": "{{PROJECT_ID}}"
+                }
+              }
+            ]
+          },
+          "widget_id": "correlation_policies"
+        }
+      ]
+    },
+    {
+      "title": "Suppression Policies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Suppression Policies",
+          "widget_type": "tabular",
+          "min_width": 12,
+          "height": 10,
+          "refreshRequired": false,
+          "timebased": false,
+          "api-endpoint": {
+            "service-name": "alert-processor",
+            "namespace": "io.cfx.dimensions.app",
+            "version": "*",
+            "methodName": "invokeAppApi:getSuppressionPolicies",
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {
+                  "projectId": "{{PROJECT_ID}}"
+                }
+              }
+            ]
+          },
+          "widget_id": "suppression_policies"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Correlation Policies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Correlation Policies",
+          "widget_type": "tabular",
+          "min_width": 12,
+          "height": 10,
+          "refreshRequired": false,
+          "timebased": false,
+          "api-endpoint": {
+            "service-name": "alert-processor",
+            "namespace": "io.cfx.dimensions.app",
+            "version": "*",
+            "methodName": "invokeAppApi:getGroupPolicies",
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {
+                  "projectId": "{{PROJECT_ID}}"
+                }
+              }
+            ]
+          },
+          "widget_id": "correlation_policies"
+        }
+      ]
+    },
+    {
+      "title": "Suppression Policies",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Suppression Policies",
+          "widget_type": "tabular",
+          "min_width": 12,
+          "height": 10,
+          "refreshRequired": false,
+          "timebased": false,
+          "api-endpoint": {
+            "service-name": "alert-processor",
+            "namespace": "io.cfx.dimensions.app",
+            "version": "*",
+            "methodName": "invokeAppApi:getSuppressionPolicies",
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {
+                  "projectId": "{{PROJECT_ID}}"
+                }
+              }
+            ]
+          },
+          "widget_id": "suppression_policies"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "oia-incident-collab-message-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "projectid",
+      "incidentid",
+      "notification_subject"
+    ],
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-d7dbcebe-oia-incident-collab-message-stream"
+}

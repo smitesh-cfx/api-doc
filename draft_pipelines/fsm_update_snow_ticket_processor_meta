@@ -1,0 +1,11 @@
+folder: Default
+name: fsm_update_snow_ticket_processor
+description: ''
+data_path: draft-pipelines/data/fsm_update_snow_ticket_processor/2026_03_18_1/data.json
+usecase: ''
+category: null
+sources: []
+artifacts: []
+version: '2026_03_18_1'
+file_type: json
+checksum: 4ae3b450

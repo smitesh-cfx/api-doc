@@ -1,0 +1,40 @@
+{
+  "name": "support-page",
+  "label": "Support",
+  "description": "Support Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Support",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Support",
+          "widget_type": "portal_html",
+          "widget_template": "saas/support",
+          "widget_id": "6778e907"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Support",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Support",
+          "widget_type": "portal_html",
+          "widget_template": "saas/support",
+          "widget_id": "6778e907"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "rda_conversation_evaluations",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [],
+    "system_defined": "no",
+    "retention_days": 60
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-c6a19784-rda_conversation_evaluations"
+}
