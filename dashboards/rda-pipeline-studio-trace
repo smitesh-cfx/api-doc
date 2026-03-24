@@ -1,0 +1,46 @@
+{
+  "name": "rda-pipeline-studio-trace",
+  "label": "Pipeline Traces",
+  "description": "RDA Pipeline Traces Dashboard",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_style": "auto",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Pipeline Traces",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Pipeline Traces",
+          "widget_type": "portal_html",
+          "widget_template": "saas/pipeline-traces",
+          "reportId": "rda.saas.pipeline.edit.studio",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "14658c25"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Pipeline Traces",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Pipeline Traces",
+          "widget_type": "portal_html",
+          "widget_template": "saas/pipeline-traces",
+          "reportId": "rda.saas.pipeline.edit.studio",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "14658c25"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@exec:get-input
+ --> @dm:explode-json column='node'
+ --> @dm:add-missing-columns columns='vm_ip_address,switch_ip_address,app_comp_ip_address,username,password'
+ --> @dm:selectcolumns include='^vm_ip_address$|^switch_ip_address$|^app_comp_ip_address$|^username$|^password$'
+ --> @dm:eval tool_ip_address = "vm_ip_address if vm_ip_address else (switch_ip_address if switch_ip_address else app_comp_ip_address)"
+ --> @diagnostictools:systemload column_name_host = 'tool_ip_address' and column_name_username = 'username' and column_name_password='password' and json_output_flag = 'True'

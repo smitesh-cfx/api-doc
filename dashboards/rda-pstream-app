@@ -1,0 +1,52 @@
+{
+  "name": "rda-pstream-app",
+  "label": "Stream: {{PSTREAM_NAME}}",
+  "is_template": true,
+  "description": "Persistent Stream App",
+  "dashboard_folder": "System",
+  "version": "23.7.26.1",
+  "enabled": true,
+  "template_variables": {
+    "PSTREAM_NAME": {
+      "contextId": "pstream_name"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": []
+  },
+  "dashboard_sections": [
+    {
+      "title": "Example"
+    }
+  ],
+  "dashboard_type": "app",
+  "dashboard_pages": [
+    {
+      "name": "rda-pstream-data-preview-template",
+      "label": "Data Preview",
+      "icon": "Analytics.svg"
+    },
+    {
+      "name": "rda-pstream-stats-template",
+      "label": "Stats",
+      "icon": "datasource.svg"
+    },
+    {
+      "name": "rda-pstream-metadata-template",
+      "label": "Metadata",
+      "icon": "stack.svg"
+    },
+    {
+      "name": "rda-pstream-ism-details-template",
+      "label": "ISM Details",
+      "icon": "contract.svg",
+      "context_filter": "ism is 'yes'"
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Example"
+    }
+  ]
+}

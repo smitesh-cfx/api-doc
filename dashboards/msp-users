@@ -1,0 +1,330 @@
+{
+  "name": "msp-users",
+  "description": "Users",
+  "label": "Users",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "template_variables": null,
+  "version": "25.3.5.1",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Users",
+      "widgets": [
+        {
+          "title": "Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.users.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bc99fde4"
+        }
+      ]
+    },
+    {
+      "title": "API Users",
+      "widgets": [
+        {
+          "title": "API Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.api.users.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "e6477e74"
+        }
+      ]
+    },
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "f7d8b5be"
+        }
+      ]
+    },
+    {
+      "title": "User Roles",
+      "widgets": [
+        {
+          "title": "User Roles",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.profile.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "e4c2d79d"
+        }
+      ]
+    },
+    {
+      "title": "Permission Groups",
+      "widgets": [
+        {
+          "title": "RDA Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.rda.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "dc70c216"
+        },
+        {
+          "title": "OIA Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.oia.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "5f9205a6"
+        },
+        {
+          "title": "ML Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.ml.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "43efc40d"
+        },
+        {
+          "title": "AgenticAI Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.agenticai.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "1d5fd007"
+        },
+        {
+          "title": "Custom Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.custom.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "44968c3e"
+        }
+      ]
+    },
+    {
+      "title": "Permissions",
+      "widgets": [
+        {
+          "title": "Custom Permissions",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.custom.permissions.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "60b9003d"
+        },
+        {
+          "title": "Dashboard Action Permissions",
+          "widget_type": "tabular",
+          "stream": "rda_dashboard_action_permissions",
+          "remote_searchable": true,
+          "virtual_scrolling": true,
+          "height": 8,
+          "min_wdith": 12,
+          "columns": {
+            "dashboard_name": {
+              "title": "Dashboard Name",
+              "key": true
+            },
+            "dashboard_label": {
+              "title": "Dashboard Label",
+              "visible": true
+            },
+            "section_title": {
+              "title": "Section Title",
+              "visible": true
+            },
+            "widget_title": {
+              "title": "Widget Title",
+              "visible": true
+            },
+            "action_title": {
+              "title": "Action Title",
+              "visible": true
+            },
+            "permission": {
+              "title": "Permission",
+              "visible": true
+            }
+          },
+          "widget_id": "3f66aaa9"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Users",
+      "widgets": [
+        {
+          "title": "Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.users.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bc99fde4"
+        }
+      ]
+    },
+    {
+      "title": "API Users",
+      "widgets": [
+        {
+          "title": "API Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.api.users.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "e6477e74"
+        }
+      ]
+    },
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "f7d8b5be"
+        }
+      ]
+    },
+    {
+      "title": "User Roles",
+      "widgets": [
+        {
+          "title": "User Roles",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.profile.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "e4c2d79d"
+        }
+      ]
+    },
+    {
+      "title": "Permission Groups",
+      "widgets": [
+        {
+          "title": "RDA Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.rda.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "dc70c216"
+        },
+        {
+          "title": "OIA Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.oia.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "5f9205a6"
+        },
+        {
+          "title": "ML Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.ml.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "43efc40d"
+        },
+        {
+          "title": "AgenticAI Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.agenticai.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "1d5fd007"
+        },
+        {
+          "title": "Custom Permission Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.custom.permission.groups.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "44968c3e"
+        }
+      ]
+    },
+    {
+      "title": "Permissions",
+      "widgets": [
+        {
+          "title": "Custom Permissions",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.all.custom.permissions.tabular",
+          "height": 8,
+          "min_width": 12,
+          "paginated": false,
+          "widget_id": "60b9003d"
+        },
+        {
+          "title": "Dashboard Action Permissions",
+          "widget_type": "tabular",
+          "stream": "rda_dashboard_action_permissions",
+          "remote_searchable": true,
+          "virtual_scrolling": true,
+          "height": 8,
+          "min_wdith": 12,
+          "columns": {
+            "dashboard_name": {
+              "title": "Dashboard Name",
+              "key": true
+            },
+            "dashboard_label": {
+              "title": "Dashboard Label",
+              "visible": true
+            },
+            "section_title": {
+              "title": "Section Title",
+              "visible": true
+            },
+            "widget_title": {
+              "title": "Widget Title",
+              "visible": true
+            },
+            "action_title": {
+              "title": "Action Title",
+              "visible": true
+            },
+            "permission": {
+              "title": "Permission",
+              "visible": true
+            }
+          },
+          "widget_id": "3f66aaa9"
+        }
+      ]
+    }
+  ]
+}

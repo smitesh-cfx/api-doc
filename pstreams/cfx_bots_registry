@@ -1,0 +1,15 @@
+{
+  "name": "cfx_bots_registry",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "bot_name",
+      "version"
+    ]
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing dynamic bots, including the bot name, code, JSON schema and imports.",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-0287d7ed-cfx_bots_registry"
+}

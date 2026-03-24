@@ -1,0 +1,135 @@
+@c:new-block
+ --> @exec:get-input
+ --> @dm:save name="temp-update-input"
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:save name="temp-incident-data"
+ --> @dm:save name="temp-updated-alert-data"
+ --> @dm:save name="temp-new-alert-data"
+ --> @dm:save name="temp-all-alerts-input"
+ --> @dm:save name="temp-push-new-alerts"
+ --> @dm:save name="temp-push-updated-alerts"
+ --> @dm:save name="temp-final-push-alerts"
+ --> @c:data-loop dataset="temp-update-input" & columns="project_id,incident_id,customer_id"
+ --> @dm:recall name="temp-update-input"
+ --> *dm:filter incident_id == '$incident_id' and project_id == '$project_id'
+ --> @dm:add-missing-columns columns = 'inc_data'
+ --> @dm:selectcolumns include="^inc_data$|^itsm_ticket_id$|^itsm_ticket_number$"
+ --> @dm:fixnull columns = 'inc_data' & value='{}'
+ --> *dm:filter inc_data != '{}' and inc_data != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:eval inc_data="json_loads(inc_data)"
+ --> @dm:explode-json column = 'inc_data'
+ --> @dm:save name="temp-incident-input-$project_id-$incident_id"
+ --> @dm:map to="step" & func="fixed" & value="u1"
+ --> @rn:write-stream compression="auto" & name="debug-fsm-att"
+ --> @c:new-block
+ --> @dm:concat names = 'temp-incident-input-*'
+ --> @dm:save name = "temp-incident-data"
+ --> @c:data-loop dataset="temp-update-input" & columns="project_id,incident_id,customer_id"
+ --> @dm:recall name="temp-update-input"
+ --> *dm:filter incident_id == '$incident_id' and project_id == '$project_id'
+ --> @dm:selectcolumns include="^updated_alerts$"
+ --> @dm:add-missing-columns columns = 'updated_alerts'
+ --> @dm:fixnull columns = 'updated_alerts' & value='[]'
+ --> *dm:filter updated_alerts != '[]' and updated_alerts != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:eval updated_alerts="json_loads(updated_alerts)"
+ --> @dm:explode-json column = 'updated_alerts'
+ --> @dm:eval project_id ="'$project_id'"
+ --> @dm:eval incident_id ="'$incident_id'"
+ --> @dm:eval customer_id ="'$customer_id'"
+ --> @dm:save name="temp-updated-alert-input-$project_id-$incident_id"
+ --> @c:new-block
+ --> @dm:concat names = 'temp-updated-alert-input-*'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:eval update_match = "'YES'"
+ --> @dm:save name = "temp-updated-alert-data"
+ --> @c:data-loop dataset="temp-update-input" & columns="project_id,incident_id,customer_id"
+ --> @dm:recall name="temp-update-input"
+ --> *dm:filter incident_id == '$incident_id' and project_id == '$project_id'
+ --> @dm:selectcolumns include="^new_alerts$"
+ --> @dm:add-missing-columns columns = 'new_alerts'
+ ## --> @dm:eval     new_alerts='"[\"58f43b2f-b69a-45db-b7d4-977bcb290e50\", \"11a8214d-ad58-4d62-b655-594f610ab491\"]"'
+
+ ## --> @dm:fixnull     columns = 'new_alerts' & value='["abc", "def"]'
+
+ --> *dm:filter new_alerts != '[]' and new_alerts != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:eval a_id="json_loads(new_alerts)"
+ --> @dm:selectcolumns exclude="^new_alerts$"
+ --> @dm:explode-json column = 'a_id'
+ --> @dm:eval project_id ="'$project_id'"
+ --> @dm:eval incident_id ="'$incident_id'"
+ --> @dm:eval customer_id ="'$customer_id'"
+ --> @dm:save name="temp-new-alert-input-$project_id-$incident_id"
+ --> @c:new-block
+ --> @dm:concat names = 'temp-new-alert-input-*'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:eval new_match = "'YES'"
+ --> @dm:save name = "temp-new-alert-data"
+ --> @c:data-loop dataset="temp-update-input" & columns="project_id,incident_id,customer_id"
+ --> @dm:empty
+ --> @dm:addrow name="oia-alerts-stream" & max_rows="1000"
+ --> #dm:query-persistent-stream a_incident_id in ['$incident_id'] and a_created_by not in ['CORRELATION']
+ --> @dm:eval project_id ="'$project_id'"
+ --> @dm:eval incident_id ="'$incident_id'"
+ --> @dm:eval customer_id ="'$customer_id'"
+ --> @dm:save name="temp-all-alerts-input-$project_id-$incident_id"
+ --> @c:new-block
+ --> @dm:concat names = 'temp-all-alerts-input-*'
+ --> @dm:save name = "temp-all-alerts-input"
+ --> @c:new-block
+ --> @dm:recall name="temp-new-alert-data"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:recall name = "temp-all-alerts-input"
+ --> @dm:enrich dict="temp-new-alert-data" and src_key_cols="a_id" and dict_key_cols="a_id" and enrich_cols='new_match'
+ --> *dm:filter new_match  is 'YES'
+ --> @dm:selectcolumns exclude="^new_match$"
+ --> @dm:save name="temp-push-new-alerts"
+ --> @dm:save name = "temp-all-alerts-input"
+ --> @c:new-block
+ --> @dm:recall name="temp-updated-alert-data"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:recall name = "temp-all-alerts-input"
+ --> @dm:enrich dict="temp-updated-alert-data" and src_key_cols="a_id" and dict_key_cols="a_id" and enrich_cols='update_match'
+ --> *dm:filter update_match  is 'YES'
+ --> @dm:selectcolumns exclude="^update_match$"
+ --> @dm:save name="temp-push-updated-alerts"
+ --> @dm:save name = "temp-all-alerts-input"
+ --> @c:data-loop dataset="temp-all-alerts-input" & columns="project_id,incident_id,customer_id"
+ --> @dm:recall name="temp-all-alerts-input"
+ --> *dm:filter incident_id == '$incident_id' and project_id == '$project_id'
+ --> @dm:apply-template-all-rows template_name = 'snow-notes-template' & output_col = 'concat_value'
+ --> @dm:add-missing-columns columns = 'concat_value' & value=""
+ --> @dm:eval work_notes="'[code] ' + concat_value + ' [/code]'"
+ --> @dm:copy-columns to="notes" & from="work_notes"
+ --> @dm:copy-columns to="comments" & from="work_notes"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="customer_id" & func="fixed" & value="$customer_id"
+ --> @dm:enrich dict='temp-incident-data' & dict_key_cols='incident_id,project_id' & src_key_cols='incident_id,project_id' & enrich_cols='i_state,i_summary,i_description,itsm_ticket_id,itsm_ticket_number,i_priority'
+ --> @dm:map to="account" & func="fixed" & value="CloudFabrix"
+ --> @dm:map to="company" & func="fixed" & value="f5eab4f4070e1110187bf9fc7c1ed0ef"
+ --> @dm:map to="category" & func="fixed" & value="Software"
+ --> @dm:copy-columns to="shortDescription" & from="i_summary"
+ --> @dm:copy-columns to="short_description" & from="i_summary"
+ --> @dm:copy-columns to="sys_id" & from="itsm_ticket_id"
+ --> @dm:eval state="('New' if i_state == 'Open' else ('New' if i_state == 'Assigned' else ('On Hold' if i_state == 'On Hold' else ('Resolved' if i_state == 'Resolved' else ('Resolved' if i_state == 'Closed' else ('Canceled' if i_state == 'Cancelled' else ('New')))))))"
+ --> @dm:fixnull columns = 'i_priority' & value='3.0'
+ --> @dm:eval impact="('1 - High' if (str(i_priority) == '1.0') else ('2 - Medium' if (str(i_priority) == '2.0') else ('3 - Low')))"
+ --> @dm:eval urgency="('1 - High' if (str(i_priority) == '1.0') else ('2 - Medium' if (str(i_priority) == '2.0') else ('3 - Low')))"
+ --> @dm:eval severity="('1 - High' if (str(i_priority) == '1.0') else ('2 - Medium' if (str(i_priority) == '2.0') else ('3 - Low')))"
+ --> @dm:apply-template-by-row template_name = 'snow-description-template' & output_col = 'description'
+ --> @dm:eval close_code="'Solution provided' if (state == 'Resolved' or state == 'Closed') else None"
+ --> @dm:eval close_notes="comments if (state == 'Resolved' or state == 'Closed') else None"
+ --> @dm:map to="caller_id" & func="fixed" & value="643b55211b592510e33b42edee4bcb9f"
+ --> @dm:selectcolumns include="account|company|category|description|short|state|urgency|impact|severity|notes|comments|work_notes|project_id|incident_id|customer_id|itsm|sys_id|close|caller"
+ --> @dm:map to="step" & func="fixed" & value="u6"
+ --> @rn:write-stream compression="auto" & name="debug-fsm-att"
+ --> @snowv2:update-incident id_cols="sys_id" & data_cols="urgency,state,impact,work_notes,close_code,close_notes,caller_id"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="customer_id" & func="fixed" & value="$customer_id"
+ --> @dm:map to="step" & func="fixed" & value="u7"
+ --> @rn:write-stream compression="auto" & name="debug-fsm-att"

@@ -1,0 +1,47 @@
+{
+  "name": "rda-pstream-metadata-template",
+  "label": "Persistent Stream Metadata",
+  "description": "Persistent Stream Metadata",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "template_variables": {
+    "PSTREAM_NAME": {
+      "contextId": "pstream_name"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Metadata",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Metadata",
+          "widget_type": "metadata",
+          "paginated": true,
+          "stream": "{{PSTREAM_NAME}}",
+          "widget_id": "2da925b4"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Metadata",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Metadata",
+          "widget_type": "metadata",
+          "paginated": true,
+          "stream": "{{PSTREAM_NAME}}",
+          "widget_id": "2da925b4"
+        }
+      ]
+    }
+  ]
+}

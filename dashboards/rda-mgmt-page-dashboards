@@ -1,0 +1,671 @@
+{
+  "name": "rda-mgmt-page-dashboards",
+  "label": "Dashboards",
+  "description": " User Dashboard Management Page",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [
+      {
+        "id": "saved_time",
+        "label": "Saved Time",
+        "type": "DATETIME"
+      },
+      {
+        "id": "enabled",
+        "label": "Enabled",
+        "type": "BOOLEAN"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Dashboards",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Dashboards",
+          "widget_type": "tabular",
+          "stream": "rda_dashboards_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "dashboard_folder",
+            "dashboard_type",
+            "label",
+            "description"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "dashboard_folder": {
+              "title": "Dashboard Folder"
+            },
+            "type": {
+              "title": "Type",
+              "type": "FIXED_VALUE",
+              "value": "Dashboard",
+              "visible": false,
+              "sortable": false
+            },
+            "dashboard_type": {
+              "title": "Dashboard Type"
+            },
+            "label": {
+              "title": "Label",
+              "key": true
+            },
+            "description": {
+              "title": "description"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "url",
+              "label": "URL",
+              "expr": "'/workspace/dashboard/user-dashboard-' + name",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visible": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:user_dashboard:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.add.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "appName": "user-dashboard",
+              "displayLabelColumnId": "id",
+              "drillDownLinkField": "name",
+              "identifier": "user.dashboard.view",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Dashboard",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "title": "View YAML",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-view-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.view.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "title": "View JSON",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-view-json",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.view.json"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "title": "Edit YAML",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-edit-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.edit.yaml"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "title": "Edit JSON",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-edit-json",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.edit.json"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:disable",
+              "title": "Disable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-deactivate-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:enable",
+              "title": "Enable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-activate-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-delete-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.delete"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "d5b2edf0"
+        }
+      ]
+    },
+    {
+      "title": "Dashboard Groups",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Dashboard Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "dashboard.groups.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "widget_id": "c821f1a3"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Dashboards",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Dashboards",
+          "widget_type": "tabular",
+          "stream": "rda_dashboards_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "dashboard_folder",
+            "dashboard_type",
+            "label",
+            "description"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "dashboard_folder": {
+              "title": "Dashboard Folder"
+            },
+            "type": {
+              "title": "Type",
+              "type": "FIXED_VALUE",
+              "value": "Dashboard",
+              "visible": false,
+              "sortable": false
+            },
+            "dashboard_type": {
+              "title": "Dashboard Type"
+            },
+            "label": {
+              "title": "Label",
+              "key": true
+            },
+            "description": {
+              "title": "description"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "url",
+              "label": "URL",
+              "expr": "'/workspace/dashboard/user-dashboard-' + name",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visible": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:user_dashboard:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.add.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "appName": "user-dashboard",
+              "displayLabelColumnId": "id",
+              "drillDownLinkField": "name",
+              "identifier": "user.dashboard.view",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Dashboard",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "title": "View YAML",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-view-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.view.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:view",
+              "title": "View JSON",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-view-json",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.view.json"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "title": "Edit YAML",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-edit-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.edit.yaml"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "title": "Edit JSON",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-edit-json",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.edit.json"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:disable",
+              "title": "Disable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-deactivate-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:enable",
+              "title": "Enable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-activate-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-delete-dashboard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.userdashboard.delete"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "d5b2edf0"
+        }
+      ]
+    },
+    {
+      "title": "Dashboard Groups",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Dashboard Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "dashboard.groups.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "widget_id": "c821f1a3"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+folder: AI
+name: run_rda_workflow
+description: test pipeline
+data_path: pipelines/data/run_rda_workflow/2025.10.10.1/data.json
+usecase: ''
+category: ''
+sources:
+  workflow:
+    name: workflow
+    type: workflow
+artifacts: []
+version: 2025.10.10.1
+file_type: json
+checksum: a38c10e0

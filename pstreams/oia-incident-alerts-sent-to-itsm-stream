@@ -1,0 +1,17 @@
+{
+  "name": "oia-incident-alerts-sent-to-itsm-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "projectid",
+      "incidentid",
+      "alertid",
+      "sourcestatus"
+    ],
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-836266d8-oia-incident-alerts-sent-to-itsm-stream"
+}

@@ -1,0 +1,910 @@
+{
+  "name": "rda-pipeline-view-trace-observability",
+  "label": "{{PIPELINE_NAME}}",
+  "description": "View pipeline traces",
+  "enabled": true,
+  "context_label_id": "pipeline_name",
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_generator": {
+    "attachment": "generator"
+  },
+  "version": "25.11.20.1",
+  "live_edit": false,
+  "short_label": "Pipeline Traces",
+  "dashboard_filters": {
+    "time_filter": true,
+    "columns_filter": [
+      {
+        "id": "attributes_deployment_id",
+        "label": "Attributes Deployment ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_deployment_name",
+        "label": "Attributes Deployment Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_deployment_run_mode",
+        "label": "Attributes Deployment Run Mode",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_deployment_type",
+        "label": "Attributes Deployment Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_is_draft",
+        "label": "Is Draft",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_pipeline_version",
+        "label": "Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "bot",
+        "label": "Bot",
+        "type": "TEXT"
+      },
+      {
+        "id": "error_message",
+        "label": "Message",
+        "type": "TEXT"
+      },
+      {
+        "id": "group_id",
+        "label": "Group ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "inspect",
+        "label": "Inspect",
+        "type": "TEXT"
+      },
+      {
+        "id": "inspect_data",
+        "label": "Inspect Data",
+        "type": "TEXT"
+      },
+      {
+        "id": "jobid",
+        "label": "Job ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "msg_version",
+        "label": "Msg Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "pipeline_checksum",
+        "label": "Pipeline Checksum",
+        "type": "TEXT"
+      },
+      {
+        "id": "pipeline_name",
+        "label": "Pipeline Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "pod_group",
+        "label": "Site",
+        "type": "TEXT"
+      },
+      {
+        "id": "pod_id",
+        "label": "Pod Id",
+        "type": "TEXT"
+      },
+      {
+        "id": "proc_info_hostname",
+        "label": "Proc Info Hostname",
+        "type": "TEXT"
+      },
+      {
+        "id": "query",
+        "label": "Query",
+        "type": "TEXT"
+      },
+      {
+        "id": "status_type",
+        "label": "Status",
+        "type": "TEXT"
+      },
+      {
+        "id": "tenant_id",
+        "label": "Tenant ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "df_size_kb",
+        "label": "Dataframe",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_cols",
+        "label": "Num Cols",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_rows",
+        "label": "Num Rows",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "pos",
+        "label": "Bot Position",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_id",
+        "label": "PID",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_cpu_percent",
+        "label": "CPU",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_cpu_time_system",
+        "label": "Proc Info CPU Time System",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_cpu_time_user",
+        "label": "Proc Info CPU Time User",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_create_time",
+        "label": "Proc Info Create Time",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_mem_mb",
+        "label": "Memory (MB)",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_memory_percent",
+        "label": "Proc Info Memory Percent",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_0",
+        "label": "Proc Info System CPU Percents 0",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_1",
+        "label": "Proc Info System CPU Percents 1",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_2",
+        "label": "Proc Info System CPU Percents 2",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_3",
+        "label": "Proc Info System CPU Percents 3",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_4",
+        "label": "Proc Info System CPU Percents 4",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_5",
+        "label": "Proc Info System CPU Percents 5",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_6",
+        "label": "Proc Info System CPU Percents 6",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "proc_info_system_cpu_percents_7",
+        "label": "Proc Info System CPU Percents 7",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "seq",
+        "label": "Sequence",
+        "type": "DOUBLE"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_system_worker_traces",
+        "title": "Job ID",
+        "group_by": [
+          "jobid"
+        ],
+        "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+        "ts_column": "timestamp",
+        "agg": "cardinality",
+        "column": "count_",
+        "type": "int",
+        "show_counts": true
+      },
+      {
+        "stream": "rda_system_worker_traces",
+        "title": "Status",
+        "group_by": [
+          "status_type"
+        ],
+        "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+        "ts_column": "timestamp",
+        "agg": "value_count",
+        "column": "count_",
+        "type": "int"
+      }
+    ],
+    "default_time_filter_labels": [
+      "All Time"
+    ]
+  },
+  "computedContext": {
+    "is_draft_status": {
+      "expr": "'yes' if str(is_draft)  in [ 'yes', 'True'] else 'no'"
+    }
+  },
+  "template_variables": {
+    "PIPELINE_NAME": {
+      "contextId": "pipeline_name"
+    },
+    "PIPELINE_VERSION": {
+      "contextId": "version"
+    },
+    "PIPELINE_TYPE": {
+      "contextId": "artifact_type"
+    },
+    "IS_DRAFT": {
+      "contextId": "is_draft_status"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Traces",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Header",
+          "widget_type": "label",
+          "max_width": 12,
+          "min_width": 12,
+          "height": 1,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "label": "<div style='text-align:left;width:100%;'><h1><a style='text-decoration:none;' target='_blank'><span style='color:#03A9F4;'>Pipeline Name:</span> <span style='color:#03A9F4;'>{{PIPELINE_NAME}}</span> | <span style='color:#03A9F4;'>Version:</span> <span style='color:#03A9F4;'>{{PIPELINE_VERSION}}</span> | <span style='color:#03A9F4;'>Pipeline Type:</span> <span style='color:#03A9F4;'>{{PIPELINE_TYPE}}</span></a></h1></div>",
+          "widget_id": "62e651e0"
+        },
+        {
+          "title": "Traces",
+          "widget_type": "tabular",
+          "stream": "rda_system_worker_traces",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 60000
+          },
+          "virtual_scrolling": false,
+          "showRowSummary": true,
+          "resizableColumns": true,
+          "ts_column": "timestamp",
+          "timebased": false,
+          "paginated": true,
+          "ui_widget_type": "TABULAR",
+          "max_width": 12,
+          "height": 10,
+          "min_width": 12,
+          "remote_searchable": false,
+          "widget_id": "182229d8",
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "columns": {
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "timestamp",
+              "sortable": false,
+              "defaultWidth": 200
+            }
+          },
+          "actions": [
+            {
+              "title": "Trace Data",
+              "type": "POPUP_REPORT",
+              "permission": "rda:pipeline:view",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:trace-inspect-data",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.trace.inspect.data"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "inspect"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            }
+          ],
+          "custom_columns": [
+            {
+              "id": "Saved Time",
+              "type": "DATETIME",
+              "expr": "timestamp"
+            },
+            {
+              "id": "Status Type",
+              "hidden": true,
+              "expr": "status_type"
+            },
+            {
+              "id": "status_type_color",
+              "hidden": true,
+              "expr": "'#007BFF' if status_type == 'in-progress' else '#28A745' if status_type == 'completed' else '#FFA500' if status_type == 'trace' else '#F44336'"
+            },
+            {
+              "id": "Status",
+              "expr": "'ok' if status_type == 'in-progress' else 'Completed' if status_type == 'completed' else 'Trace' if status_type == 'trace' else 'Failed'",
+              "htmlTemplateForRow": "{%raw%}<span class='badge' style='background-color: {{ row.status_type_color }}' > {{ row.Status }} </span>{%endraw%}"
+            },
+            {
+              "id": "Bot",
+              "expr": "bot"
+            },
+            {
+              "id": "Query",
+              "expr": "query"
+            },
+            {
+              "id": "Dataframe",
+              "expr": "str(num_rows) + 'x' + str(num_cols)"
+            },
+            {
+              "id": "Message",
+              "expr": "error_message"
+            },
+            {
+              "id": "Job ID",
+              "expr": "str(jobid)[0:8]"
+            },
+            {
+              "id": "Sequence",
+              "expr": "seq",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Site",
+              "expr": "pod_group",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Pipeline",
+              "expr": "pipeline_name",
+              "defaultWidth": 150
+            },
+            {
+              "id": "Version",
+              "expr": "attributes_pipeline_version",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Bot Position",
+              "expr": "pos",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Inspect",
+              "expr": "inspect",
+              "defaultWidth": 100,
+              "key": true,
+              "visible": false
+            },
+            {
+              "id": "Inspect Data",
+              "expr": "inspect_data",
+              "defaultWidth": 100,
+              "key": true,
+              "visible": false
+            },
+            {
+              "id": "inspect",
+              "expr": "inspect",
+              "defaultWidth": 100,
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "inspect_data",
+              "expr": "inspect_data",
+              "defaultWidth": 100,
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "PID",
+              "expr": "proc_id",
+              "defaultWidth": 100
+            },
+            {
+              "id": "CPU",
+              "expr": "proc_info_cpu_percent",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Memory (MB)",
+              "expr": "proc_info_mem_mb",
+              "defaultWidth": 100
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Metrics",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Header",
+          "widget_type": "label",
+          "max_width": 12,
+          "min_width": 12,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "height": 1,
+          "label": "<div style='text-align:left;width:100%;'><h1><a style='text-decoration:none;' target='_blank'><span style='color:#03A9F4;'>Pipeline Name:</span> <span style='color:#03A9F4;'>{{PIPELINE_NAME}}</span> | <span style='color:#03A9F4;'>Version:</span> <span style='color:#03A9F4;'>{{PIPELINE_VERSION}}</span> | <span style='color:#03A9F4;'>Pipeline Type:</span> <span style='color:#03A9F4;'>{{PIPELINE_TYPE}}</span></a></h1></div>",
+          "widget_id": "94a2aac7"
+        },
+        {
+          "title": "CPU Utilization",
+          "widget_type": "timeseries",
+          "stream": "rda_system_worker_traces",
+          "ts_column": "timestamp",
+          "max_width": 6,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "height": 7,
+          "min_width": 6,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "bottom"
+          },
+          "interval": "10s",
+          "group_by": [
+            "pipeline_name"
+          ],
+          "series_spec": [
+            {
+              "column": "proc_info_cpu_percent",
+              "agg": "sum",
+              "type": "int"
+            }
+          ],
+          "widget_id": "c3c92078"
+        },
+        {
+          "title": "Memory Utilization",
+          "widget_type": "timeseries",
+          "stream": "rda_system_worker_traces",
+          "ts_column": "timestamp",
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "max_width": 6,
+          "height": 7,
+          "min_width": 6,
+          "interval": "1s",
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "bottom"
+          },
+          "group_by": [
+            "pipeline_name"
+          ],
+          "series_spec": [
+            {
+              "column": "proc_info_mem_mb",
+              "agg": "sum",
+              "type": "int"
+            }
+          ],
+          "widget_id": "1f7fe682"
+        }
+      ]
+    }
+  ],
+  "attachments": [
+    {
+      "name": "generator",
+      "value": "{%raw%}\r\n{%- set pipeline_name = context.get(\"pipeline_name\") -%}\r\n{%- set data = engine.query_stream_aggs(\r\n    stream=\"rda_system_worker_traces\", \r\n    cfxql_query = \"pipeline_name is '\" ~ pipeline_name ~ \"'\"\r\n) -%}\r\n\r\n{%- if not data and dashboard.get(\"navigation_dashboards\") -%}\r\n    {%- set nav_dashboards = dashboard[\"navigation_dashboards\"] -%}\r\n    {%- set _ = dashboard.update({\"navigation_dashboards1\": nav_dashboards}) -%}\r\n    {%- set _ = dashboard.update({\"navigation_dashboards\": None}) -%}\r\n{%- endif -%}\r\n\r\n{%endraw%}\r\n"
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Traces",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Header",
+          "widget_type": "label",
+          "max_width": 12,
+          "min_width": 12,
+          "height": 1,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "label": "<div style='text-align:left;width:100%;'><h1><a style='text-decoration:none;' target='_blank'><span style='color:#03A9F4;'>Pipeline Name:</span> <span style='color:#03A9F4;'>{{PIPELINE_NAME}}</span> | <span style='color:#03A9F4;'>Version:</span> <span style='color:#03A9F4;'>{{PIPELINE_VERSION}}</span> | <span style='color:#03A9F4;'>Pipeline Type:</span> <span style='color:#03A9F4;'>{{PIPELINE_TYPE}}</span></a></h1></div>",
+          "widget_id": "62e651e0"
+        },
+        {
+          "title": "Traces",
+          "widget_type": "tabular",
+          "stream": "rda_system_worker_traces",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 60000
+          },
+          "virtual_scrolling": false,
+          "showRowSummary": true,
+          "resizableColumns": true,
+          "ts_column": "timestamp",
+          "timebased": false,
+          "paginated": true,
+          "ui_widget_type": "TABULAR",
+          "max_width": 12,
+          "height": 10,
+          "min_width": 12,
+          "remote_searchable": false,
+          "widget_id": "182229d8",
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "columns": {
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "timestamp",
+              "sortable": false,
+              "defaultWidth": 200
+            }
+          },
+          "actions": [
+            {
+              "title": "Trace Data",
+              "type": "POPUP_REPORT",
+              "permission": "rda:pipeline:view",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:trace-inspect-data",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.trace.inspect.data"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "inspect"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            }
+          ],
+          "custom_columns": [
+            {
+              "id": "Saved Time",
+              "type": "DATETIME",
+              "expr": "timestamp"
+            },
+            {
+              "id": "Status Type",
+              "hidden": true,
+              "expr": "status_type"
+            },
+            {
+              "id": "status_type_color",
+              "hidden": true,
+              "expr": "'#007BFF' if status_type == 'in-progress' else '#28A745' if status_type == 'completed' else '#FFA500' if status_type == 'trace' else '#F44336'"
+            },
+            {
+              "id": "Status",
+              "expr": "'ok' if status_type == 'in-progress' else 'Completed' if status_type == 'completed' else 'Trace' if status_type == 'trace' else 'Failed'",
+              "htmlTemplateForRow": "{%raw%}<span class='badge' style='background-color: {{ row.status_type_color }}' > {{ row.Status }} </span>{%endraw%}"
+            },
+            {
+              "id": "Bot",
+              "expr": "bot"
+            },
+            {
+              "id": "Query",
+              "expr": "query"
+            },
+            {
+              "id": "Dataframe",
+              "expr": "str(num_rows) + 'x' + str(num_cols)"
+            },
+            {
+              "id": "Message",
+              "expr": "error_message"
+            },
+            {
+              "id": "Job ID",
+              "expr": "str(jobid)[0:8]"
+            },
+            {
+              "id": "Sequence",
+              "expr": "seq",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Site",
+              "expr": "pod_group",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Pipeline",
+              "expr": "pipeline_name",
+              "defaultWidth": 150
+            },
+            {
+              "id": "Version",
+              "expr": "attributes_pipeline_version",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Bot Position",
+              "expr": "pos",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Inspect",
+              "expr": "inspect",
+              "defaultWidth": 100,
+              "key": true,
+              "visible": false
+            },
+            {
+              "id": "Inspect Data",
+              "expr": "inspect_data",
+              "defaultWidth": 100,
+              "key": true,
+              "visible": false
+            },
+            {
+              "id": "inspect",
+              "expr": "inspect",
+              "defaultWidth": 100,
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "inspect_data",
+              "expr": "inspect_data",
+              "defaultWidth": 100,
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "PID",
+              "expr": "proc_id",
+              "defaultWidth": 100
+            },
+            {
+              "id": "CPU",
+              "expr": "proc_info_cpu_percent",
+              "defaultWidth": 100
+            },
+            {
+              "id": "Memory (MB)",
+              "expr": "proc_info_mem_mb",
+              "defaultWidth": 100
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Metrics",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Header",
+          "widget_type": "label",
+          "max_width": 12,
+          "min_width": 12,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "height": 1,
+          "label": "<div style='text-align:left;width:100%;'><h1><a style='text-decoration:none;' target='_blank'><span style='color:#03A9F4;'>Pipeline Name:</span> <span style='color:#03A9F4;'>{{PIPELINE_NAME}}</span> | <span style='color:#03A9F4;'>Version:</span> <span style='color:#03A9F4;'>{{PIPELINE_VERSION}}</span> | <span style='color:#03A9F4;'>Pipeline Type:</span> <span style='color:#03A9F4;'>{{PIPELINE_TYPE}}</span></a></h1></div>",
+          "widget_id": "94a2aac7"
+        },
+        {
+          "title": "CPU Utilization",
+          "widget_type": "timeseries",
+          "stream": "rda_system_worker_traces",
+          "ts_column": "timestamp",
+          "max_width": 6,
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "height": 7,
+          "min_width": 6,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "bottom"
+          },
+          "interval": "10s",
+          "group_by": [
+            "pipeline_name"
+          ],
+          "series_spec": [
+            {
+              "column": "proc_info_cpu_percent",
+              "agg": "sum",
+              "type": "int"
+            }
+          ],
+          "widget_id": "c3c92078"
+        },
+        {
+          "title": "Memory Utilization",
+          "widget_type": "timeseries",
+          "stream": "rda_system_worker_traces",
+          "ts_column": "timestamp",
+          "extra_filter": "pipeline_name is '{{PIPELINE_NAME}}'",
+          "max_width": 6,
+          "height": 7,
+          "min_width": 6,
+          "interval": "1s",
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "bottom"
+          },
+          "group_by": [
+            "pipeline_name"
+          ],
+          "series_spec": [
+            {
+              "column": "proc_info_mem_mb",
+              "agg": "sum",
+              "type": "int"
+            }
+          ],
+          "widget_id": "1f7fe682"
+        }
+      ]
+    }
+  ]
+}

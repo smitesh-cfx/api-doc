@@ -1,0 +1,12 @@
+{
+  "name": "rda_system_snapshots_details",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 365
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream containing detailed snapshot information including artifact lists, artifact checksums, artifact versions, and snapshot component details",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3cdeb2ca-rda_system_snapshots_details"
+}

@@ -1,0 +1,26 @@
+{
+  "name": "rda_packs_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "id",
+      "version"
+    ],
+    "flatten_json": true,
+    "_mappings": {
+      "properties": {
+        "activated_customers": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing RDA pack metadata including pack id, version, description, activated_customers count, pack configuration, and pack deployment information",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-994f00a8-rda_packs_meta"
+}

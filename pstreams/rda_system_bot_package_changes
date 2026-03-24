@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_bot_package_changes",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream recording bot package installation, update, and deployment events including package name, version, checksum, and change type for package management",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-cb47c9a2-rda_system_bot_package_changes"
+}

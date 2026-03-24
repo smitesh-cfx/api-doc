@@ -1,0 +1,40 @@
+{
+  "name": "oia-source-events-payload",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "se_id"
+    ],
+    "computed_columns": {
+      "customer_id": {
+        "expr": "se_customerid"
+      },
+      "project_id": {
+        "expr": "se_projectid"
+      }
+    },
+    "_mappings": {
+      "properties": {
+        "se_createdat": {
+          "type": "date"
+        },
+        "se_updatedat": {
+          "type": "date"
+        },
+        "se_sourcereceivedat": {
+          "type": "date"
+        }
+      }
+    },
+    "default_values": {
+      "se_sourcesystemname": "Not Available",
+      "se_status": "Not Available"
+    },
+    "retention_days": 3,
+    "retention_purge_extra_filter": "se_status != 'Failed'",
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-cd7a63ca-oia-source-events-payload"
+}

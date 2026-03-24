@@ -1,0 +1,70 @@
+{
+  "name": "tenant-users",
+  "description": "Users",
+  "label": "Users",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "template_variables": null,
+  "version": "23.2.7.1",
+  "dashboard_filters": {
+    "time_filter": false,
+    "show_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Users",
+      "widgets": [
+        {
+          "title": "Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.users.list.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "87f6842d"
+        }
+      ]
+    },
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.list.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "a351bf0e"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Users",
+      "widgets": [
+        {
+          "title": "Users",
+          "widget_type": "portal_tabular",
+          "reportId": "tenant.users.list.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "87f6842d"
+        }
+      ]
+    },
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.list.tabular",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "a351bf0e"
+        }
+      ]
+    }
+  ]
+}

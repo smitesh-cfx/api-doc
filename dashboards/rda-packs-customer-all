@@ -1,0 +1,1134 @@
+{
+  "name": "rda-packs-customer-all",
+  "label": "Customer RDA Packs",
+  "context_label_id": "customer_tag",
+  "description": "RDA Packs: Customer Activation Management",
+  "dashboard_folder": "System",
+  "enabled": false,
+  "dashboard_style": "auto",
+  "dashboard_type": "template",
+  "template_variables": {
+    "CUST_TAG": {
+      "contextId": [
+        "customerTag"
+      ]
+    },
+    "CUSTOMER_ID": {
+      "contextId": [
+        "customerId"
+      ]
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "Last 12 months"
+    ],
+    "columns_filter": [
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      },
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "id",
+        "label": "ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "type",
+        "label": "Pack Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "publisher",
+        "label": "Publisher",
+        "type": "TEXT"
+      },
+      {
+        "id": "status",
+        "label": "Status",
+        "type": "TEXT"
+      },
+      {
+        "id": "version",
+        "label": "Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "message",
+        "label": "Message",
+        "type": "TEXT"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "customer-rda-packs",
+        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter1": "scope = 'customer'",
+        "title": "Pack Type",
+        "duration_hours": 1080,
+        "limit": 200,
+        "group_by": [
+          "type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "customer-rda-packs",
+        "title": "Publisher",
+        "duration_hours": 1080,
+        "limit": 200,
+        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter1": "scope = 'customer'",
+        "group_by": [
+          "publisher"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "customer-rda-packs",
+        "title": "Status",
+        "duration_hours": 1080,
+        "limit": 200,
+        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter1": "scope = 'customer'",
+        "group_by": [
+          "status"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "customer-rda-packs",
+        "title": "Version",
+        "duration_hours": 1080,
+        "limit": 200,
+        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter1": "scope = 'customer'",
+        "group_by": [
+          "version"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "RDA Packs Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Packs",
+          "widget_type": "tabular",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "type",
+            "name",
+            "version",
+            "publisher",
+            "status",
+            "message",
+            "customer",
+            "customer_id"
+          ],
+          "sorting": [
+            {
+              "timestamp": "desc"
+            }
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "max_width": 12,
+          "min_width": 12,
+          "stream": "customer-rda-packs",
+          "extra_filter": "customer = '{{CUST_TAG}}'",
+          "extra_filter1": "scope = 'customer'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "type": {
+              "title": "Pack Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "customer_id": {
+              "title": "Customer ID",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "name": {
+              "title": "Name",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "version": {
+              "title": "Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "publisher": {
+              "title": "Publisher",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "html": {
+              "hidden": true,
+              "key": true
+            },
+            "activation_id": {
+              "hidden": true,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333"
+              }
+            },
+            "status": {
+              "title": "Status",
+              "htmlTemplateForRow": "{%raw%}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{%endraw%}"
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "upload_time": {
+              "title": "Upload Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "deactivation_time": {
+              "title": "Deactivation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "launch_dashboard": {
+              "title": "Dashboard",
+              "type": "TEXT",
+              "hidden": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + launch_dashboard",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "activation_status_page_label",
+              "label": "Activation Status Page Label",
+              "expr": "name + ' Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard",
+              "drillDownLinkField": "name",
+              "identifier": "id",
+              "selectionType": "SINGLE",
+              "title": "Launch Dashboard",
+              "type": "GO_TO_APP_STATE",
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "",
+                    "fieldId": "launch_dashboard"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:upload",
+              "selectionType": "SINGLE",
+              "title": "Compare with Another Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-comparewithpack",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.comparewithpack"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:upload",
+              "selectionType": "SINGLE",
+              "title": "Compare with Deployed Artifacts",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-comparewithdeployed",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.comparewithdeployed"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-deployed-artifacts",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-deployed-artifacts",
+              "selectionType": "SINGLE",
+              "title": "View Activation Status",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  },
+                  {
+                    "paramKey": "activation_status_page_label",
+                    "paramId": "activation_status_page_label"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "NOT ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Disable Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivatecustomerlevel"
+                  }
+                ]
+              },
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Enable Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activatecustomerlevel"
+                  }
+                ]
+              },
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "title": "Enable Packs",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.form",
+                    "formActionList": {
+                      "formActions": [
+                        {
+                          "identifier": "Submit",
+                          "actionLabel": "Enable"
+                        }
+                      ]
+                    },
+                    "formDefinition": {
+                      "id": "rda.saas.dynamic.form",
+                      "refreshRequired": true,
+                      "formFieldList": [
+                        {
+                          "help": "Displays the criteria used display the packs.",
+                          "dataType": "string",
+                          "label": "This table displays packs that do not need values for any deployment variables and for which the system level pack has been activated.",
+                          "controlType": "LABEL",
+                          "required": true,
+                          "editable": false,
+                          "hidden": false,
+                          "fieldId": "note1"
+                        },
+                        {
+                          "help": "Customer context",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "required": true,
+                          "editable": true,
+                          "label": "customer_tag",
+                          "hidden": true,
+                          "defaultValue": "{{CUST_TAG}}",
+                          "fieldId": "customer_tag"
+                        },
+                        {
+                          "help": "Select packs that you want to enable for this customer.",
+                          "dataType": "string",
+                          "required": true,
+                          "editable": true,
+                          "label": "Packs",
+                          "hidden": false,
+                          "fieldId": "Others",
+                          "controlType": "SELECTOR_TABLE",
+                          "controlPropertyList": [
+                            {
+                              "attribute": "column-key",
+                              "value": "id"
+                            },
+                            {
+                              "attribute": "column-key",
+                              "value": "version"
+                            },
+                            {
+                              "attribute": "selection",
+                              "value": "MULTIPLE"
+                            },
+                            {
+                              "attribute": "includeFormDefInValidation",
+                              "value": true
+                            }
+                          ],
+                          "widget": {
+                            "title": "Customer Packs",
+                            "timebased": false,
+                            "max_width": 12,
+                            "height": 8,
+                            "min_width": 12,
+                            "extra_filter": "(customer_section is 'true' and status is  'ACTIVATED' and customers does not contains '{{CUST_TAG}}' and has_customer_variables is 'false')",
+                            "stream": "rda_packs_meta",
+                            "ts_column": "timestamp",
+                            "sorting": [],
+                            "columns": {
+                              "id": {
+                                "title": "ID",
+                                "key": true,
+                                "visible": false
+                              },
+                              "name": {
+                                "title": "Name",
+                                "key": true
+                              },
+                              "version": {
+                                "title": "Version",
+                                "key": true
+                              },
+                              "_RDA_Id": {
+                                "title": "RDA ID",
+                                "key": false,
+                                "visible": false
+                              }
+                            },
+                            "custom_columns": [
+                              {
+                                "id": "customer_tag",
+                                "label": "Customer Tag",
+                                "key": true,
+                                "visible": false,
+                                "expr": "'{{CUST_TAG}}'"
+                              },
+                              {
+                                "id": "enable_uuid",
+                                "label": "UUID",
+                                "key": true,
+                                "visible": false,
+                                "expr": "uuid()"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "type": "UPDATE_PSTREAM",
+                        "pstreamName": "rda_packs_customer_enable_request",
+                        "operation": "ADD",
+                        "params": {
+                          "fieldId": "Others"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "57a3e223"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "RDA Packs Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Packs",
+          "widget_type": "tabular",
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "type",
+            "name",
+            "version",
+            "publisher",
+            "status",
+            "message",
+            "customer",
+            "customer_id"
+          ],
+          "sorting": [
+            {
+              "timestamp": "desc"
+            }
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "max_width": 12,
+          "min_width": 12,
+          "stream": "customer-rda-packs",
+          "extra_filter": "customer = '{{CUST_TAG}}'",
+          "extra_filter1": "scope = 'customer'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "type": {
+              "title": "Pack Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "customer_id": {
+              "title": "Customer ID",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "name": {
+              "title": "Name",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "version": {
+              "title": "Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "publisher": {
+              "title": "Publisher",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "html": {
+              "hidden": true,
+              "key": true
+            },
+            "activation_id": {
+              "hidden": true,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333"
+              }
+            },
+            "status": {
+              "title": "Status",
+              "htmlTemplateForRow": "{%raw%}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{%endraw%}"
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "upload_time": {
+              "title": "Upload Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "deactivation_time": {
+              "title": "Deactivation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "launch_dashboard": {
+              "title": "Dashboard",
+              "type": "TEXT",
+              "hidden": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + launch_dashboard",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "activation_status_page_label",
+              "label": "Activation Status Page Label",
+              "expr": "name + ' Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard",
+              "drillDownLinkField": "name",
+              "identifier": "id",
+              "selectionType": "SINGLE",
+              "title": "Launch Dashboard",
+              "type": "GO_TO_APP_STATE",
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "",
+                    "fieldId": "launch_dashboard"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:upload",
+              "selectionType": "SINGLE",
+              "title": "Compare with Another Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-comparewithpack",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.comparewithpack"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:upload",
+              "selectionType": "SINGLE",
+              "title": "Compare with Deployed Artifacts",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-comparewithdeployed",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.comparewithdeployed"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-deployed-artifacts",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-deployed-artifacts",
+              "selectionType": "SINGLE",
+              "title": "View Activation Status",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  },
+                  {
+                    "paramKey": "activation_status_page_label",
+                    "paramId": "activation_status_page_label"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "NOT ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Disable Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivatecustomerlevel"
+                  }
+                ]
+              },
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Enable Pack",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activatecustomerlevel"
+                  }
+                ]
+              },
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customer_tag"
+                  },
+                  {
+                    "paramKey": "customer",
+                    "paramId": "customerTag"
+                  },
+                  {
+                    "paramKey": "customer_id",
+                    "paramId": "customer_id"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "title": "Enable Packs",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.form",
+                    "formActionList": {
+                      "formActions": [
+                        {
+                          "identifier": "Submit",
+                          "actionLabel": "Enable"
+                        }
+                      ]
+                    },
+                    "formDefinition": {
+                      "id": "rda.saas.dynamic.form",
+                      "refreshRequired": true,
+                      "formFieldList": [
+                        {
+                          "help": "Displays the criteria used display the packs.",
+                          "dataType": "string",
+                          "label": "This table displays packs that do not need values for any deployment variables and for which the system level pack has been activated.",
+                          "controlType": "LABEL",
+                          "required": true,
+                          "editable": false,
+                          "hidden": false,
+                          "fieldId": "note1"
+                        },
+                        {
+                          "help": "Customer context",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "required": true,
+                          "editable": true,
+                          "label": "customer_tag",
+                          "hidden": true,
+                          "defaultValue": "{{CUST_TAG}}",
+                          "fieldId": "customer_tag"
+                        },
+                        {
+                          "help": "Select packs that you want to enable for this customer.",
+                          "dataType": "string",
+                          "required": true,
+                          "editable": true,
+                          "label": "Packs",
+                          "hidden": false,
+                          "fieldId": "Others",
+                          "controlType": "SELECTOR_TABLE",
+                          "controlPropertyList": [
+                            {
+                              "attribute": "column-key",
+                              "value": "id"
+                            },
+                            {
+                              "attribute": "column-key",
+                              "value": "version"
+                            },
+                            {
+                              "attribute": "selection",
+                              "value": "MULTIPLE"
+                            },
+                            {
+                              "attribute": "includeFormDefInValidation",
+                              "value": true
+                            }
+                          ],
+                          "widget": {
+                            "title": "Customer Packs",
+                            "timebased": false,
+                            "max_width": 12,
+                            "height": 8,
+                            "min_width": 12,
+                            "extra_filter": "(customer_section is 'true' and status is  'ACTIVATED' and customers does not contains '{{CUST_TAG}}' and has_customer_variables is 'false')",
+                            "stream": "rda_packs_meta",
+                            "ts_column": "timestamp",
+                            "sorting": [],
+                            "columns": {
+                              "id": {
+                                "title": "ID",
+                                "key": true,
+                                "visible": false
+                              },
+                              "name": {
+                                "title": "Name",
+                                "key": true
+                              },
+                              "version": {
+                                "title": "Version",
+                                "key": true
+                              },
+                              "_RDA_Id": {
+                                "title": "RDA ID",
+                                "key": false,
+                                "visible": false
+                              }
+                            },
+                            "custom_columns": [
+                              {
+                                "id": "customer_tag",
+                                "label": "Customer Tag",
+                                "key": true,
+                                "visible": false,
+                                "expr": "'{{CUST_TAG}}'"
+                              },
+                              {
+                                "id": "enable_uuid",
+                                "label": "UUID",
+                                "key": true,
+                                "visible": false,
+                                "expr": "uuid()"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "type": "UPDATE_PSTREAM",
+                        "pstreamName": "rda_packs_customer_enable_request",
+                        "operation": "ADD",
+                        "params": {
+                          "fieldId": "Others"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "57a3e223"
+        }
+      ]
+    }
+  ]
+}

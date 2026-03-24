@@ -1,0 +1,215 @@
+
+ ## ## NetApp ONTAP 7 Mode Storage Inventory Collection
+
+ ## NetApp ONTAP 7 Mode IP Range Feed
+@c:new-block
+ --> @dm:empty
+ --> @dm:addrow ntap_ip = '10.95.158.15,10.95.158.17,10.95.131.51,10.95.131.52'
+ --> @dm:save name = 'temp-ntap-ip-feed'
+ ## NetApp ONTAP 7 Mode Controller Info
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:controller-info column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_controller_info'
+ ## NetApp ONTAP 7 Mode Network Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:network-config column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_network_config'
+ ## NetApp ONTAP 7 Mode FC Adapter Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:fc-adapters column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_fc_adapters'
+ ## NetApp ONTAP 7 Mode Volumes
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:volumes column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_volumes'
+ ## NetApp ONTAP 7 Mode Aggregates
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:aggregates column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_aggregates'
+ ## NetApp ONTAP 7 Mode LUNs
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:luns column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_luns'
+ ## NetApp ONTAP 7 Mode NFS Exports
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp-ntap-ip-feed'
+ --> @ntap:nfs-exports column_name='ntap_ip' & concurrent_discovery = '100'
+ --> @dm:save name = 'netapp_ontap7_nfs_exports'
+ ## ### NetApp ONTAP 7 - Nodes ######
+
+ ## NetApp ONTAP 7 Controllers
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_controller_info' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter * get system_name as 'ntap_array_name',system_model as 'ntap_array_model',system_serial_number as 'ntap_array_serial_number',vendor_id as 'ntap_array_vendor',version as 'ntap_array_version',controller_ip as 'ntap_array_ip'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Storage'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Controller'
+ --> @dm:map from = 'ntap_array_name' & to = 'node_label'
+ --> @dm:map from = 'ntap_array_serial_number' & to = 'node_id'
+ --> @dm:save name = 'netapp_ontap7_controller_nodes'
+ ## NetApp ONTAP 7 - Network Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_network_config' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter object_type='IFGRP' get controller_ip,interface_name as 'ifgrp_name',links_link_0,links_link_1
+ --> @dm:save name = 'temp-ntap-ifgroup-to-phy-interface'
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_network_config' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter object_type='INTERFACE' and v4_primary_address_ip_address_info_address is not empty and interface_name does not contain 'c0*|^e0P$' get controller_ip,interface_name as 'vlan_interface_name',mac_address,v4_primary_address_ip_address_info_address as 'interface_ip_address'
+ --> @dm:save name = 'temp-ntap-interface-mac-ip'
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_network_config' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter object_type='VLAN' get controller_ip,interface_name as 'vlan_interface_name',parent_interface
+ --> @dm:enrich dict='temp-ntap-interface-mac-ip' & src_key_cols = 'controller_ip,vlan_interface_name' & dict_key_cols='controller_ip,vlan_interface_name' & enrich_cols = 'interface_ip_address,mac_address'
+ --> @dm:fixnull-regex columns = '.*'
+ --> @dm:enrich dict='temp-ntap-ifgroup-to-phy-interface' & src_key_cols='controller_ip,parent_interface' & dict_key_cols='controller_ip,ifgrp_name' & enrich_cols='links_link_0,links_link_1'
+ --> *dm:filter * get controller_ip as 'ntap_array_ip',vlan_interface_name as 'ntap_array_vlan_interface',parent_interface as 'ntap_array_parent_interface',interface_ip_address as 'ntap_array_interface_ip',mac_address as 'ntap_array_interface_mac',links_link_0 as 'ntap_array_nic0',links_link_1 as 'ntap_array_nic1'
+ --> @dm:enrich dict = 'netapp_ontap7_controller_nodes' & src_key_cols = 'ntap_array_ip' & dict_key_cols = 'ntap_array_ip' & enrich_cols = 'ntap_array_serial_number'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Storage'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'NIC'
+ --> @dm:map from = 'ntap_array_vlan_interface' & to = 'node_label'
+ --> @dm:map from = 'ntap_array_ip,ntap_array_vlan_interface' & to = 'ntap_array_vlan_interface_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'ntap_array_vlan_interface_id' & to = 'node_id'
+ --> @dm:save name = 'netapp_ontap7_network_nodes'
+ ## NetApp ONTAP 7 - Aggregate Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_aggregates' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter * get name as 'ntap_array_aggr_name',controller_ip as 'ntap_array_ip',controller as 'ntap_array_ip_2',has_local_root as 'ntap_array_aggr_root',is_hybrid as 'ntap_array_aggr_hybrid',is_mirrored as 'ntap_array_aggr_mirrored',mount_state as 'ntap_array_aggr_status',disk_count as 'ntap_array_aggr_disks',raid_size as 'ntap_array_aggr_raid_size',raid_status as 'ntap_array_aggr_raid_type'
+ --> @dm:map to = 'ntap_array_ip' & func = 'evaluate' & expr = "ntap_array_ip_2 if ntap_array_ip == '' else ntap_array_ip"
+ --> @dm:selectcolumns exclude = 'ntap_array_ip_2'
+ --> @dm:enrich dict = 'netapp_ontap7_controller_nodes' & src_key_cols = 'ntap_array_ip' & dict_key_cols = 'ntap_array_ip' & enrich_cols = 'ntap_array_serial_number'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Storage'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Storagepool'
+ --> @dm:map from = 'ntap_array_aggr_name' & to = 'node_label'
+ --> @dm:map from = 'ntap_array_ip,ntap_array_aggr_name' & to = 'ntap_array_aggr_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'ntap_array_aggr_id' & to = 'node_id'
+ --> @dm:save name = 'netapp_ontap7_aggr_nodes'
+ ## NetApp ONTAP 7 - Volume Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_volumes' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> *dm:filter * get controller_ip as 'ntap_array_ip',name as 'ntap_array_vol_name',containing_aggregate as 'ntap_array_parent_aggr',sis_sis_info_state as 'ntap_array_vol_dedup_status'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Storage'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Volume'
+ --> @dm:map from = 'ntap_array_vol_name' & to = 'node_label'
+ --> @dm:map from = 'ntap_array_ip,ntap_array_vol_name' & to = 'ntap_array_vol_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'ntap_array_ip,ntap_array_parent_aggr' & to = 'ntap_array_aggr_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'ntap_array_vol_id' & to = 'node_id'
+ --> @dm:save name = 'netapp_ontap7_volume_nodes'
+ ## NetApp ONTAP 7 - NFS Exports Configuration
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_nfs_exports' & empty_as_null = 'no'
+ --> @dm:fixcolumns
+ --> @dm:map from = 'pathname' & to = 'parent_vol'
+ --> @dm:map attr = 'parent_vol' & func = 'split' & sep = '/'
+ --> @dm:map attr = 'parent_vol' & func = 'slice' & fromIdx = 2
+ --> @dm:map attr = 'parent_vol' & func = 'join'
+ --> *dm:filter * get controller_ip as 'ntap_array_ip',pathname as 'ntap_array_nfs_export_path',parent_vol as 'ntap_array_parent_vol'
+ --> @dm:save name = 'temp-netapp_ontap7_nfs_exports'
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_volume_nodes' & empty_as_null = 'no'
+ --> @dm:enrich dict = 'temp-netapp_ontap7_nfs_exports' & src_key_cols = 'ntap_array_ip,ntap_array_vol_name' & dict_key_cols = 'ntap_array_ip,ntap_array_parent_vol' & enrich_cols = 'ntap_array_nfs_export_path'
+ --> @dm:selectcolumns exclude = '^ntap_array_parent_vol$'
+ --> @dm:save name = 'netapp_ontap7_volume_nodes'
+ ## ### Consolidated Nodes output
+
+ --> @c:new-block
+ --> @dm:concat names = '^netapp_ontap7_controller_nodes$|^netapp_ontap7_network_nodes$|^netapp_ontap7_aggr_nodes$|^netapp_ontap7_volume_nodes$'
+ --> @dm:save name = 'netapp_ontap7_inventory_nodes'
+ ## # NetApp ONTAP 7 Mode - Relationships
+
+ ## NetApp Array Controllers to Network interfaces
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_inventory_nodes' & empty_as_null = 'no'
+ --> *dm:filter node_type='NIC' get node_label,node_id,ntap_array_serial_number
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get ntap_array_serial_number as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'netapp_ontap7_array_to_network_edges'
+ ## NetApp Array Controllers to Aggregates
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_inventory_nodes' & empty_as_null = 'no'
+ --> *dm:filter node_type='Storagepool' get node_label,node_id,ntap_array_serial_number
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get ntap_array_serial_number as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'netapp_ontap7_array_to_aggregate_edges'
+ ## NetApp Array Aggregates to Volumes
+
+ --> @c:new-block
+ --> @dm:recall name = 'netapp_ontap7_inventory_nodes' & empty_as_null = 'no'
+ --> *dm:filter node_type='Volume' get node_label,node_id,ntap_array_aggr_id
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get ntap_array_aggr_id as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'netapp_ontap7_aggregate_to_volume_edges'
+ ## ## NetApp Array - Relationships
+
+ --> @c:new-block
+ --> @dm:concat names = '^netapp_ontap7_array_to_network_edges$|^netapp_ontap7_array_to_aggregate_edges$|^netapp_ontap7_aggregate_to_volume_edges$'
+ --> @dm:dropnull columns = 'left,right'
+ --> @dm:dedup
+ --> @dm:map from = 'left' & to = 'left_id'
+ --> @dm:map from = 'right' & to = 'right_id'
+ --> @dm:save name = 'netapp_ontap7_inventory_edges'
+ ## #########################################
+
+ ## # NetApp Storage Arrat Stacks - Topology Pipeline
+
+ ## #########################################
+
+ --> @c:new-block
+ --> @dm:stack-create topology_nodes='netapp_ontap7_inventory_nodes' and topology_edges='netapp_ontap7_inventory_edges' and name = 'netapp_array_7mode_topology_stack'
+ --> @dm:stack-save name='netapp_array_7mode_topology_stackv2'
+ ## #########################################
+
+ ## # Create pstreams if not existing already
+
+ ## #########################################
+
+ --> @dm:create-persistent-stream name = 'ntap_topology_nodes' and retention_days=0 and unique_cols= "node_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "ntap_topology_nodes" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ --> @dm:create-persistent-stream name = 'ntap_topology_edges' and retention_days=0 and unique_cols= "left_id,right_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "ntap_topology_edges" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ ## #####################
+
+ ## Save nodes and edges data to dynamic pstreams
+
+ ## #####################
+
+ --> @c:new-block
+ --> @dm:recall name="netapp_ontap7_inventory_nodes"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'NetApp'
+ --> @dm:add-missing-columns columns = 'iconURL' & value = 'Not Available'
+ --> @rn:write-stream name="ntap_topology_nodes"
+ --> @dm:recall name="netapp_ontap7_inventory_edges"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'NetApp'
+ --> @rn:write-stream name="ntap_topology_edges"

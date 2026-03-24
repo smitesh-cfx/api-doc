@@ -1,0 +1,30 @@
+{
+  "name": "oia-event-trail-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "et_id"
+    ],
+    "computed_columns": {
+      "customer_id": {
+        "expr": "et_customerid"
+      },
+      "project_id": {
+        "expr": "et_projectid"
+      }
+    },
+    "_mappings": {
+      "properties": {
+        "et_createdat": {
+          "type": "date"
+        }
+      }
+    },
+    "retention_days": 3,
+    "retention_purge_extra_filter": "et_status != 'Failed'",
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-c5df7709-oia-event-trail-stream"
+}

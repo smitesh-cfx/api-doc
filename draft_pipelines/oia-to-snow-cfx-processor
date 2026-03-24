@@ -1,0 +1,567 @@
+
+ ## oia-to-snow-cfx-processor
+
+ ## All debugging is captured on oia-to-snow-debug-stream
+
+ ## 
+
+ ## Read Input Data and select required columns
+@c:new-block
+ --> @exec:get-input
+ ## Change-Here
+
+ --> @dm:add-missing-columns columns = 'attrs_public_url,i_source' & value=""
+ --> @dm:fixnull columns = 'attrs_public_url,i_source' & value=""
+ ## Change-Here
+
+ ## select all columns needed here. reduce the number of columns to work with.
+
+ --> @dm:selectcolumns include="i_priority|i_description|i_summary|delta|i_source|i_updated|i_created|i_reported|i_resolved|i_state|incident_id|project_id|attrs_public_url|i_source|timestamp|i_resolution|user_req"
+ --> @dm:add-missing-columns columns = 'user_req_team_name,user_req_team_id,user_req_action' & value=""
+ --> @dm:fixnull columns = 'user_req_team_name,user_req_team_id,user_req_action' & value=""
+ --> @dm:save name="temp-query-result-cfx"
+ --> @dm:selectcolumns include="project_id"
+ --> @dm:dedup columns="project_id"
+ --> @dm:save name="temp-query-result-cfx-dedup"
+ ## datasets may not be available due to filters. so initialize them
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:save name="temp-getIncidentAlerts"
+ --> @dm:save name="temp-getIncidentAlertAttributes"
+ --> @dm:save name="temp-update-cfx"
+ --> @dm:save name="temp-create-cfx"
+ --> @dm:save name="temp-incident-for-update"
+ --> @dm:save name="temp-incident-for-create"
+ --> @dm:save name="temp-incident-payload-prep-cfx"
+ --> @dm:save name="temp-team-info"
+ --> @dm:save name="temp-op-mode"
+ --> @dm:save name="temp-incident-payload-ready-cfx"
+ ## Skip Unwanted Delta Records
+
+ --> @c:new-block
+ --> @dm:recall name="temp-query-result-cfx"
+ --> @dm:add-missing-columns columns = 'delta' & value=''
+ ## Skip unwanted delta fields
+
+ --> @dm:enrich-using-rule-dict dict='incident-delta-ignore-dict' & enrich_columns='ignore_changes,runName'
+ --> @dm:add-missing-columns columns = 'ignore_changes,user_req_action'
+ --> @dm:fixnull columns = 'ignore_changes' & value="false"
+ --> @dm:fixnull columns = 'user_req_action' & value=""
+ ## Empty Delta (New CFX Ticket) or Acceptable-Delta or User Action
+
+ ## Change-Here: Uncomment as needed. Remove all unwanted deltas. if user-requested-action, allow it
+
+ --> *dm:filter (user_req_action != '') or (ignore_changes == 'false')
+ --> @dm:map to="step" & func="fixed" & value="ignore-changes-filter"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ ## Reset the query-results. remove all unwanted noise
+
+ --> @dm:save name="temp-query-result-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'Delta-Check'" & stage="'incident-delta-ignore-dict'" & status_comments="'Incident:' + incident_id + ',St:' + i_state + ',isIgnore?' + str(ignore_changes) + ',Delta:' + delta + ',Action:' + user_req_action" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @dm:save name="temp-query-result-cfx"
+ --> @dm:selectcolumns include="project_id"
+ --> @dm:dedup columns="project_id"
+ --> @dm:save name="temp-query-result-cfx-dedup"
+ ## Get Project Level Info. Like Team
+
+ ## Change-Here: TeamName
+
+ --> @c:data-loop dataset="temp-query-result-cfx-dedup" & columns="project_id"
+ --> @dm:empty
+ ## Change-Here
+
+ --> @agent:agent-collab:collabagent:getTeamAttributes project_id='$project_id' & team_name='ServiceNow'
+ --> @dm:check-columns must_contain="teamId" & action="skip-block"
+ --> @dm:add-missing-columns columns = 'autoShareAttributes,execution_delay,source'
+ --> @dm:fixnull columns = 'autoShareAttributes,execution_delay,source' & value=""
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'Team Attrs'" & stage="'AutoShare-Check'" & status_comments="'Team:' + name + ',Id:' + str(teamId) + ',AutoShare:' + str(autoShareAttributes)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> *dm:filter autoShareAttributes != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:rename-columns teamName="name"
+ --> @dm:save name="temp-team-info" & append="yes"
+ ## For-Each incident, figure out if it is Create or Update?
+
+ ## User-based actions will have team_id sent with the input request.
+
+ --> @c:data-loop dataset="temp-query-result-cfx" & columns="project_id,incident_id,user_req_team_id"
+ --> @dm:empty
+ ## What we found here: External Ticket Exists - so we we should consider this for update
+
+ --> @dm:addrow name="oia-incidents-external-tickets-stream" & max_rows="1000"
+ ## Columns: | team_id | customer_id | project_id  | incident_id  | collab_type | ticket_number | shared_time | ticket_id  | link |
+
+ --> #dm:query-persistent-stream incident_id is '$incident_id' & project_id is '$project_id' & collab_type is 'ServiceNow'
+ ## Alternate approach. If oia-incidents-external-tickets-stream doesnt have data. Check in the Collab service table teamincident
+
+ ## --> @agent:agent-collab:collabagent:getExternalTicket project_id='$project_id' & incident_id='incident_id'
+
+ ## If returned a row: This action will be treated as UPDATE else INSERT
+
+ ## Input team_id is for flows coming from user-actions like manual Create-Ticket, Update-Ticket, Share-Ticket
+
+ --> @dm:eval user_req_team_id = "'$user_req_team_id'"
+ --> @dm:eval user_req_team_id = "user_req_team_id if user_req_team_id != '' else team_id"
+ ## If user_req_team_id is given, it must match the teamId we are processing.
+
+ --> *dm:filter user_req_team_id == team_id
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:add-missing-columns columns = 'ticket_id,ticket_number,collab_type,link,team_id'
+ --> @dm:dedup columns="project_id,incident_id,collab_type,team_id" & keep="last"
+ ## For each incident, if record exists - that means external ticket exists.
+
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ ## There wont be a record without ticket_id set.
+
+ --> @dm:eval is_create="'false' if (ticket_id and ticket_number) else 'true'"
+ --> @dm:save name="temp-op-mode" & append="yes"
+ ## Must have Team-Info, else exit the call
+
+ --> @c:new-block
+ --> @dm:recall name="temp-team-info"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'TeamAttributes'" & stage="''" & status_comments="'Team:' + str(teamName) + ', AutoShare:' + str(autoShareAttributes)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @dm:map to="step" & func="fixed" & value="temp-team-info"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:recall name="temp-op-mode"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'ExternalTkt'" & stage="''" & status_comments="'Incident:' + str(incident_id) + ', Ext-Tkt:' + str(ticket_number) + ',IsCreate?' + str(is_create)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @dm:map to="step" & func="fixed" & value="temp-op-mode"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ ## Enrich Each Incident Record with Create or Update + Team Info
+
+ --> @c:new-block
+ --> @dm:recall name="temp-query-result-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:copy-columns to="Alert_Source" & from="i_source"
+ ## get "is_create"
+
+ --> @dm:enrich dict='temp-op-mode' & dict_key_cols='incident_id,project_id' & src_key_cols='incident_id,project_id' & enrich_cols='ticket_id,ticket_number,collab_type,link,team_id,is_create'
+ ## if record exists in temp-op-mode/oia-incidents-external-tickets-stream -- means ExternalExists and isCreate = False
+
+ ## For all Non-Existing: Treat them as isCreate = True. So default missing is treated as isCreate=True
+
+ --> @dm:add-missing-columns columns = 'is_create' & value='true'
+ --> @dm:fixnull columns = 'is_create' & value='true'
+ --> @dm:save name="temp-query-result-cfx"
+ ## If you want to create when delta is {} - use below. else support creating ticket in any stage
+
+ ## --> *dm:filter (is_create == 'true' and delta == '{}') or (is_create == 'false' and delta != '{}')
+
+ ## --> @dm:skip-block-if-shape row_count = 0
+
+ ## get "teamid"
+
+ --> @dm:enrich dict='temp-team-info' & dict_key_cols='projectId' & src_key_cols='project_id' & enrich_cols='teamId,teamName,collabType,autoShareAttributes,execution_delay,source'
+ --> @dm:check-columns must_contain="teamId" & action="skip-block"
+ --> @dm:rename-columns teamSource="source"
+ --> @dm:rename-columns teamExecDelay="execution_delay"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Team&Mode'" & stage="''" & status_comments="'Incident:' + incident_id + ',Team:' + (teamName) + ',IsCreate?' + str(is_create) + ',Delta:' + str(delta)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-query-result-cfx"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-query-result-cfx"
+ ## Do all the required mapping here. Prepare Payload
+
+ --> @c:new-block
+ --> @dm:recall name="temp-query-result-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## prepare the payload
+
+ --> @dm:eval state="('New' if i_state == 'Open' else ('New' if i_state == 'Assigned' else ('On Hold' if i_state == 'On Hold' else ('Resolved' if i_state == 'Resolved' else ('Resolved' if i_state == 'Closed' else ('Canceled' if i_state == 'Cancelled' else ('New')))))))"
+ --> @dm:copy-columns to="short_description" & from="i_summary"
+ --> @dm:copy-columns to="shortDescription" & from="short_description"
+ --> @dm:copy-columns to="sys_created_on" & from="i_created_ts"
+ --> @dm:copy-columns to="sys_updated_on" & from="i_updated_ts"
+ --> @dm:eval impact="('1 - High' if (str(i_priority) == '1') else ('2 - Medium' if (str(i_priority) == '2') else ('3 - Low')))"
+ --> @dm:eval urgency="('1 - High' if (str(i_priority) == '1') else ('2 - Medium' if (str(i_priority) == '2') else ('3 - Low')))"
+ ## assignmentGroup
+
+ ## assignedTo
+
+ --> @dm:map to="account" & func="fixed" & value="CloudFabrix"
+ --> @dm:map to="category" & func="fixed" & value="Software"
+ ## Change-Here
+
+ --> @dm:map to="company" & func="fixed" & value="1f746994070a511078b7fe4f7c1ed00a"
+ --> @dm:add-missing-columns columns="i_resolution_code"
+ --> @dm:fixnull columns="i_resolution_code"
+ --> @dm:eval close_code="'Solution provided' if (state == 'Resolved' or state == 'Closed') else None"
+ --> @dm:eval close_code="'Solution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'DB Tuning') else close_code"
+ --> @dm:eval close_code="'Solution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'Log Cleanup') else close_code"
+ --> @dm:eval close_code="'Solution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'Resource increase') else close_code"
+ --> @dm:eval close_code="'Solution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'Maintenance') else close_code"
+ --> @dm:eval close_code="'No resolution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'No Action Taken') else close_code"
+ --> @dm:eval close_code="'Solution provided' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'DB Clean') else close_code"
+ --> @dm:eval close_code="'Resolved by caller' if ((state == 'Resolved' or state == 'Closed') and i_resolution_code == 'Other') else close_code"
+ --> @dm:eval close_notes="i_resolution_code if (state == 'Resolved' or state == 'Closed') else None"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Payload-Prep'" & stage="'temp-incident-payload-prep-cfx'" & status_comments="'Incident:' + incident_id + ',State:' + state" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-incident-payload-prep-cfx"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-incident-payload-prep-cfx"
+ ## AlertData, Worker Notes & sourcepayload
+
+ ## Change-Here: Picking latest alert for now. If we need all alerts or specific set or delta: revisit this.
+
+ --> @c:data-loop dataset="temp-incident-payload-prep-cfx" & columns="project_id,incident_id,i_source_key"
+ ## For Custom Desc
+
+ --> @dm:empty
+ --> @dm:addrow name="oia-alerts-stream" & max_rows="1000"
+ --> #dm:query-persistent-stream a_id is '$i_source_key' or a_correlation_parent is '$i_source_key'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:save name="temp-incident-alerts"
+ --> @dm:selectcolumns include="a_incident_id|a_id"
+ --> @dm:groupby columns = 'a_incident_id' & agg = 'count'
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Incident-Alerts'" & stage="'oia-alerts-stream'" & status_comments="'Incident:' + a_incident_id + ',Alerts:' + str(a_id)" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @dm:recall name="temp-incident-alerts"
+ ## One to Many. Returns 1 or more Rows. Use: mode=concat, returns single row with all specified fields concat and line seperated.
+
+ ## message,raisedat,status,assetname,updatedat,repeatcount
+
+ ## Change-Here. Pick last/first/all
+
+ --> @dm:dedup columns="a_incident_id" & keep="last"
+ --> @dm:selectcolumns include="a_message|a_raised_ts|a_created_ts|a_updated_ts|a_status|a_asset_name|a_repeat_count"
+ --> @dm:add-missing-columns columns = 'a_message,a_raised_ts,a_created_ts,a_updated_ts,a_status,a_asset_name,a_repeat_count' & value=""
+ --> @dm:fixnull columns = 'a_message,a_raised_ts,a_created_ts,a_updated_ts,a_status,a_asset_name,a_repeat_count' & value=""
+ ## Use the fields fetched above to prepare the notes body using template. Return single row
+
+ --> @dm:apply-template-all-rows template_name = 'snow-notes-template' & output_col = 'concat_value'
+ --> @dm:add-missing-columns columns = 'concat_value' & value=""
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ --> @dm:save name="temp-getIncidentAlerts" & append="yes"
+ ## Enrich payload-prep with worker-notes and sourcepayload
+
+ --> @c:new-block
+ --> @dm:recall name="temp-incident-payload-prep-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:enrich dict='temp-getIncidentAlerts' & dict_key_cols='project_id,incident_id' & src_key_cols='project_id,incident_id' & enrich_cols='concat_value'
+ --> @dm:add-missing-columns columns = 'concat_value' & value=""
+ --> @dm:fixnull columns = 'concat_value' & value=""
+ --> @dm:eval work_notes="'[code] ' + concat_value + ' [/code]'"
+ --> @dm:eval work_notes = "(work_notes + '[code] <a href=' + attrs_public_url  + ' target=_blank>' + incident_id  + '</a> [/code]') if (attrs_public_url != '') else work_notes"
+ --> @dm:eval comments = "'Comments from CloudFabrix Inc. RDA' + ' \n ' + work_notes"
+ ## --> @dm:enrich dict='temp-getIncidentAlertAttributes' & dict_key_cols='project_id,incident_id' & src_key_cols='project_id,incident_id' & enrich_cols='text'
+
+ --> @dm:add-missing-columns columns = 'text' & value=""
+ ## Use "text (email_body)" + other fields in the template and prepare
+
+ --> @dm:apply-template-by-row template_name = 'snow-description-template' & output_col = 'description'
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Payload Ready'" & stage="''" & status_comments="'Incident:' + incident_id + ',State:' + state + ',Priority:' + str(i_priority) + ',Summary' + shortDescription" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-incident-payload-ready-cfx"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-incident-payload-ready-cfx"
+ ## Create Logic Check - Skip
+
+ --> @c:new-block
+ --> @dm:recall name="temp-incident-payload-ready-cfx"
+ --> *dm:filter ((is_create == 'true') and (i_state == 'Resolved' or i_state == 'Closed' or i_state == 'Cancelled'))
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'Skipping Create'" & stage="'Invalid State for Create Action'" & status_comments="'Incident:' + incident_id + ',State:' + i_state" & status="'WARNING'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @dm:save name="temp-incident-for-skip"
+ ## Create Flow
+
+ --> @c:new-block
+ --> @dm:recall name="temp-incident-payload-ready-cfx"
+ --> @dm:eval is_alert_source_in_team_source = "'yes' if (Alert_Source and teamSource and Alert_Source in teamSource) else 'no'"
+ --> @dm:add-missing-columns columns = 'user_req_action'
+ --> @dm:fixnull columns = 'user_req_action' & value=""
+ ## Override if user requested action
+
+ --> @dm:eval is_create="('true' if (user_req_action == 'cfx.collaboration.upsert.incident') else is_create)"
+ ## (autoShareAttributes contains 'incReceived')
+
+ --> *dm:filter (is_create == 'true') and (i_state == 'Open' or i_state == 'Assigned')
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Uncomment as needed. Delta {} only possible for INCIDENT_ADDED event. Manual requests may not have delta {}
+
+ --> *dm:filter (user_req_action != '') or (delta == '{}')
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'For Create'" & stage="'State Check'" & status_comments="'Incident:' + incident_id + ',St:' + i_state" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-incident-for-create"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-incident-for-create"
+ ## Update Flow
+
+ --> @c:new-block
+ --> @dm:recall name="temp-incident-payload-ready-cfx"
+ --> @dm:eval is_alert_source_in_team_source = "'yes' if (Alert_Source and teamSource and Alert_Source in teamSource) else 'no'"
+ --> @dm:add-missing-columns columns = 'user_req_action'
+ --> @dm:fixnull columns = 'user_req_action' & value=""
+ --> *dm:filter (is_create == 'false') and (i_state != 'Closed')
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Uncomment as needed. INCIDENT_UPDATED event will have some valid delta {.....}
+
+ --> *dm:filter (user_req_action != '') or (delta != '{}')
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'For Update'" & stage="'Delta&State Check'" & status_comments="'Incident:' + incident_id + ',State:' + i_state + ',Delta:' + delta" & status="'INFO'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-incident-for-update"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-incident-for-update"
+ ## Create
+
+ ## snowv2 doesnt return back the incidentId. Inorder to associate cfx-incident and procase-ticket, we are looping thru
+
+ --> @c:data-loop dataset="temp-incident-for-create" & columns="project_id,incident_id,Alert_Source"
+ ## Instead of typing all columns in data-loop, using just few and recall and apply filter. This gets all columns. doesnt have to keep track of cols
+
+ --> @dm:recall name="temp-incident-for-create"
+ --> *dm:filter project_id == '$project_id' and incident_id == '$incident_id' and Alert_Source == '$Alert_Source'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:dedup columns="project_id,incident_id" & keep="last"
+ --> @dm:save name="temp-pre-snowc-$loop_index"
+ ## Send to Snow
+
+ ## Select what fields to send out to snow
+
+ ## Change-Here
+
+ --> @dm:selectcolumns include="channel|account|itsm|serviceIdentifier|company|category|description|notes|comments|message|report|short|sys|state|i_state|urgency|impact|severity|assignment|work_notes|project_id|incident_id"
+ --> @snowv2:create-incident mandatory_cols="short_description,urgency,state,impact,description,comments"
+ ## Returns rda_row_update_status rda_row_id  number
+
+ --> @dm:add-missing-columns columns = 'rda_reason,rda_status,ticketId,ticketStatus,ticketNumber' & value=""
+ --> @dm:copy-columns to="ticketNumber" & from="number"
+ --> @dm:copy-columns to="ticketId" & from="rda_row_id"
+ --> @dm:copy-columns to="ticketStatus" & from="rda_row_update_status"
+ --> @dm:rename-columns resTicketStatus="ticketStatus"
+ --> @dm:fixnull columns="rda_reason,rda_status,ticketId,resTicketStatus,ticketNumber,rda_row_update_status" & value=""
+ --> @dm:eval rda_reason="('Successfully created ServiceNow Ticket:' + ticketNumber) if rda_row_id else ('Error creating ServiceNow Ticket. Update Status Code ' + str(rda_row_update_status))"
+ --> @dm:eval rda_status="('SUCCESS') if rda_row_id else ('ERROR')"
+ ## To avoid conflict with input ticketStatus
+
+ ## When Proactive call returns back, it doesnt carry the source Incident and Project. So looping thru and adding back
+
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ --> @dm:map to="step" & func="fixed" & value="temp-post-snowc-$loop_index"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-post-snowc-$loop_index"
+ --> @dm:recall name="temp-pre-snowc-$loop_index"
+ ## HACK
+
+ ## --> @dm:sleep seconds=1
+
+ --> @dm:enrich dict='temp-post-snowc-$loop_index' & dict_key_cols='project_id,incident_id' & src_key_cols='project_id,incident_id' & enrich_cols='rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus,rda_row_id,rda_row_update_status'
+ --> @dm:add-missing-columns columns = 'rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus' & value=""
+ --> @dm:fixnull columns="rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus" & value=""
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'Ticket Creation'" & stage="'Create Status for Incident:' + incident_id" & status_comments="rda_reason" & status="rda_status"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Snow links for each instance is different. ProactiveCase, ServiceNow and ServiceNow
+
+ ## Change-Here
+
+ --> @dm:eval link="'https://dev76279.service-now.com/nav_to.do?uri=%2Fincident.do%3Fsys_id%3D' + ticketId"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-create-cfx-$loop_index"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-create-cfx" & append="yes"
+ --> @c:new-block
+ ## Team Incident Upsert
+
+ --> @dm:recall name="temp-create-cfx"
+ --> *dm:filter ticketId != '' and ticketNumber != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:copy-columns to="team_id" & from="teamId"
+ --> @dm:copy-columns to="customer_id" & from="project_id"
+ --> @dm:copy-columns to="collab_type" & from="collabType"
+ --> @dm:copy-columns to="ticket_number" & from="ticketNumber"
+ --> @dm:eval shared_time="time_now_as_isoformat()"
+ --> @dm:copy-columns to="ticket_id" & from="ticketId"
+ ## get link column from the caller.
+
+ --> @dm:selectcolumns include="team_id|customer_id|project_id|incident_id|collab_type|ticket_number|shared_time|ticket_id|link"
+ --> @agent:agent-collab:collabagent:addExternalTicket
+ --> @dm:recall name="temp-create-cfx"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Collab addExternalTicket'" & stage="'CFX Incident and ITSM Ticket Link'" & status_comments="'Incident:' + incident_id + ',TicketId:' + ticketNumber" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @c:new-block
+ ## Team Incident Upsert
+
+ --> @dm:recall name="temp-create-cfx"
+ --> *dm:filter ticketId != '' and ticketNumber != ''
+ --> @dm:skip-block-if-shape row_count = 0
+ ## IRM Update
+
+ --> @dm:recall name="temp-create-cfx"
+ --> @dm:copy-columns to="label" & from="ticketNumber"
+ --> @dm:copy-columns to="itsm_ticket_number" & from="ticketNumber"
+ --> @dm:copy-columns to="incidentid" & from="incident_id"
+ --> @dm:copy-columns to="roomid" & from="project_id"
+ --> @dm:copy-columns to="updated_by" & from="i_updated_by"
+ --> @dm:selectcolumns include="roomid|incidentid|label|itsm"
+ --> @agent:agent-irm:irmagent:updateIncidents
+ --> @dm:recall name="temp-create-cfx"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'IRM updateIncidents'" & stage="'ITSM Reference'" & status_comments="'Incident:' + incident_id + ',TicketId:' + ticketNumber" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @c:new-block
+ ## Team Incident Upsert
+
+ --> @dm:recall name="temp-create-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Notify Collab
+
+ --> @dm:eval notification_message="rda_reason"
+ --> @dm:copy-columns to="customerid" & from="project_id"
+ --> @dm:copy-columns to="roomid" & from="project_id"
+ --> @dm:copy-columns to="projectId" & from="project_id"
+ --> @dm:copy-columns to="incidentid" & from="incident_id"
+ --> @dm:copy-columns to="source_system" & from="Alert_Source"
+ --> @dm:eval summary="('Ticket Creation Successful') if (rda_status == 'Success' or rda_status == 'SUCCESS') else ('Ticket Creation Failed')"
+ --> @dm:eval creator="i_updated_by if i_updated_by else (i_reported_by if i_reported_by else i_created_by)"
+ --> @dm:copy-columns to="notification_subject" & from="summary"
+ --> @dm:selectcolumns include="notification_message|customerid|roomid|projectId|incidentid|summary|creator|notification_subject"
+ --> @rn:write-stream compression="auto" & name="oia-incident-collab-message-stream"
+ --> @dm:recall name="temp-create-cfx"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Collab Activity Status Stream'" & stage="'Ticket Create Status'" & status_comments="'Incident:' + incident_id + ',TicketId:' + ticketNumber" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Update
+
+ ## snowv2 doesnt return back the incidentId. Inorder to associate cfx-incident and procase-ticket, we are looping thru
+
+ --> @c:data-loop dataset="temp-incident-for-update" & columns="project_id,incident_id,Alert_Source"
+ ## Instead of typing all columns in data-loop, using just few and recall and apply filter. This gets all columns. doesnt have to keep track of cols
+
+ --> @dm:recall name="temp-incident-for-update"
+ --> *dm:filter project_id == '$project_id' and incident_id == '$incident_id' and Alert_Source == '$Alert_Source'
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:dedup columns="project_id,incident_id" & keep="last"
+ --> @dm:add-missing-columns columns = 'ticket_number,ticket_id'
+ --> @dm:fixnull columns="ticket_number,ticket_id" & value=""
+ ## Record The Step
+
+ --> @dm:eval status_comments="'External Ticket Not Found' if (ticket_id == '') else ('Updating ' + ticket_number + ' with delta' + delta)"
+ --> @dm:eval sts="'ERROR' if (ticket_id == '') else 'SUCCESS'"
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'External Ticket Info'" & stage="'Ticket To Update'" & status_comments="status_comments" & status="sts"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> *dm:filter (ticket_number != "") and (ticket_id != "")
+ --> @dm:skip-block-if-shape row_count = 0
+ --> @dm:rename-columns number="ticket_number"
+ --> @dm:rename-columns sys_id="ticket_id"
+ ## Send to Snow
+
+ ## Select what fields to send out to snow
+
+ ## Change-Here
+
+ --> @dm:save name="temp-pre-snowu-$loop_index"
+ --> @dm:selectcolumns include="sys_id|work|comments|reporter|short|sys_updated|state|urgency|impact|project_id|incident_id|close|company"
+ --> @snowv2:update-incident id_cols="sys_id" & data_cols="comments,urgency,state,impact,work_notes,short_description,close_code,close_notes"
+ ## Returns: rda_row_id	rda_row_update_status   sys_id  number
+
+ --> @dm:add-missing-columns columns = 'rda_reason,rda_status,ticketId,ticketStatus,ticketNumber' & value=""
+ --> @dm:copy-columns to="ticketId" & from="sys_id"
+ --> @dm:copy-columns to="ticketNumber" & from="number"
+ --> @dm:fixnull columns = 'rda_reason,rda_status,ticketId,ticketStatus,ticketNumber,rda_row_update_status' & value=""
+ --> @dm:eval rda_reason="('Successfully updated ServiceNow Ticket:' + ticketNumber) if (rda_row_id) else ('Error updating ServiceNow Ticket ' + ticketNumber + '. Update Status Code ' + str(rda_row_update_status))"
+ --> @dm:eval rda_status = "('SUCCESS') if (rda_row_id) else ('ERROR')"
+ ## To avoid conflict with input ticketStatus
+
+ --> @dm:rename-columns resTicketStatus="ticketStatus"
+ --> @dm:fixnull columns="rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus" & value=""
+ ## When Proactive call returns back, it doesnt carry the source Incident and Project. So looping thru and adding back
+
+ --> @dm:map to="project_id" & func="fixed" & value="$project_id"
+ --> @dm:map to="incident_id" & func="fixed" & value="$incident_id"
+ --> @dm:map to="step" & func="fixed" & value="temp-post-snowu-$loop_index"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-post-snowu-$loop_index"
+ --> @dm:recall name="temp-pre-snowu-$loop_index"
+ ## HACK
+
+ ## --> @dm:sleep seconds=1
+
+ --> @dm:enrich dict='temp-post-snowu-$loop_index' & dict_key_cols='project_id,incident_id' & src_key_cols='project_id,incident_id' & enrich_cols='rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus,rda_row_id,rda_row_update_status'
+ --> @dm:add-missing-columns columns = 'rda_reason,rda_status,ticketId,resTicketStatus,ticketNumber' & value=""
+ --> @dm:fixnull columns="rda_reason,rda_status,ticketId,ticketNumber,resTicketStatus" & value=""
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx'" & step="'Ticket Updated'" & stage="'Ticket Update Status'" & status_comments="'Incident:' + incident_id + ',TicketId:' + ticketNumber + ',Status:' + rda_status + ',Reason:' + rda_reason" & status="rda_status"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ ## Debug
+
+ --> @dm:map to="step" & func="fixed" & value="temp-update-cfx-$loop_index"
+ --> @rn:write-stream compression="auto" & name="oia-to-snow-debug-stream"
+ --> @dm:save name="temp-update-cfx" & append="yes"
+ --> @c:new-block
+ ## Team Incident Upsert
+
+ --> @dm:recall name="temp-update-cfx"
+ --> @dm:skip-block-if-shape row_count = 0
+ ## Notify Collab
+
+ --> @dm:eval notification_message="rda_reason"
+ --> @dm:copy-columns to="customerid" & from="project_id"
+ --> @dm:copy-columns to="roomid" & from="project_id"
+ --> @dm:copy-columns to="projectId" & from="project_id"
+ --> @dm:copy-columns to="incidentid" & from="incident_id"
+ --> @dm:copy-columns to="source_system" & from="Alert_Source"
+ --> @dm:eval summary="('Ticket Update Successful') if (rda_status == 'Success' or rda_status == 'SUCCESS') else ('Ticket Update Failed')"
+ --> @dm:eval creator="i_updated_by if i_updated_by else (i_reported_by if i_reported_by else i_created_by)"
+ --> @dm:copy-columns to="notification_subject" & from="summary"
+ --> @dm:selectcolumns include="notification_message|customerid|roomid|projectId|incidentid|summary|creator|notification_subject"
+ --> @rn:write-stream compression="auto" & name="oia-incident-collab-message-stream"
+ --> @dm:recall name="temp-create-cfx"
+ ## Record The Step
+
+ --> @dm:eval pipeline="'oia-to-snow-cfx-processor'" & step="'Collab Activity Status Stream'" & stage="'Ticket Update Status'" & status_comments="'Incident:' + incident_id + ',TicketId:' + ticketId" & status="'SUCCESS'"
+ --> @exec:run-pipeline name="oia-incident-status-tracker-stream" & ignore_failures="yes"
+ --> @c:new-block
+ ## Dont have to return back anything
+
+ --> @dm:empty

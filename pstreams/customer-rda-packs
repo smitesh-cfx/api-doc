@@ -1,0 +1,16 @@
+{
+  "name": "customer-rda-packs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "id",
+      "version",
+      "customer"
+    ]
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking customer-specific RDA pack installations including pack id, version, customer identifier, installation status, and customer-specific configurations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-686a7a5d-customer-rda-packs"
+}

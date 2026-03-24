@@ -1,0 +1,12 @@
+{
+  "name": "rda_system_collector_ingestion_failures",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream logging collector data ingestion failures including stream name, attempted_row_count, error messages, and timestamps for troubleshooting",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-df75ce35-rda_system_collector_ingestion_failures"
+}

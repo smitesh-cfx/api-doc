@@ -1,0 +1,29 @@
+folder: AI
+name: conversations_data_migration
+description: test pipeline
+data_path: pipelines/data/conversations_data_migration/2025.12.09.1/data.json
+usecase: ''
+category: ''
+sources: {}
+artifacts:
+- artifact_type: dataset
+  artifact_name: fq_data
+  access: write
+- artifact_type: dataset
+  artifact_name: update_stream_output
+  access: write
+- artifact_type: dataset
+  artifact_name: fq_data
+  access: write
+- artifact_type: dataset
+  artifact_name: update_stream_output
+  access: write
+- artifact_type: dataset
+  artifact_name: fq_data
+  access: write
+- artifact_type: dataset
+  artifact_name: update_stream_output
+  access: write
+version: 2025.12.09.1
+file_type: json
+checksum: 7648046e

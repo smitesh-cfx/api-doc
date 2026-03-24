@@ -1,0 +1,6 @@
+
+ ## @files:loadfile filename="alert.json"
+@rn:read-stream name="enrichment-input-alerts" & group="grp-alertenrichment"
+ ## Run enrichment pipeline
+
+ --> @exec:run-pipeline-multi-proc name="alert-dataset-enrichment" and num_procs="0"
