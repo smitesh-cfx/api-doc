@@ -1,0 +1,244 @@
+{
+  "name": "rda-github-push-1",
+  "label": "RDA Artifacts in GitHub",
+  "is_template": true,
+  "description": "RDA Artifacts in GitHub",
+  "version": "23.11.7.1",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "default",
+  "dashboard_style": "auto",
+  "stream": "rda_github_push_stream",
+  "dashboard_filters": {
+    "time_filter": true,
+    "columns_filter": [
+      {
+        "id": "filepath",
+        "label": "Full Path",
+        "type": "TEXT"
+      },
+      {
+        "id": "artifact_type",
+        "label": "Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "file",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "user",
+        "label": "User",
+        "type": "TEXT"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_github_push_stream",
+        "title": "Type",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "artifact_type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      },
+      {
+        "stream": "rda_github_push_stream",
+        "title": "User",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "user"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "RDA artifacts in GitHub",
+      "widgets": [
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "github_push_details",
+          "widget_id": "1d288e5b"
+        },
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "tabular",
+          "stream": "rda_github_push_stream",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "filepath",
+            "artifact_type",
+            "file",
+            "user"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "filepath": {
+              "title": "Full Path"
+            },
+            "artifact_type": {
+              "title": "Type"
+            },
+            "file": {
+              "title": "Name"
+            },
+            "user": {
+              "title": "User"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:github:push",
+              "title": "Push Now",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:push-github",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.push"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:github:push",
+              "title": "Configure Git",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:github-settings",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.settings"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "01dc3a55"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "RDA artifacts in GitHub",
+      "widgets": [
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "github_push_details",
+          "widget_id": "1d288e5b"
+        },
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "tabular",
+          "stream": "rda_github_push_stream",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "filepath",
+            "artifact_type",
+            "file",
+            "user"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "filepath": {
+              "title": "Full Path"
+            },
+            "artifact_type": {
+              "title": "Type"
+            },
+            "file": {
+              "title": "Name"
+            },
+            "user": {
+              "title": "User"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:github:push",
+              "title": "Push Now",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:push-github",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.push"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:github:push",
+              "title": "Configure Git",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:github-settings",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.settings"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "01dc3a55"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+folder: Default
+name: event_trigger_test_1_d99da428
+description: test pipeline
+data_path: pipelines/data/event_trigger_test_1_d99da428/2026_03_25/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+  workflow:
+    name: workflow
+    type: workflow
+artifacts:
+- artifact_type: rda-network-stream
+  artifact_name: test
+  access: read
+version: '2026_03_25'
+file_type: json
+checksum: 82b23b45

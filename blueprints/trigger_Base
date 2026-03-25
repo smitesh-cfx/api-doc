@@ -1,0 +1,19 @@
+name: trigger_Base
+id: trigger_Base
+version: '2026_03_25_08'
+category: Event Triggers - Base
+comment: null
+enabled: true
+type: Service
+provider: CloudFabrix Software Inc.
+service_pipelines:
+- name: event_trigger_test_1_d99da428
+  label: 'Event Trigger: test_1'
+  version: '2026_03_25'
+  site: .*
+  site_type: regex
+  instances: 1
+  scaling_policy:
+    min_instances: 1
+    max_instances: 1
+dashboard_type: dashboard
