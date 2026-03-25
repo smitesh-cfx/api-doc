@@ -1,0 +1,13 @@
+{
+  "name": "rda_shared_conversations",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [],
+    "retention_days": 60,
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-8b11ec1e-rda_shared_conversations"
+}

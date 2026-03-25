@@ -1,0 +1,14 @@
+{
+  "name": "rda_alert_state_management_execution_status",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "flatten_json": false,
+    "flatten_object_with_dot_notation": true,
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream 'rda_alert_state_management_execution_status' for internal operations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-5d429516-rda_alert_state_management_execution_status"
+}

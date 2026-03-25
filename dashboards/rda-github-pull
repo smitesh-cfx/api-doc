@@ -1,0 +1,187 @@
+{
+  "name": "rda-github-pull",
+  "label": "RDA Artifacts in GitHub",
+  "is_template": true,
+  "description": "RDA Artifacts in GitHub",
+  "version": "23.11.7.1",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "stream": "rda_github_pull_stream",
+  "dashboard_filters": {
+    "time_filter": true,
+    "columns_filter": [
+      {
+        "id": "filename",
+        "label": "Full Path",
+        "type": "TEXT"
+      },
+      {
+        "id": "additions",
+        "label": "Additions",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "deletions",
+        "label": "Deletions",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "status",
+        "label": "Status",
+        "type": "TEXT"
+      },
+      {
+        "id": "position",
+        "label": "Ahead/Behind",
+        "type": "TEXT"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_github_pull_stream",
+        "title": "Status",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "status"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "RDA artifacts in GitHub",
+      "widgets": [
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "github_pull_details",
+          "height": 2,
+          "widget_id": "8ddee7d9"
+        },
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "tabular",
+          "stream": "rda_github_pull_stream",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "filename",
+            "status",
+            "position"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "filename": {
+              "title": "Full Path",
+              "key": true
+            },
+            "additions": {
+              "title": "Additions",
+              "type": "DOUBLE"
+            },
+            "deletions": {
+              "title": "Deletions",
+              "type": "DOUBLE"
+            },
+            "status": {
+              "title": "Status"
+            },
+            "position": {
+              "title": "Ahead/Behind"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            },
+            "diff_html": {
+              "hidden": true,
+              "key": true
+            }
+          },
+          "actions": [],
+          "widget_id": "01dc3a55",
+          "preview_dashboard": "rda-diff-preview",
+          "preview_width": 900,
+          "preview_height": 700
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "RDA artifacts in GitHub",
+      "widgets": [
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "github_pull_details",
+          "height": 2,
+          "widget_id": "8ddee7d9"
+        },
+        {
+          "title": "RDA artifacts in GitHub",
+          "widget_type": "tabular",
+          "stream": "rda_github_pull_stream",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "filename",
+            "status",
+            "position"
+          ],
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "filename": {
+              "title": "Full Path",
+              "key": true
+            },
+            "additions": {
+              "title": "Additions",
+              "type": "DOUBLE"
+            },
+            "deletions": {
+              "title": "Deletions",
+              "type": "DOUBLE"
+            },
+            "status": {
+              "title": "Status"
+            },
+            "position": {
+              "title": "Ahead/Behind"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            },
+            "diff_html": {
+              "hidden": true,
+              "key": true
+            }
+          },
+          "actions": [],
+          "widget_id": "01dc3a55",
+          "preview_dashboard": "rda-diff-preview",
+          "preview_width": 900,
+          "preview_height": 700
+        }
+      ]
+    }
+  ]
+}

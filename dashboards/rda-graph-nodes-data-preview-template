@@ -1,0 +1,50 @@
+{
+  "name": "rda-graph-nodes-data-preview-template",
+  "label": "Graph Nodes Data Preview",
+  "description": "Graph Nodes Data Preview",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "template_variables": {},
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": []
+  },
+  "dashboard_sections": [
+    {
+      "title": "Data Preview",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Collection Data",
+          "widget_type": "portal_tabular",
+          "reportId": "graphdb.nodes.collection.data",
+          "max_width": 12,
+          "height": 12,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "72498ed4"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Data Preview",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Collection Data",
+          "widget_type": "portal_tabular",
+          "reportId": "graphdb.nodes.collection.data",
+          "max_width": 12,
+          "height": 12,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "72498ed4"
+        }
+      ]
+    }
+  ]
+}

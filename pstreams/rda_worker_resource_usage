@@ -1,0 +1,15 @@
+{
+  "name": "rda_worker_resource_usage",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking worker resource utilization metrics including jobs_started, jobs_completed, cpu_load5, mem_active_gb, mem_percent, network_in_bytes, network_out_bytes, site_name, and pod_id",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-6281e58c-rda_worker_resource_usage"
+}

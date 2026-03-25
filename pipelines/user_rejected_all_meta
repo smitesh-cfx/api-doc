@@ -1,0 +1,26 @@
+folder: AI
+name: user_rejected_all
+description: test pipeline
+data_path: pipelines/data/user_rejected_all/2025.10.10.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+artifacts:
+- artifact_type: dataset
+  artifact_name: test-reject-all-data
+  access: write
+- artifact_type: dataset
+  artifact_name: test-reject-all
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: user_approval_stream
+  access: write
+- artifact_type: dataset
+  artifact_name: test-reject-all
+  access: write
+version: 2025.10.10.1
+file_type: json
+checksum: e684d790

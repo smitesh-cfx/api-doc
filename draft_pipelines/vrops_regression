@@ -1,0 +1,2 @@
+@vrops:metrics resource_id= "9e527382-b237-428d-b9af-1817543a5f0e" and metric_name='cpu|usage_average' and timestamp is after -1 months  and interval is '1H'
+ --> @cfxml:regression ts_column='timestamps' and value_column='data' and agg_func='mean' and frequency='1H' and job_name='CPU Usage' and timeseries_y_axis_label='Value (%)'

@@ -1,0 +1,46 @@
+{
+  "name": "rda-graph-aql-editor-template",
+  "label": "AQL Editor",
+  "description": "AQL Editor",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "AQL",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "AQL",
+          "widget_type": "portal_html",
+          "widget_template": "app-rda/aql-executor",
+          "reportId": "graphdb.aql.editor",
+          "height": 12,
+          "min_width": 12,
+          "widget_id": "1232637c"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "AQL",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "AQL",
+          "widget_type": "portal_html",
+          "widget_template": "app-rda/aql-executor",
+          "reportId": "graphdb.aql.editor",
+          "height": 12,
+          "min_width": 12,
+          "widget_id": "1232637c"
+        }
+      ]
+    }
+  ]
+}

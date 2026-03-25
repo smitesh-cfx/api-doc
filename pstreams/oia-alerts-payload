@@ -1,0 +1,43 @@
+{
+  "name": "oia-alerts-payload",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "a_id"
+    ],
+    "_mappings": {
+      "properties": {
+        "a_created_ts": {
+          "type": "date"
+        },
+        "a_updated_ts": {
+          "type": "date"
+        },
+        "a_source_payload_compressed": {
+          "type": "boolean"
+        },
+        "a_source_payload": {
+          "type": "text",
+          "index": false
+        },
+        "a_sourceeventreceivedat_ts": {
+          "type": "date"
+        },
+        "a_raisedreceivedat_ts": {
+          "type": "date"
+        },
+        "a_clearreceivedat_ts": {
+          "type": "date"
+        },
+        "a_cleared_ts": {
+          "type": "date"
+        }
+      }
+    },
+    "default_values": {},
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-e1e89edb-oia-alerts-payload"
+}

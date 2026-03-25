@@ -1,0 +1,85 @@
+
+ ## collab-db-to-pstream-migration
+
+ ## ========================MAKE SURE TO RUN THE FOLLOWING BEFORE PIPELINE EXECUTION
+
+ ## mysql> alter table irmessagesharing add column if not exists migration_status varchar(100);
+
+ ## .
+
+ ## mysql> alter table message add column if not exists migration_status varchar(100);
+
+ ## .
+
+ ## mysql> alter table teamincident add column if not exists migration_status varchar(100);
+
+ ## ================================================================================
+
+ ## .
+
+ ## MESSAGE
+
+ ## .
+@c:new-block
+ --> @dm:empty
+ --> @dm:addrow table="message" & dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & limit=5 & retry_count=5 & retry_interval=10
+ --> #mysqlv2:read migration_status is None or migration_status is not 'SUCCESS1'
+ --> @dm:save name="temp-collab-db-message"
+ ## Write/Publish
+
+ ## --unique_keys projectid,incidentid,messageid
+
+ --> @dm:selectcolumns exclude="migration_status"
+ --> @dm:to-type columns="createdat,updatedat" & type="str"
+ --> @rn:write-stream name="staging-oia-incidents-collaboration-stream"
+ ## Update the migration_status column on the db
+
+ --> @dm:recall name="temp-collab-db-message"
+ --> @dm:eval migration_status="'SUCCESS'"
+ --> @mysqlv2:update dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & table="message" & update_columns="migration_status"
+ ## .
+
+ ## IRMESSAGESHARING
+
+ ## .
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow table="irmessagesharing" & dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & limit=5 & retry_count=5 & retry_interval=10
+ --> #mysqlv2:read migration_status is None or migration_status is not 'SUCCESS1'
+ --> @dm:save name="temp-collab-db-irmessagesharing"
+ ## Write/Publish
+
+ ## --unique_keys projectid,incidentid,messageid,shared_to_team
+
+ --> @dm:selectcolumns exclude="migration_status"
+ --> @dm:to-type columns="shared_time" & type="str"
+ --> @rn:write-stream name="staging-oia-collab-messagesharing-stream"
+ ## Update the migration_status column on the db
+
+ --> @dm:recall name="temp-collab-db-irmessagesharing"
+ --> @dm:eval migration_status="'SUCCESS'"
+ --> @mysqlv2:update dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & table="irmessagesharing" & update_columns="migration_status"
+ ## .
+
+ ## TEAMINCIDENT
+
+ ## .
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow table="teamincident" & dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & limit=5 & retry_count=5 & retry_interval=10
+ --> #mysqlv2:read migration_status is None or migration_status is not 'SUCCESS1'
+ --> @dm:save name="temp-collab-db-teamincident"
+ ## Write/Publish
+
+ ## --unique_keys projectid,incidentid,messageid,team_id,collab_type
+
+ --> @dm:selectcolumns exclude="migration_status"
+ --> @dm:to-type columns="shared_time" & type="str"
+ --> @rn:write-stream name="staging-oia-incidents-external-tickets-stream"
+ ## Update the migration_status column on the db
+
+ --> @dm:recall name="temp-collab-db-teamincident"
+ --> @dm:eval migration_status="'SUCCESS'"
+ --> @mysqlv2:update dbname="98e005500460423c886d8e30d8a9acf6_cfxdimensions_app_collaboratio" & table="teamincident" & update_columns="migration_status"

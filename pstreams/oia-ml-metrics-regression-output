@@ -1,0 +1,17 @@
+{
+  "name": "oia-ml-metrics-regression-output",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "timestamp",
+      "job_name"
+    ],
+    "drop_columns": [],
+    "default_values": {},
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-87005596-oia-ml-metrics-regression-output"
+}

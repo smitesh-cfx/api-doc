@@ -1,0 +1,8 @@
+@dm:empty
+ --> @dm:addrow status="Deleting expired schedules"
+ --> @dm:eval current_time="int(time_now_as_ms())"
+ --> @dm:save name="temp-current-time"
+ --> @c:data-loop dataset="temp-current-time" and columns="current_time"
+ --> @dm:empty
+ --> @dm:addrow name="rda_dashboard_export_schedules"
+ --> #dm:pstream-delete-data-by-query start_time< $current_time

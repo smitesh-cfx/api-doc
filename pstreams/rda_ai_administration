@@ -1,0 +1,12 @@
+{
+  "name": "rda_ai_administration",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "search_case_insensitive": true
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream tracking AI administration operations including model deployments, AI project management activities, and AI workflow operations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-427329c7-rda_ai_administration"
+}

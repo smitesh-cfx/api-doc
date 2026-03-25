@@ -1,0 +1,14 @@
+{
+  "name": "rda_system_collector_export_job_status",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "export_job_name"
+    ]
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream monitoring collector export job execution status including export_job_name, status, file paths, and completion metadata",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-4632cdce-rda_system_collector_export_job_status"
+}

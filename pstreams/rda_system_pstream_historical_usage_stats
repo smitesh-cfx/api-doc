@@ -1,0 +1,12 @@
+{
+  "name": "rda_system_pstream_historical_usage_stats",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "retention_days": 30
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing daily historical persistent stream usage statistics including name, datastore_type, docs_count, size_in_mb, shards status, and index_name for capacity planning",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-8e27b9f1-rda_system_pstream_historical_usage_stats"
+}

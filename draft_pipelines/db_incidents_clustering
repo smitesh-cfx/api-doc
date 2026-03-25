@@ -1,0 +1,5 @@
+@c:new-block
+ --> @dm:empty
+ --> @dm:addrow dbname='<incidents-dbname>' & table='incident' & limit = '0'
+ --> #mysql:read customerId is '$customerId'
+ --> @cfxusml:logclustering columns='summary' and min_cluster_size = 5 and remove_vars = 'yes' and job_name='DB incidents'

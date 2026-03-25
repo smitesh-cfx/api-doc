@@ -1,0 +1,13 @@
+{
+  "name": "rda_system_organizations",
+  "datastore_type": "SQL",
+  "read_only": true,
+  "attrs": {
+    "system_defined": "yes",
+    "timestamp": "createdAt"
+  },
+  "status": "Read Only",
+  "description": "System-defined SQL-based persistent stream containing organization and tenant management data from PostgreSQL database including customer records, organization metadata, and tenant information",
+  "database_name": "1aef62f5872d416a8dd237483bfa58c9_cfxdimensions_app_resource_man",
+  "table_name": "customer"
+}

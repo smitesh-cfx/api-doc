@@ -1,0 +1,66 @@
+{
+  "name": "global-service-configs",
+  "label": "Service Configurations",
+  "description": "Service Configurations",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "exportable": false,
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Service Configurations",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Service Configurations",
+          "widget_type": "tabular",
+          "api-endpoint": {
+            "service-name": "configuration-service",
+            "namespace": "io.cfx.dimensions.app",
+            "methodName": "invokeAppApi:getServiceConfigurationsTabularReport",
+            "version": "*",
+            "useReportContext": true,
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {}
+              }
+            ]
+          },
+          "widget_id": "bae3b367"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Service Configurations",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Service Configurations",
+          "widget_type": "tabular",
+          "api-endpoint": {
+            "service-name": "configuration-service",
+            "namespace": "io.cfx.dimensions.app",
+            "methodName": "invokeAppApi:getServiceConfigurationsTabularReport",
+            "version": "*",
+            "useReportContext": true,
+            "stringified-params": true,
+            "parse-output": false,
+            "params": [
+              {
+                "context": {}
+              }
+            ]
+          },
+          "widget_id": "bae3b367"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "rda_dashboard_action_permissions",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "dashboard_name",
+      "section_title",
+      "widget_title",
+      "action_title"
+    ],
+    "flatten_json": false,
+    "_mappings": {
+      "properties": {
+        "saved_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream 'rda_dashboard_action_permissions' for internal operations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-948d077a-rda_dashboard_action_permissions"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "rda_system_audit_logs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream logging all artifact operations (ADD/UPDATE/DELETE) with user_id, artifact_type (PersistentStream/AlertRule/Dashboard/etc), artifact_name, operation, description, service, hostname, and timestamp for compliance tracking",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-c65fa617-rda_system_audit_logs"
+}

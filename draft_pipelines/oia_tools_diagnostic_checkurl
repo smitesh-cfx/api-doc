@@ -1,0 +1,6 @@
+@exec:get-input
+ --> @dm:explode-json column='node'
+ --> @dm:add-missing-columns columns='url'
+ --> @dm:selectcolumns include='^url$'
+ --> @dm:eval tool_url = "url"
+ --> @diagnostictools:checkurl column_name_url = 'tool_url' and json_output_flag = 'True'

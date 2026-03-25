@@ -1,0 +1,355 @@
+{
+  "name": "rda_system_snapshots_main",
+  "label": "Snapshots List",
+  "description": "Snapshots List",
+  "dashboard_folder": "System",
+  "version": "1.0.2",
+  "enabled": false,
+  "live_edit": true,
+  "stream": "rda_system_snapshots_main",
+  "dashboard_type": "dashboard",
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "All Time"
+    ],
+    "columns_filter": [
+      {
+        "id": "snapshot_name",
+        "label": "Snapshot Name",
+        "key": true,
+        "type": "TEXT"
+      },
+      {
+        "id": "snapshot_type",
+        "label": "Snapshot Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "status",
+        "label": "Status",
+        "type": "TEXT"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_system_snapshots_main",
+        "title": "Snapshot Type",
+        "duration_hours": 87600,
+        "limit": 200,
+        "extra_filter": null,
+        "group_by": [
+          "snapshot_type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "rda_system_snapshots_main",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Snapshots",
+          "widget_type": "tabular",
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "rda_system_snapshots_main",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter": null,
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "snapshot_type": {
+              "title": "Snapshot Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "snapshot_name": {
+              "title": "Snapshot Name",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "status": {
+              "title": "Status",
+              "type": "TEXT"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "title": "Create",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "permission": "rda:dataset:add",
+              "identifier": "rda.snapshot.add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.create.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:import",
+              "title": "Import",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "rda.snapshot.import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.import.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "appName": "user-dashboard/rda_system_single_snapshot_details",
+              "drillDownLinkField": "snapshot_name",
+              "identifier": "user.dashboard.view",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "title": "Export",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:export",
+              "identifier": "rda.snapshot.export",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.export.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Review",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:review",
+              "identifier": "rda.snapshot.review",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.review.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:delete",
+              "identifier": "rda.snapshot.delete",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.delete.snapshot"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "acfb36eb"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "rda_system_snapshots_main",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Snapshots",
+          "widget_type": "tabular",
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "rda_system_snapshots_main",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter": null,
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "snapshot_type": {
+              "title": "Snapshot Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "snapshot_name": {
+              "title": "Snapshot Name",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "status": {
+              "title": "Status",
+              "type": "TEXT"
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "title": "Create",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "permission": "rda:dataset:add",
+              "identifier": "rda.snapshot.add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.create.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:import",
+              "title": "Import",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "rda.snapshot.import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.import.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:view",
+              "appName": "user-dashboard/rda_system_single_snapshot_details",
+              "drillDownLinkField": "snapshot_name",
+              "identifier": "user.dashboard.view",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "title": "Export",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:export",
+              "identifier": "rda.snapshot.export",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.export.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Review",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:review",
+              "identifier": "rda.snapshot.review",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.review.snapshot"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "permission": "rda:dataset:delete",
+              "identifier": "rda.snapshot.delete",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.delete.snapshot"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "acfb36eb"
+        }
+      ]
+    }
+  ]
+}

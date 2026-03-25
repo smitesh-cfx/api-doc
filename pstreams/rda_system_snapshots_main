@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_snapshots_main",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "snapshot_name"
+    ],
+    "retention_days": 365
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing system snapshot main records including snapshot_name, snapshot metadata, creation timestamp, and snapshot configuration",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f6fe409b-rda_system_snapshots_main"
+}

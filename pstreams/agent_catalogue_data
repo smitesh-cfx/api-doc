@@ -1,0 +1,15 @@
+{
+  "name": "agent_catalogue_data",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "agent_id"
+    ],
+    "system_defined": "no",
+    "retention_days": 60
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-d2d55ebb-agent_catalogue_data"
+}

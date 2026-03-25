@@ -1,0 +1,175 @@
+{
+  "name": "rda-pstream-data-preview-template",
+  "label": "Persistent Stream Data Preview",
+  "description": "Persistent Stream Data Preview",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "template_variables": {
+    "PSTREAM_NAME": {
+      "contextId": "pstream_name"
+    },
+    "TS_COLUMN": {
+      "contextId": "ts_column"
+    },
+    "DEFFAUT_TIME_FILTER": {
+      "contextId": "default_data_preview_time_filter",
+      "default": "Last 12 months"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": true,
+    "build_dynamic_columns_filter": {
+      "stream": "{{PSTREAM_NAME}}"
+    },
+    "columns_filter": [],
+    "default_time_filter_labels": [
+      "{{DEFFAUT_TIME_FILTER}}"
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Data Preview",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "custom_counter",
+          "title": "Row Count",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "duration_hours": 24,
+          "min_width": 3,
+          "style": {
+            "color-list": [
+              "#35b539"
+            ]
+          },
+          "height": 3,
+          "max_width": 6,
+          "agg": "value_count",
+          "column": "{{TS_COLUMN}}",
+          "type": "int",
+          "widget_id": "2faa4f30"
+        },
+        {
+          "widget_type": "timeseries",
+          "title": "Histogram",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "duration_hours": 24,
+          "min_width": 9,
+          "height": 3,
+          "max_width": 12,
+          "interval": "15Min",
+          "series_spec": [
+            {
+              "agg": "value_count",
+              "column": "{{TS_COLUMN}}",
+              "type": "int"
+            }
+          ],
+          "chartProperties": {
+            "yAxisLabel": null,
+            "xAxisLabel": null,
+            "legendLocation": "none",
+            "mode": "selection",
+            "column-id": "{{TS_COLUMN}}"
+          },
+          "widget_id": "faa7e361"
+        },
+        {
+          "title": "Data Preview",
+          "widget_type": "tabular",
+          "showRowSummary": true,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "paginated": true,
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "max_rows": 100,
+          "duration_hours": 24,
+          "sorting": [
+            {
+              "{{TS_COLUMN}}": "desc"
+            }
+          ],
+          "widget_id": "72498ed7"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Data Preview",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "custom_counter",
+          "title": "Row Count",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "duration_hours": 24,
+          "min_width": 3,
+          "style": {
+            "color-list": [
+              "#35b539"
+            ]
+          },
+          "height": 3,
+          "max_width": 6,
+          "agg": "value_count",
+          "column": "{{TS_COLUMN}}",
+          "type": "int",
+          "widget_id": "2faa4f30"
+        },
+        {
+          "widget_type": "timeseries",
+          "title": "Histogram",
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "duration_hours": 24,
+          "min_width": 9,
+          "height": 3,
+          "max_width": 12,
+          "interval": "15Min",
+          "series_spec": [
+            {
+              "agg": "value_count",
+              "column": "{{TS_COLUMN}}",
+              "type": "int"
+            }
+          ],
+          "chartProperties": {
+            "yAxisLabel": null,
+            "xAxisLabel": null,
+            "legendLocation": "none",
+            "mode": "selection",
+            "column-id": "{{TS_COLUMN}}"
+          },
+          "widget_id": "faa7e361"
+        },
+        {
+          "title": "Data Preview",
+          "widget_type": "tabular",
+          "showRowSummary": true,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "paginated": true,
+          "stream": "{{PSTREAM_NAME}}",
+          "ts_column": "{{TS_COLUMN}}",
+          "max_rows": 100,
+          "duration_hours": 24,
+          "sorting": [
+            {
+              "{{TS_COLUMN}}": "desc"
+            }
+          ],
+          "widget_id": "72498ed7"
+        }
+      ]
+    }
+  ]
+}

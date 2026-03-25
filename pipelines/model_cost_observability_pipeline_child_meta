@@ -1,0 +1,77 @@
+folder: AI
+name: model_cost_observability_pipeline_child
+description: test pipeline
+data_path: pipelines/data/model_cost_observability_pipeline_child/2025.10.10.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+artifacts:
+- artifact_type: dataset
+  artifact_name: rda_chat_session_data
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: dataset
+  artifact_name: before-enrich
+  access: write
+- artifact_type: dataset
+  artifact_name: token_usage_input_tokens
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: dataset
+  artifact_name: token_count_output
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: token_cost_input
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: token_cost_output
+  access: write
+- artifact_type: dataset
+  artifact_name: tool_name_before_groupby
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: dataset
+  artifact_name: tools_called_Data
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: llm_model_costs
+  access: read
+- artifact_type: rda-network-stream
+  artifact_name: ai_observability
+  access: write
+- artifact_type: dataset
+  artifact_name: status_count
+  access: write
+version: 2025.10.10.1
+file_type: json
+checksum: 6d179c50

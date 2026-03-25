@@ -1,0 +1,27 @@
+{
+  "name": "rda_textfsm_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "name"
+    ],
+    "flatten_json": false,
+    "_mappings": {
+      "properties": {
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing TextFSM template metadata including template names, parsing patterns, field mappings, and text parsing configurations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3e7dc78a-rda_textfsm_meta"
+}

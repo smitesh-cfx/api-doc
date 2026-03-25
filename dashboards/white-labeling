@@ -1,0 +1,45 @@
+{
+  "name": "white-labeling",
+  "label": "White Labeling",
+  "description": " White Labeling Information",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "exportable": false,
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "White Labeling",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "White Labeling",
+          "widget_type": "portal_html",
+          "widget_template": "saas/white-label-settings",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "45a9c539"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "White Labeling",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "White Labeling",
+          "widget_type": "portal_html",
+          "widget_template": "saas/white-label-settings",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "45a9c539"
+        }
+      ]
+    }
+  ]
+}

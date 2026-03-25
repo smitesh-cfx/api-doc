@@ -1,0 +1,43 @@
+{
+  "name": "default-dashboard",
+  "label": "Home",
+  "description": "Default Landing Dashboard",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Home",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Home",
+          "widget_type": "portal_html",
+          "widget_template": "common/welcome-screen",
+          "height": 12,
+          "min_wdith": 12,
+          "widget_id": "89bf181c"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Home",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Home",
+          "widget_type": "portal_html",
+          "widget_template": "common/welcome-screen",
+          "height": 12,
+          "min_wdith": 12,
+          "widget_id": "89bf181c"
+        }
+      ]
+    }
+  ]
+}

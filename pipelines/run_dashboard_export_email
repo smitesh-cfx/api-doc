@@ -1,0 +1,71 @@
+@dm:create-persistent-stream name="dashboard_export_email_status" and unique_cols="job_id" and retention_days=1
+ --> @dm:empty
+ --> @dm:save name="temp-df"
+ --> @c:new-block
+ --> @dm:empty
+ --> @exec:define-function name="handle_error"
+ --> @dm:empty
+ --> @dm:addrow status="Failed" and reason="Error: email sending process failed to the email ID '{{recipient}}'" and job_id="{{job_id}}" and ingestion_id="{{ingestion_id}}"
+ --> @rn:write-stream name="rda_dashboard_schedule_logs"
+ --> @exec:end-function
+ ## --> @c:new-block
+
+ ## --> @dm:empty
+
+ ## --> @exec:retry-loop retries=3 & retry_delay_millis=5000 & on_failure_callback="handle_error"
+
+ ## --> @dm:addrow name="dashboard_export_email_status" & limit = '0'
+
+ ## --> #dm:query-persistent-stream job_id=="{{job_id}}"
+
+ ## --> @dm:save name="temp-original"
+
+ ## --> @dm:skip-block-if-shape row_count="0"
+
+ ## --> @dm:eval collection_timestamp = "int(time_now_as_ms())"
+
+ ## --> @dm:eval diff="collection_timestamp-rda_timestamp"
+
+ ## --> *dm:filter diff > 300000
+
+ ## --> @dm:save name="temp-df"
+
+ ## --> @dm:skip-block-if-shape row_count="0"
+
+ ## --> @dm:empty
+
+ ## --> @dm:addrow job_id="{{job_id}}"
+
+ ## --> @email:sendmail-data recipient="{{recipient}}" and minio_file_location="{{minio_path}}" and subject="{{subject}}"
+
+ ## --> @rn:write-stream name="dashboard_export_email_status"
+
+ ## --> @dm:empty
+
+ ## --> @dm:addrow status="The exported file is successfully sent to the email ID '{{recipient}}'"
+
+ ## --> @dm:eval reason=None
+
+ ## --> @dm:eval job_id="'{{job_id}}'" and ingestion_id="'{{ingestion_id}}'"
+
+ ## --> @rn:write-stream name="rda_dashboard_schedule_logs"
+
+ ## --> @exec:end-loop
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @exec:retry-loop retries=3 & retry_delay_millis=5000 & on_failure_callback="handle_error"
+ ## --> @dm:recall name="temp-original"
+
+ --> @dm:empty
+ --> @dm:skip-block-if-shape row_count>0
+ --> @dm:empty
+ --> @dm:addrow job_id="{{job_id}}"
+ --> @email:sendmail-data recipient="{{recipient}}" and minio_file_location="{{minio_path}}" and subject="{{subject}}"
+ --> @rn:write-stream name="dashboard_export_email_status"
+ --> @dm:empty
+ --> @dm:addrow status="The exported file is successfully sent to the email ID '{{recipient}}'"
+ --> @dm:eval reason=None
+ --> @dm:eval job_id="'{{job_id}}'" and ingestion_id="'{{ingestion_id}}'"
+ --> @rn:write-stream name="rda_dashboard_schedule_logs"
+ --> @exec:end-loop

@@ -1,0 +1,377 @@
+
+ ## #########################################
+
+ ## Configure vCenter Extension Name in RDA as: vc
+
+ ## ##########################################
+
+ ## VMware vCenter VM Inventory
+@c:new-block
+ --> *vc:vms
+ --> @dm:save name = 'cfx-vm-inventory'
+ ## VMware vCenter Host Inventory
+
+ --> @c:new-block
+ --> *vc:hosts
+ --> @dm:save name = 'cfx-esxi-host-inventory'
+ ## VMware vCenter Network Inventory
+
+ --> @c:new-block
+ --> *vc:vswitches
+ --> @dm:save name = 'cfx-vswitch-inventory'
+ ## VMware vCenter Datastore Inventory
+
+ --> @c:new-block
+ --> *vc:datastores
+ --> @dm:save name = 'cfx-datastore-inventory'
+ ## VMware vCenter Storage Inventory
+
+ --> @c:new-block
+ --> *vc:host-storage-adapters
+ --> @dm:save name = 'cfx-storage-inventory'
+ ## #########################################################
+
+ ## VMware vCenter VM Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vm-inventory'
+ --> *dm:filter * get name as 'vm_name',id as 'vm_bios_id',guest as 'vm_guest_os',memorySizeMB as 'vm_memory_mb',numCpu as 'vm_cpu',path as 'vm_path',vcenter_address as 'parent_vcenter'
+ --> @dm:save name = 'temp_vm-enrich-attribute-table'
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vm-inventory'
+ --> *dm:filter * get name as 'vm_name',ipAddress as 'vm_ip_address',id as 'vm_bios_id',host as 'parent_esxi_host',cluster as 'parent_cluster',datacenter as 'parent_datacenter',vm_nic_network as 'parent_network_portgroup',vm_nic_ipaddresses,vm_nic_macAddress,network as 'configured_network_portgroup',vcenter_address as 'parent_vcenter'
+ --> @dm:fixnull columns = 'parent_network_portgroup'
+ --> @dm:eval parent_network_portgroup = "configured_network_portgroup if parent_network_portgroup == '' else parent_network_portgroup"
+ --> @dm:dedup columns = 'vm_bios_id,vm_nic_macAddress'
+ --> @dm:explode column = 'vm_nic_ipaddresses'
+ --> *dm:filter vm_nic_ipaddresses does not contain '::'
+ --> @dm:explode column = 'configured_network_portgroup'
+ --> @dm:explode column = 'parent_network_portgroup'
+ --> @dm:map attr = 'parent_network_portgroup' & func = 'strip'
+ --> @dm:dedup columns = 'vm_bios_id,parent_network_portgroup'
+ ## --> *dm:filter parent_network_portgroup is not empty
+
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'VM'
+ --> @dm:map from = 'vm_name' & to = 'node_label'
+ --> @dm:map from = 'vm_bios_id' & to = 'node_id'
+ --> @dm:map from = 'parent_network_portgroup,parent_esxi_host' & to = 'parent_network_portgroup_id' & func = 'join' & sep = '_'
+ --> @dm:save name = 'temp_vm-inventory-nodes-before-implode-network-table'
+ --> @dm:implode key_columns = 'vm_bios_id' & merge_columns = 'vm_nic_ipaddresses,vm_nic_macAddress,parent_network_portgroup,parent_network_portgroup_id' & keep_columns = 'layer,node_type,node_id,node_label,vm_ip_address,vm_bios_id,parent_esxi_host,parent_cluster,parent_datacenter,parent_network_portgroup,parent_network_portgroup_id,vm_nic_ipaddresses,vm_nic_macAddress,configured_network_portgroup,parent_vcenter'
+ --> @dm:save name = 'temp_vm-inventory-nodes-network-table'
+ --> @dm:recall name = 'cfx-vm-inventory'
+ --> *dm:filter * get name as 'vm_name',ipAddress as 'vm_ip_address',id as 'vm_bios_id',host as 'parent_esxi_host',cluster as 'parent_cluster',datacenter as 'parent_datacenter',disk_datastore as 'parent_datastore',vcenter_address as 'parent_vcenter'
+ --> @dm:dedup columns = 'vm_bios_id,parent_datastore'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'VM'
+ --> @dm:map from = 'vm_name' & to = 'node_label'
+ --> @dm:map from = 'vm_bios_id' & to = 'node_id'
+ --> @dm:map from = 'parent_datastore,parent_esxi_host' & to = 'parent_datastore_id' & func = 'join' & sep = '_'
+ --> @dm:save name = 'temp_vm-inventory-nodes-before-implode-datastore-table'
+ --> @dm:implode key_columns = 'vm_bios_id' & merge_columns = 'parent_datastore,parent_datastore_id' & keep_columns = 'layer,node_type,node_id,node_label,vm_ip_address,vm_bios_id,parent_esxi_host,parent_cluster,parent_datacenter,parent_datastore,parent_datastore_id'
+ --> @dm:save name = 'temp_vm-inventory-nodes-storage-table,parent_vcenter'
+ --> @dm:enrich dict = 'temp_vm-inventory-nodes-network-table' & src_key_cols = 'vm_bios_id' & dict_key_cols = 'vm_bios_id' & enrich_cols = 'parent_network_portgroup,parent_network_portgroup_id,vm_nic_ipaddresses,vm_nic_macAddress'
+ ## --> *dm:filter parent_network_portgroup is not empty
+
+ --> @dm:enrich dict = 'temp_vm-enrich-attribute-table' & src_key_cols = 'vm_bios_id' & dict_key_cols = 'vm_bios_id' & enrich_cols = 'parent_vcenter,vm_guest_os,vm_cpu,vm_memory_mb,vm_path'
+ --> @dm:save name = 'cfx-vm-inventory-nodes-table'
+ ## VMware vCenter ESXi Host Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-esxi-host-inventory'
+ --> *dm:filter * get host as 'esxi_host',hardware_bios_uuid as 'esxi_host_bios_id',cluster as 'parent_cluster',datacenter as 'parent_datacenter', esx_host_build as 'esxi_version',esx_host_hardware_model as 'esxi_server_model',esx_host_hardware_vendor as 'esxi_server_vendor',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Host'
+ --> @dm:map from = 'esxi_host' & to = 'node_label'
+ --> @dm:map from = 'esxi_host' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label,node_type,layer,parent_datacenter,parent_cluster,esxi_host,esxi_version,esxi_host_bios_id,esxi_server_model,esxi_server_vendor,parent_vcenter
+ --> @dm:dedup columns = 'node_id'
+ --> @dm:save name = 'cfx-esxi-host-inventory-nodes-table'
+ ## VMware vCenter Datastore Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-datastore-inventory'
+ --> *dm:filter * get name as 'datastore_name',datacenter as 'parent_datacenter',host_name as 'parent_esxi_host', type as 'storage_type',remoteHost as 'storage_array_ip',remotePath as 'storage_array_volume_export_path',multipleHostAccess,extents,capacity_GB as 'total_capacity_in_gb',freeSpace_GB as 'free_capacity_in_gb',provisioned_GB as 'provisioned_capacity_in_gb',overprovisioned_pct as 'overprovisioned_capacity_pct',vcenter_address as 'parent_vcenter'
+ --> @dm:grok column = 'extents' & pattern = '%{DATA}\.(?<storage_vendor_id>.{8})%{GREEDYDATA:storage_lun_serial}'
+ --> @dm:fixnull columns = 'storage_lun_serial' & value = ''
+ --> @dm:eval storage_lun_serial = "bytes.fromhex(storage_lun_serial).decode('unicode-escape')"
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Datastore'
+ --> @dm:map from = 'datastore_name,parent_esxi_host' & to = 'parent_datastore_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'datastore_name' & to = 'node_label'
+ --> @dm:map from = 'parent_datastore_id' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label,node_type,layer,parent_esxi_host,parent_datacenter,storage_type,storage_array_ip,storage_array_volume_export_path,storage_type,multipleHostAccess as 'storage_multihost_access',extents as 'storage_serial_number',storage_lun_serial,total_capacity_in_gb,free_capacity_in_gb,provisioned_capacity_in_gb,overprovisioned_capacity_pct,parent_vcenter
+ --> @dm:dedup columns = 'node_id,parent_esxi_host'
+ --> @dm:save name = 'cfx-esxi-datastore-inventory-nodes-table'
+ ## VMware vCenter Block Storage Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-storage-inventory'
+ --> *dm:filter path_canonicalName is not empty and path_lunType is not 'enclosure' get cluster as 'parent_cluster',datacenter as 'parent_datacenter',device as 'esxi_host_hba',driver as 'esxi_hba_driver',host as 'parent_esxi_host',path_canonicalName as 'storage_serial_number',path_lunType as 'storage_type',path_model as 'remote_storage_type',path_localDisk as 'local_storage_status',path_name as 'storage_disk_path',path_pathState as 'storage_target_mode',path_vendor as 'storage_vendor',path_operationalState as 'storage_path_status',path_displayName as 'storage_disk_display_name',iScsiName as 'esxi_iscsi_hba_name',iScsiAlias as 'esxi_iscsi_hba_alias'
+ --> @dm:dedup columns = 'storage_serial_number'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Storage'
+ --> @dm:map from = 'storage_disk_display_name' & to = 'node_label'
+ --> @dm:map from = 'storage_serial_number' & to = 'node_id'
+ --> *dm:filter * get layer,node_type,node_label,node_id,parent_cluster,parent_datacenter,parent_esxi_host,storage_serial_number,esxi_host_hba,local_storage_status,storage_vendor
+ --> @dm:save name = 'cfx-esxi-block-storage-inventory-nodes-table'
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-esxi-datastore-inventory-nodes-table'
+ --> @dm:enrich dict = 'cfx-esxi-block-storage-inventory-nodes-table' & src_key_cols = 'storage_serial_number' & dict_key_cols = 'storage_serial_number' & enrich_cols = 'esxi_host_hba,local_storage_status,storage_vendor'
+ --> @dm:selectcolumns exclude = 'storage_type.1'
+ --> @dm:save name = 'cfx-esxi-datastore-inventory-nodes-enriched-table'
+ ## VMware vCenter vSwitch Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Standard' get vswitch_name,portgroup as 'stadard_portgroup',pnic as 'vswitch_uplink_int',datacenter_name as 'parent_datacenter',cluster_name as 'parent_cluster',host_name as 'parent_esxi_host',cdp_mgmtAddr as 'phy_switch_ip',cdp_hardwarePlatform as 'phy_switch_platform',cdp_devId as 'phy_switch_device_name',cdp_portId as 'phy_switch_int',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'vSwitch'
+ --> @dm:map from = 'vswitch_name' & to = 'node_label'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'vswitch_parent' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label,node_type,layer,stadard_portgroup,parent_esxi_host,parent_datacenter,vswitch_parent,vswitch_uplink_int,phy_switch_ip,phy_switch_device_name,phy_switch_platform,phy_switch_int,parent_vcenter
+ --> @dm:dedup columns = 'node_id,parent_esxi_host,stadard_portgroup,vswitch_uplink_int'
+ --> @dm:save name = 'cfx-esxi-vswitch-inventory-nodes-table'
+ ## VMware vCenter standard portgroup
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Standard' get vswitch_name,portgroup as 'stadard_portgroup',host_name as 'parent_esxi_host',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'vPortgroup'
+ --> @dm:map from = 'stadard_portgroup' & to = 'node_label'
+ --> @dm:map from = 'stadard_portgroup,parent_esxi_host' & to = 'parent_network_portgroup_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'parent_network_portgroup_id' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label,node_type,layer,vswitch_parent,parent_network_portgroup_id,stadard_portgroup,parent_vcenter
+ --> @dm:dedup columns = 'node_id'
+ --> @dm:save name = 'cfx-esxi-std-portgroup-inventory-nodes-table'
+ ## VMware vCenter dvSwitch Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Distributed' get vswitch_name,portgroup as 'distributed_portgroup',pnic as 'dvswitch_uplink_int',uplinks as 'dvswitch_uplink',datacenter_name as 'parent_datacenter',cluster_name as 'parent_cluster',host_name as 'parent_esxi_host',cdp_mgmtAddr as 'phy_switch_ip',cdp_hardwarePlatform as 'phy_switch_platform',cdp_devId as 'phy_switch_device_name',cdp_portId as 'phy_switch_int',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'dvSwitch'
+ --> @dm:map from = 'vswitch_name' & to = 'node_label'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'vswitch_parent' & to = 'node_id'
+ ## --> @dm:map from = 'vswitch_name' & to = 'node_id'
+
+ ## --> @dm:map from = 'vswitch_name' & to = 'vswitch_parent'
+
+ --> *dm:filter * get node_id,node_label,node_type,layer,distributed_portgroup,vswitch_parent,parent_esxi_host,parent_datacenter,dvswitch_uplink_int,dvswitch_uplink,phy_switch_ip,phy_switch_device_name,phy_switch_platform,phy_switch_int,parent_vcenter
+ --> @dm:dedup columns = 'node_id,parent_esxi_host,distributed_portgroup,dvswitch_uplink_int'
+ --> @dm:save name = 'cfx-esxi-dvswitch-inventory-nodes-table'
+ ## VMware vCenter distributed portgroup
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Distributed' get vswitch_name,portgroup as 'distributed_portgroup',host_name as 'parent_esxi_host',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'dvPortgroup'
+ --> @dm:map from = 'distributed_portgroup' & to = 'node_label'
+ --> @dm:map from = 'distributed_portgroup,parent_esxi_host' & to = 'parent_network_portgroup_id' & func = 'join' & sep = '_'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'parent_network_portgroup_id' & to = 'node_id'
+ ## --> @dm:map from = 'distributed_portgroup' & to = 'node_id'
+
+ --> *dm:filter * get node_id,node_label,node_type,layer,vswitch_name,parent_esxi_host,parent_network_portgroup_id,vswitch_parent,distributed_portgroup,parent_vcenter
+ --> @dm:dedup columns = 'node_id,vswitch_name'
+ --> @dm:save name = 'cfx-esxi-distributed-portgroup-inventory-nodes-table'
+ ## VMware vCenter - ESXi Host Physical NIC Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Standard' get pnic as 'physical_nic',vswitch_name,host_name as 'parent_esxi_host',cdp_mgmtAddr as 'phy_switch_ip',cdp_hardwarePlatform as 'phy_switch_platform',cdp_devId as 'phy_switch_device_name',cdp_portId as 'phy_switch_int',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'NIC'
+ --> @dm:map from = 'physical_nic' & to = 'node_label'
+ --> @dm:map from = 'physical_nic,parent_esxi_host' & to = 'physical_nic_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'physical_nic_parent' & to = 'node_id'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> *dm:filter * get node_id,node_label,node_type,layer,vswitch_name,vswitch_parent,physical_nic_parent,parent_esxi_host,phy_switch_device_name,phy_switch_int,parent_vcenter
+ --> @dm:dedup columns = 'node_id,vswitch_name,parent_esxi_host'
+ --> @dm:save name = 'temp-vswitch-pnic-inventory-nodes-table'
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter type = 'Distributed' get pnic as 'physical_nic',vswitch_name,host_name as 'parent_esxi_host',cdp_mgmtAddr as 'phy_switch_ip',cdp_hardwarePlatform as 'phy_switch_platform',cdp_devId as 'phy_switch_device_name',cdp_portId as 'phy_switch_int',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Virtualization'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'NIC'
+ --> @dm:map from = 'physical_nic' & to = 'node_label'
+ --> @dm:map from = 'physical_nic,parent_esxi_host' & to = 'physical_nic_parent' & func = 'join' & sep = '_'
+ --> @dm:map from = 'physical_nic_parent' & to = 'node_id'
+ --> @dm:map from = 'vswitch_name,parent_esxi_host' & to = 'vswitch_parent' & func = 'join' & sep = '_'
+ --> *dm:filter * get node_id,node_label,node_type,layer,vswitch_name,vswitch_parent,physical_nic_parent,parent_esxi_host,phy_switch_device_name,phy_switch_int,parent_vcenter
+ --> @dm:dedup columns = 'node_id,vswitch_name,parent_esxi_host'
+ --> @dm:save name = 'temp-dvswitch-pnic-inventory-nodes-table'
+ --> @c:new-block
+ --> @dm:concat names = 'temp-vswitch-pnic-inventory-nodes-table|temp-dvswitch-pnic-inventory-nodes-table'
+ --> @dm:save name = 'cfx-esxi-pnic-inventory-nodes-table'
+ ## VMware vCenter - ESXi Host Physical Switch Inventory
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vswitch-inventory'
+ --> *dm:filter * get cdp_mgmtAddr as 'phy_switch_ip',cdp_hardwarePlatform as 'phy_switch_platform',cdp_devId as 'phy_switch_device_name',cdp_portId as 'phy_switch_int',vswitch_name,pnic as 'vswitch_uplink_int',vcenter_address as 'parent_vcenter'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Network'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Switch'
+ --> @dm:map from = 'phy_switch_device_name' & to = 'node_label'
+ --> @dm:map from = 'phy_switch_device_name' & to = 'node_id'
+ --> *dm:filter * get node_id,node_label,node_type,layer,vswitch_name,vswitch_uplink_int,phy_switch_ip,phy_switch_platform,phy_switch_int,parent_vcenter
+ --> @dm:dedup columns = 'node_id,vswitch_name,vswitch_uplink_int'
+ --> @dm:save name = 'cfx-esxi-pswitch-inventory-nodes-table'
+ ## ######################################################################################################
+
+ ## VMware vCenter Node Inventory Consolidation
+
+ --> @c:new-block
+ --> @dm:concat names = 'cfx-vm-inventory-nodes-table|cfx-esxi-host-inventory-nodes-table|cfx-esxi-datastore-inventory-nodes-enriched-table|cfx-esxi-vswitch-inventory-nodes-table|cfx-esxi-dvswitch-inventory-nodes-table|cfx-esxi-pswitch-inventory-nodes-table|cfx-esxi-pnic-inventory-nodes-table|cfx-esxi-std-portgroup-inventory-nodes-table|cfx-esxi-distributed-portgroup-inventory-nodes-table'
+ --> @dm:save name = 'cfx-vcenter-nodes-table'
+ ## ######################################################################################################
+
+ ## VMware vCenter Relationship table
+
+ ## VM to Host relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'VM' get node_label,node_id,parent_esxi_host
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get parent_esxi_host as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-vm-to-host-relationship-table'
+ ## Host to Cluster relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'Host' get node_label,node_id,parent_cluster
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter * get node_id as 'left',relation_type,parent_cluster as 'right'
+ --> @dm:save name = 'cfx-host-to-cluster-relationship-table'
+ ## VM to Datastore relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp_vm-inventory-nodes-before-implode-datastore-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'VM' get node_label,node_id,parent_datastore_id
+ --> @dm:explode column = 'parent_datastore_id'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'used-by'
+ --> *dm:filter * get parent_datastore_id as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-vm-to-storage-relationship-table'
+ ## VM to Network Portgroup relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'temp_vm-inventory-nodes-before-implode-network-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'VM' get node_label,node_id,parent_network_portgroup_id
+ --> @dm:explode column = 'parent_network_portgroup_id'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'used-by'
+ --> *dm:filter * get parent_network_portgroup_id as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-vm-to-portgroup-relationship-table'
+ ## Network Portgroup to vSwitch relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'vPortgroup' get node_label,node_id,stadard_portgroup,parent_network_portgroup_id,vswitch_parent
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get vswitch_parent as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-portgroup-to-vswitch-relationship-table'
+ ## Network dvPortgroup to vSwitch relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'dvPortgroup' get node_label,node_id,distributed_portgroup,vswitch_parent
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'contains'
+ --> *dm:filter * get vswitch_parent as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-portgroup-to-dvswitch-relationship-table'
+ ## vSwitch to Host relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'vSwitch' get node_label,node_id,parent_esxi_host
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter * get node_id as 'left',relation_type,parent_esxi_host as 'right'
+ --> @dm:save name = 'cfx-vswitch-to-host-relationship-table'
+ ## dvSwitch to Host relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'dvSwitch' get node_label,node_id,parent_esxi_host
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter * get node_id as 'left',relation_type,parent_esxi_host as 'right'
+ --> @dm:save name = 'cfx-dvswitch-to-host-relationship-table'
+ ## vSwitch to Physical NIC relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'NIC' get node_label,node_id,vswitch_name,vswitch_parent
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'used-by'
+ --> *dm:filter * get node_id as 'left',relation_type,vswitch_parent as 'right'
+ --> @dm:save name = 'cfx-vswitch-to-physical-nic-relationship-table'
+ ## Physical NIC to Physical Switch relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'NIC' get node_label,node_id,phy_switch_device_name
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'used-by'
+ --> *dm:filter * get phy_switch_device_name as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'cfx-physical-nic-to-switch-relationship-table'
+ ## Datastore to Host relationship
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-vcenter-nodes-table' & empty_as_null = 'no'
+ ## --> *dm:filter node_type = 'Datastore' and storage_multihost_access = 'False' and storage_type = 'VMFS' get node_id,node_label,parent_esxi_host,parent_datastore,parent_datastore_id
+
+ --> *dm:filter node_type = 'Datastore' get node_id,node_label,parent_esxi_host,parent_datastore,parent_datastore_id
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'used-by'
+ --> *dm:filter * get node_id as 'left',relation_type,parent_esxi_host as 'right'
+ --> @dm:save name = 'cfx-datastore-to-host-relationship-table'
+ ## ###########################################################################################
+
+ ## Consolidate VMware vCenter relationship data
+
+ --> @c:new-block
+ --> @dm:concat names = 'cfx-vm-to-host-relationship-table|cfx-host-to-cluster-relationship-table|cfx-vm-to-storage-relationship-table|cfx-vm-to-portgroup-relationship-table|cfx-portgroup-to-vswitch-relationship-table|cfx-portgroup-to-dvswitch-relationship-table|cfx-vswitch-to-host-relationship-table|cfx-dvswitch-to-host-relationship-table|cfx-vswitch-to-physical-nic-relationship-table|cfx-physical-nic-to-switch-relationship-table|cfx-datastore-to-host-relationship-table'
+ --> @dm:dropnull columns = 'left,right'
+ --> @dm:dedup
+ --> @dm:map from = 'left' & to = 'left_id'
+ --> @dm:map from = 'right' & to = 'right_id'
+ --> @dm:save name = 'cfx-vcenter-relationship-table'
+ ## #########################################
+
+ ## # vCenter Stacks - Topology Pipeline
+
+ ## #########################################
+
+ --> @c:new-block
+ --> @dm:stack-create topology_nodes='cfx-vcenter-nodes-table' and topology_edges='cfx-vcenter-relationship-table' and name = 'vcenter_stack'
+ --> @dm:stack-save name='vcenter_topology_stacks'
+ ## #########################################
+
+ ## # Create pstreams if not existing already
+
+ ## #########################################
+
+ --> @dm:create-persistent-stream name = 'vcenter_topology_nodes' and retention_days=0 and unique_cols= "node_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "vcenter_topology_nodes" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ --> @dm:create-persistent-stream name = 'vcenter_topology_edges' and retention_days=0 and unique_cols= "left_id,right_id"
+ --> @exec:retry-loop retries is 30 and retry_delay_millis is 5000
+ --> @dm:empty
+ --> @dm:addrow name is "vcenter_topology_edges" and limit is 1
+ --> #dm:query-persistent-stream
+ --> @exec:end-loop
+ ## #####################
+
+ ## Save nodes and edges data to dynamic pstreams
+
+ ## #####################
+
+ --> @c:new-block
+ --> @dm:recall name="cfx-vcenter-nodes-table"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'VCenter'
+ --> @dm:add-missing-columns columns = 'iconURL' & value = 'Not Available'
+ --> @rn:write-stream name="vcenter_topology_nodes"
+ --> @dm:recall name="cfx-vcenter-relationship-table"
+ --> @dm:map to = 'stack_type' & func = 'fixed' & value = 'VCenter'
+ --> @rn:write-stream name="vcenter_topology_edges"
