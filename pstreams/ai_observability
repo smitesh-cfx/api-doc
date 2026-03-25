@@ -1,19 +1,22 @@
 {
-  "name": "ml-regression-seasonality",
+  "name": "ai_observability",
   "datastore_type": "OS",
   "read_only": false,
   "attrs": {
     "unique_keys": [
-      "experimentName",
-      "jobName",
-      "versionName",
-      "pipelineType",
-      "seasonality",
-      "timestamp"
+      "config_id"
     ],
-    "retention_days": 365,
-    "case_insensitive": true
+    "retention_days": 60,
+    "system_defined": "no",
+    "_mappings": {
+      "properties": {
+        "metric_value": {
+          "type": "float"
+        }
+      }
+    }
   },
   "status": "Running",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-011e736c-ml-regression-seasonality"
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f5f68e0e-ai_observability"
 }
