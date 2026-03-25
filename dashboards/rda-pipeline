@@ -1,0 +1,1191 @@
+{
+  "name": "rda-pipeline",
+  "label": "Pipelines",
+  "description": "Pipelines",
+  "version": "23.3.30.1",
+  "enabled": true,
+  "stream": "rda_pipelines_meta",
+  "debug": true,
+  "dashboard_style": "tabbed",
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "status_poller": {},
+  "template_variables": {},
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_non_removable": false,
+    "show_default_time_filter": false,
+    "additional_datetime_column_filters": [
+      {
+        "id": "saved_time",
+        "label": "Saved Time"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp"
+      }
+    ],
+    "columns_filter": [
+      {
+        "id": "folder",
+        "label": "Folder",
+        "type": "TEXT"
+      },
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "description",
+        "label": "Description",
+        "type": "TEXT"
+      },
+      {
+        "id": "category",
+        "label": "Category",
+        "type": "TEXT"
+      },
+      {
+        "id": "usecase",
+        "label": "Usecase",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "version",
+        "label": "Lastest Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "versions_count",
+        "label": "Versions",
+        "type": "TEXT"
+      },
+      {
+        "id": "versions",
+        "label": "Versions",
+        "type": "TEXT"
+      },
+      {
+        "id": "saved_time",
+        "label": "Saved Time",
+        "type": "DATETIME"
+      },
+      {
+        "id": "reltime",
+        "label": "When",
+        "type": "DATETIME"
+      },
+      {
+        "id": "timestamp",
+        "label": "Timestamp",
+        "type": "DATETIME"
+      },
+      {
+        "id": "_RDA_Id",
+        "label": "Id",
+        "type": "TEXT"
+      }
+    ],
+    "default_time_filter_labels": [
+      "Last 1 month"
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_pipelines_meta",
+        "title": "Category",
+        "group_by": [
+          "category"
+        ],
+        "ts_column": "timestamp",
+        "agg": "value_count",
+        "column": "_RDA_Id",
+        "type": "str"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Published Pipelines",
+      "show_filter": true,
+      "projects": [
+        "ACME"
+      ],
+      "widgets": [
+        {
+          "title": "Published Pipelines",
+          "widget_type": "tabular",
+          "stream": "rda_pipelines_meta",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "refreshRequired": true,
+          "timebased": false,
+          "max_rows": 50,
+          "columns": {
+            "folder": {
+              "title": "Folder",
+              "key": false
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "key": true
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "usecase": {
+              "title": "Usecase",
+              "key": true
+            },
+            "version": {
+              "title": "Latest Version",
+              "visible": true
+            },
+            "versions_count": {
+              "title": "Versions",
+              "visible": true,
+              "key": false
+            },
+            "versions": {
+              "title": "Versions",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false
+            },
+            "reltime": {
+              "title": "When",
+              "type": "DATETIME",
+              "visible": true
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            },
+            "_RDA_Id": {
+              "title": " RDA_Id",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Text",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-text",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.add.text"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:add-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Version History",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:pipeline-view-versions",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.tabular.report"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:traces:view",
+              "title": "View Traces",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-traces",
+              "appName": "user-dashboard/rda-pipeline-studio-trace-app"
+            },
+            {
+              "permission": "rda:logs:view",
+              "title": "View Logs",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-logs",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.worker.logs"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "View Dependencies",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:pipeline-dependency",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.dependency.report"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "e7ab7cd8"
+        }
+      ]
+    },
+    {
+      "title": "Draft Pipelines",
+      "show_filter": true,
+      "projects": [
+        "ACME"
+      ],
+      "widgets": [
+        {
+          "title": "Draft Pipelines",
+          "widget_type": "tabular",
+          "stream": "rda_draft_pipelines_meta",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "refreshRequired": true,
+          "timebased": false,
+          "max_rows": 50,
+          "columns": {
+            "folder": {
+              "title": "Folder",
+              "key": false
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "key": true
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "usecase": {
+              "title": "Usecase",
+              "key": true
+            },
+            "version": {
+              "title": "Latest Version",
+              "visible": true
+            },
+            "versions_count": {
+              "title": "Versions",
+              "visible": true,
+              "key": false
+            },
+            "versions": {
+              "title": "Versions",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false
+            },
+            "reltime": {
+              "title": "when",
+              "type": "DATETIME",
+              "visible": true
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            },
+            "_RDA_Id": {
+              "title": " RDA_Id",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Builder",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Text",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-text",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.add.text"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:import",
+              "title": "Import from Catalog",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:pipeline-import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.import"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Version History",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:draft-pipeline-view-versions",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.tabular.report"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:traces:view",
+              "title": "View Traces",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-traces",
+              "appName": "user-dashboard/rda-pipeline-studio-trace-app"
+            },
+            {
+              "permission": "rda:logs:view",
+              "title": "View Logs",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-logs",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.worker.logs"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:verify",
+              "title": "Verify",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:verify-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.verify"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:publish",
+              "title": "Publish",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:publish-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.publish"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-draft-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.delete"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "8ce18929"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Published Pipelines",
+      "show_filter": true,
+      "projects": [
+        "ACME"
+      ],
+      "widgets": [
+        {
+          "title": "Published Pipelines",
+          "widget_type": "tabular",
+          "stream": "rda_pipelines_meta",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "refreshRequired": true,
+          "timebased": false,
+          "max_rows": 50,
+          "columns": {
+            "folder": {
+              "title": "Folder",
+              "key": false
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "key": true
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "usecase": {
+              "title": "Usecase",
+              "key": true
+            },
+            "version": {
+              "title": "Latest Version",
+              "visible": true
+            },
+            "versions_count": {
+              "title": "Versions",
+              "visible": true,
+              "key": false
+            },
+            "versions": {
+              "title": "Versions",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false
+            },
+            "reltime": {
+              "title": "When",
+              "type": "DATETIME",
+              "visible": true
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            },
+            "_RDA_Id": {
+              "title": " RDA_Id",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Text",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-text",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.add.text"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:add-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Version History",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:pipeline-view-versions",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.tabular.report"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:traces:view",
+              "title": "View Traces",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-traces",
+              "appName": "user-dashboard/rda-pipeline-studio-trace-app"
+            },
+            {
+              "permission": "rda:logs:view",
+              "title": "View Logs",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-logs",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.worker.logs"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "View Dependencies",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:pipeline-dependency",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.dependency.report"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "e7ab7cd8"
+        }
+      ]
+    },
+    {
+      "title": "Draft Pipelines",
+      "show_filter": true,
+      "projects": [
+        "ACME"
+      ],
+      "widgets": [
+        {
+          "title": "Draft Pipelines",
+          "widget_type": "tabular",
+          "stream": "rda_draft_pipelines_meta",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "refreshRequired": true,
+          "timebased": false,
+          "max_rows": 50,
+          "columns": {
+            "folder": {
+              "title": "Folder",
+              "key": false
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "key": true
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "usecase": {
+              "title": "Usecase",
+              "key": true
+            },
+            "version": {
+              "title": "Latest Version",
+              "visible": true
+            },
+            "versions_count": {
+              "title": "Versions",
+              "visible": true,
+              "key": false
+            },
+            "versions": {
+              "title": "Versions",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false
+            },
+            "reltime": {
+              "title": "when",
+              "type": "DATETIME",
+              "visible": true
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            },
+            "_RDA_Id": {
+              "title": " RDA_Id",
+              "visible": false,
+              "hidden": false,
+              "key": false
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Builder",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:add",
+              "title": "Add with Text",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-pipeline-text",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.add.text"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:import",
+              "title": "Import from Catalog",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:pipeline-import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.import"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-plus",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda-pipeline-studio-app",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline-studio"
+            },
+            {
+              "permission": "rda:pipeline:edit",
+              "title": "Edit Pipeline in Plain Text",
+              "type": "POPUP_FORM",
+              "drillDownLinkField": "name",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:view",
+              "title": "Version History",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:draft-pipeline-view-versions",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.pipeline.tabular.report"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:traces:view",
+              "title": "View Traces",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-traces",
+              "appName": "user-dashboard/rda-pipeline-studio-trace-app"
+            },
+            {
+              "permission": "rda:logs:view",
+              "title": "View Logs",
+              "type": "POPUP_REPORT",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:job-pipeline-logs",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getReport",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "reportId": "rda.saas.worker.logs"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:verify",
+              "title": "Verify",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:verify-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.verify"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:run",
+              "title": "Run",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:run-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.run"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:publish",
+              "title": "Publish",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:publish-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.publish"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pipeline:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-draft-pipeline",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.pipeline.delete"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "8ce18929"
+        }
+      ]
+    }
+  ]
+}

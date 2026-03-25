@@ -1,0 +1,37 @@
+{
+  "name": "portal-account-edit-profile-page",
+  "label": "Edit Profile",
+  "description": "Edit Profile Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_style": "auto",
+  "dashboard_folder": "System",
+  "dashboard_sections": [
+    {
+      "title": "Edit Profile",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "saas/my_account/EditProfileForm",
+          "widget_id": "2420f929"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Edit Profile",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "",
+          "widget_type": "portal_html",
+          "widget_template": "saas/my_account/EditProfileForm",
+          "widget_id": "2420f929"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "oia-ingestion-failures",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-17a4aee5-oia-ingestion-failures"
+}

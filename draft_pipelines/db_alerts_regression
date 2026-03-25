@@ -1,0 +1,5 @@
+@c:new-block
+ --> @dm:empty
+ --> @dm:addrow dbname='<alerts-dbname>' & table='allalertsview' & limit = '0'
+ --> #mysql:read raisedat is during this month and customerId is '$customerId'
+ --> @cfxml:regression ts_column='raisedat' and frequency='1H' and agg_func='count' and job_name='DB Alerts'

@@ -1,0 +1,15 @@
+{
+  "name": "ml-model-meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "versionId"
+    ],
+    "computed_columns": {},
+    "retention_days": 365,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f9648b37-ml-model-meta"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "rda_dashboards_debug_console",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream capturing dashboard debug console logs including widget queries, query results, error messages, os_queries, and diagnostic information for troubleshooting dashboard issues",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-78e3435c-rda_dashboards_debug_console"
+}

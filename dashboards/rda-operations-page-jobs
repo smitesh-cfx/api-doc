@@ -1,0 +1,267 @@
+{
+  "name": "rda-operations-page-jobs",
+  "label": "Jobs",
+  "description": "Jobs Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "stream": "rda_system_job_tracker",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [
+      {
+        "id": "jobid",
+        "label": "Job Id",
+        "type": "TEXT"
+      },
+      {
+        "id": "pid",
+        "label": "PID",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "pod_id",
+        "label": "Pod ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "pipeline-name",
+        "label": "Pipeline",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_org_name",
+        "label": "Org Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_file_name",
+        "label": "File Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "attributes_pipeline_version",
+        "label": "Pipeline Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "status",
+        "label": "Status",
+        "type": "TEXT"
+      },
+      {
+        "id": "reason",
+        "label": "Reason",
+        "type": "TEXT"
+      },
+      {
+        "id": "created",
+        "label": "Job Created",
+        "type": "DATETIME"
+      },
+      {
+        "id": "ended_time",
+        "label": "Job Ended",
+        "type": "DATETIME"
+      },
+      {
+        "id": "age",
+        "label": "Duration",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Active Jobs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Worker Nodes",
+          "widget_type": "portal_counter",
+          "reportId": "registry.workers.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "41d076c1"
+        },
+        {
+          "title": "Sites",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "c159bbb8"
+        },
+        {
+          "title": "Total CPUs",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites_cpu.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "59a12b3c"
+        },
+        {
+          "title": "Total Memory GB",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites_mem.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "d9c0327e"
+        },
+        {
+          "title": "Agents",
+          "widget_type": "portal_counter",
+          "reportId": "registry.agents.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "65e7c70f"
+        },
+        {
+          "title": "Active Jobs",
+          "widget_type": "portal_counter",
+          "reportId": "jobs.active.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "875f9e64"
+        },
+        {
+          "title": "Jobs By Pipeline",
+          "widget_type": "portal_pie_chart",
+          "reportId": "jobs.by-pipeline.ringpie",
+          "height": 4,
+          "min_width": 4,
+          "widget_id": "bgf6b5b9"
+        },
+        {
+          "title": "Jobs By Pod",
+          "widget_type": "portal_pie_chart",
+          "reportId": "jobs.by-pod.ringpie",
+          "height": 4,
+          "min_width": 4,
+          "widget_id": "abc6b5b9"
+        },
+        {
+          "title": "Jobs",
+          "widget_type": "portal_tabular",
+          "reportId": "jobs.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bbc6b5f6"
+        }
+      ]
+    },
+    {
+      "title": "All Jobs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "All Jobs",
+          "widget_type": "portal_tabular",
+          "reportId": "jobs.historical.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bbc6b5g6"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Active Jobs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Worker Nodes",
+          "widget_type": "portal_counter",
+          "reportId": "registry.workers.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "41d076c1"
+        },
+        {
+          "title": "Sites",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "c159bbb8"
+        },
+        {
+          "title": "Total CPUs",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites_cpu.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "59a12b3c"
+        },
+        {
+          "title": "Total Memory GB",
+          "widget_type": "portal_counter",
+          "reportId": "registry.sites_mem.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "d9c0327e"
+        },
+        {
+          "title": "Agents",
+          "widget_type": "portal_counter",
+          "reportId": "registry.agents.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "65e7c70f"
+        },
+        {
+          "title": "Active Jobs",
+          "widget_type": "portal_counter",
+          "reportId": "jobs.active.counter",
+          "height": 2,
+          "min_width": 2,
+          "widget_id": "875f9e64"
+        },
+        {
+          "title": "Jobs By Pipeline",
+          "widget_type": "portal_pie_chart",
+          "reportId": "jobs.by-pipeline.ringpie",
+          "height": 4,
+          "min_width": 4,
+          "widget_id": "bgf6b5b9"
+        },
+        {
+          "title": "Jobs By Pod",
+          "widget_type": "portal_pie_chart",
+          "reportId": "jobs.by-pod.ringpie",
+          "height": 4,
+          "min_width": 4,
+          "widget_id": "abc6b5b9"
+        },
+        {
+          "title": "Jobs",
+          "widget_type": "portal_tabular",
+          "reportId": "jobs.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bbc6b5f6"
+        }
+      ]
+    },
+    {
+      "title": "All Jobs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "All Jobs",
+          "widget_type": "portal_tabular",
+          "reportId": "jobs.historical.list.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "bbc6b5g6"
+        }
+      ]
+    }
+  ]
+}

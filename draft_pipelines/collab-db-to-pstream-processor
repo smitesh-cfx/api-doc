@@ -1,0 +1,60 @@
+
+ ## .
+
+ ## collab-db-to-pstream-processor
+
+ ## .
+@c:new-block
+ --> @exec:get-input
+ --> @dm:save name="temp-irm-incident-ids-concat"
+ --> @c:data-loop dataset="temp-irm-incident-ids-concat" & columns="incident_id,project_id"
+ ## .
+
+ --> @dm:empty
+ --> @dm:addrow current_loop="${loop_index}" & incidents="$incident_id" & projectids="$project_id"
+ --> @mysqlv2:native-query dbname="0bde1fc06a7542c3a6a4c47d85f64d9d_cfxdimensions_app_collaboratio" & query="select * from message where incidentid in ($incident_id) and projectid in ($project_id)"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:check-columns must_contain="incidentid" & action="skip-block"
+ --> @dm:selectcolumns exclude="execution_status|execution_reason|attempt_count"
+ --> @dm:save name="temp-collab-msgs-db-${loop_index}"
+ --> @c:data-loop dataset="temp-irm-incident-ids-concat" & columns="incident_id,project_id"
+ ## .
+
+ --> @dm:empty
+ --> @dm:addrow current_loop="${loop_index}" & incidents="$incident_id" & projectids="$project_id"
+ --> @mysqlv2:native-query dbname="0bde1fc06a7542c3a6a4c47d85f64d9d_cfxdimensions_app_collaboratio" & query="select ms.*, m.customerid, m.projectid, m.incidentid from irmessagesharing ms inner join message m on m.messageid=ms.message_id where m.incidentid in ($incident_id) and m.projectid in ($project_id)"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:check-columns must_contain="incidentid" & action="skip-block"
+ --> @dm:selectcolumns exclude="execution_status|execution_reason|attempt_count"
+ --> @dm:save name="temp-collab-irmsharing-db-${loop_index}"
+ --> @c:data-loop dataset="temp-irm-incident-ids-concat" & columns="incident_id,project_id"
+ ## .
+
+ --> @dm:empty
+ --> @dm:addrow current_loop="${loop_index}" & incidents="$incident_id" & projectids="$project_id"
+ --> @mysqlv2:native-query dbname="0bde1fc06a7542c3a6a4c47d85f64d9d_cfxdimensions_app_collaboratio" & query="select * from teamincident where incident_id in ($incident_id) and project_id in ($project_id)"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:check-columns must_contain="incident_id" & action="skip-block"
+ --> @dm:selectcolumns exclude="execution_status|execution_reason|attempt_count"
+ --> @dm:save name="temp-collab-teamincidents-db-${loop_index}"
+ --> @c:new-block
+ --> @dm:concat names="temp-collab-msgs-db-*"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:change-time-format columns="createdat,updatedat" & from_format="datetimestr" & to_format="datetimestr"
+ --> @dm:copy-columns to="timestamp" & from="updatedat"
+ --> @dm:fixnull-regex
+ --> @rn:write-stream name="oia-incidents-collaboration-stream"
+ --> @c:new-block
+ --> @dm:concat names="temp-collab-irmsharing-db-*"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:change-time-format columns="shared_time" & from_format="datetimestr" & to_format="datetimestr"
+ --> @dm:copy-columns to="timestamp" & from="shared_time"
+ --> @dm:fixnull-regex
+ --> @rn:write-stream name="oia-collab-messagesharing-stream"
+ --> @c:new-block
+ --> @dm:concat names="temp-collab-teamincidents-db-*"
+ --> @dm:skip-block-if-shape row_count=0
+ --> @dm:change-time-format columns="shared_time" & from_format="datetimestr" & to_format="datetimestr"
+ --> @dm:copy-columns to="timestamp" & from="shared_time"
+ --> @dm:fixnull-regex
+ --> @rn:write-stream name="oia-incidents-external-tickets-stream"

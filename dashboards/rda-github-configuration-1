@@ -1,0 +1,134 @@
+{
+  "name": "rda-github-configuration-1",
+  "label": "RDA Git Configuration",
+  "description": "Configure GitHub integration for RDA Git push/pull",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "default",
+  "dashboard_style": "auto",
+  "exportable": false,
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Git Configuration",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Git Configuration",
+          "widget_type": "portal_html",
+          "widget_template": "saas/github-settings",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "gitcfg_form_01"
+        }
+      ]
+    }
+  ],
+  "dynamic_form": {
+    "formData": {},
+    "formDefinition": {
+      "id": "rda.saas.git.settings",
+      "refreshRequired": false,
+      "formFieldList": [
+        {
+          "fieldId": "github_access_token",
+          "label": "Github Access Token",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": true,
+          "editable": true,
+          "hidden": false
+        },
+        {
+          "fieldId": "github_url",
+          "label": "Github API URL",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": false,
+          "editable": true,
+          "hidden": false
+        },
+        {
+          "fieldId": "github_base_url",
+          "label": "Github Base URL",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": false,
+          "editable": true,
+          "hidden": false
+        },
+        {
+          "fieldId": "github_org",
+          "label": "Github Organization",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": true,
+          "editable": true,
+          "hidden": false
+        },
+        {
+          "fieldId": "github_repo",
+          "label": "Github Repository",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": true,
+          "editable": true,
+          "hidden": false
+        },
+        {
+          "fieldId": "github_branch_prefix",
+          "label": "Github Branch Prefix",
+          "controlType": "TEXT_FIELD",
+          "dataType": "string",
+          "required": true,
+          "editable": true,
+          "hidden": false
+        }
+      ],
+      "formActionList": {
+        "formActions": [
+          {
+            "actionLabel": "Save",
+            "type": "SUBMIT",
+            "identifier": "Submit",
+            "api-endpoint": {
+              "service-name": "saas-reports",
+              "methodName": "submitForm",
+              "stringified-params": true,
+              "parse-output": false,
+              "params": [
+                {
+                  "formId": "rda.saas.git.settings",
+                  "formData": {}
+                }
+              ]
+            }
+          },
+          {
+            "actionLabel": "Cancel",
+            "type": "CANCEL",
+            "identifier": "Cancel"
+          }
+        ]
+      }
+    }
+  },
+  "pstream_dashboards": [
+    {
+      "title": "Git Configuration",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Git Configuration",
+          "widget_type": "portal_html",
+          "widget_template": "saas/github-settings",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "gitcfg_form_01"
+        }
+      ]
+    }
+  ]
+}

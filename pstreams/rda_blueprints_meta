@@ -1,0 +1,22 @@
+{
+  "name": "rda_blueprints_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "id"
+    ],
+    "flatten_json": true,
+    "_mappings": {
+      "properties": {
+        "saved_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream 'rda_blueprints_meta' for internal operations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-6b574d79-rda_blueprints_meta"
+}

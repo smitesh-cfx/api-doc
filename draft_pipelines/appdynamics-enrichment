@@ -1,0 +1,109 @@
+
+ ## # Configure AppDynamics Extension Name in RDA as: AppDynamics
+
+ ## AppDynamics Application and DB Discovery for Application Dependency and Relationships
+
+ ## AppDynamics - Get Applications
+@c:new-block
+ --> *AppDynamics:appdynamics_apps * get app_name,app_id
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Application'
+ --> @dm:map from = 'app_name' & to = 'node_label'
+ --> @dm:map from = 'app_id' & to = 'node_id'
+ --> @dm:save name = 'temp_appd_applications_logical_nodes'
+ --> *dm:filter * get node_label as 'right_label',node_id as 'right_id',layer as 'right_layer',node_type as 'right_type',app_name,app_id
+ --> @dm:save name = 'temp_appd_applications'
+ ## AppDynamics Process - Database nodes
+
+ --> @c:new-block
+ --> @AppDynamics:appdynamics_apps_backends
+ --> *dm:filter exitPointType contains 'DB|JDBC' get HOST,app_name
+ --> @dm:dedup columns = 'HOST'
+ --> @dm:save name = 'temp_appd_db_backends'
+ --> @c:new-block
+ --> *AppDynamics:appdynamics_db_servers
+ --> *dm:filter * get host as 'db_dns_name',ipAddress as 'db_ip_address',name as 'db_hostname'
+ --> @dm:dedup columns = 'db_ip_address'
+ --> @dm:save name = 'temp_db_identity'
+ --> @c:new-block
+ --> @dm:recall name = 'temp_db_identity'
+ --> @dm:enrich dict = 'temp_appd_db_backends' and src_key_cols = 'db_ip_address' and dict_key_cols = 'HOST' and enrich_cols = 'app_name'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Database'
+ --> @dm:map from = 'db_dns_name,node_type' & to = 'db_identity' & func = 'join' & sep = '_'
+ --> @dm:map from = 'db_identity' & to = 'node_label'
+ --> @dm:map from = 'db_identity' & to = 'node_id'
+ --> @dm:selectcolumns exclude = '^db_identity$'
+ ## --> @dm:enrich dict = 'cfx-vm-inventory-nodes-table' & src_key_cols = 'db_ip_address' & dict_key_cols = 'vm_ip_address' & enrich_cols = 'vm_name,vm_bios_id'
+
+ --> *dm:filter * get app_name,layer,node_label,node_id,node_type,db_ip_address as 'app_comp_ip_address',db_dns_name as 'app_comp_dns_name',db_hostname as 'app_comp_hostname'
+ --> @dm:enrich dict = 'temp_appd_applications' & src_key_cols = 'app_name' & dict_key_cols = 'app_name' & enrich_cols = 'app_id'
+ --> @dm:save name = 'cfx-appd-db-table'
+ ## AppDynamics Process - Application nodes
+
+ --> @c:new-block
+ --> @AppDynamics:appdynamics_apps_nodes
+ --> *dm:filter * get name as 'app_hostname',tierName as 'app_tier',ipAddress as 'app_ipAddress',app_name
+ --> *dm:filter app_ipAddress does not contain ':' and app_ipAddress does not contain '172.17.0.1'
+ --> *dm:filter app_tier = 'Web'
+ --> @dm:dns_ip_to_name from_cols = 'app_ipAddress' and to_cols = 'app_dns_name'
+ --> @dm:map to = 'layer' & func = 'fixed' & value = 'Application Component'
+ --> @dm:map to = 'node_type' & func = 'fixed' & value = 'Webserver'
+ --> @dm:map from = 'app_dns_name,node_type' & to = 'app_identity' & func = 'join' & sep = '_'
+ --> @dm:map from = 'app_identity' & to = 'node_label'
+ --> @dm:map from = 'app_identity' & to = 'node_id'
+ ## --> @dm:enrich dict = 'cfx-vm-inventory-nodes-table' & src_key_cols = 'app_ipAddress' & dict_key_cols = 'vm_ip_address' & enrich_cols = 'vm_name,vm_bios_id'
+
+ --> *dm:filter * get app_name,layer,node_label,node_id,node_type,app_ipAddress as 'app_comp_ip_address',app_dns_name as 'app_comp_dns_name',app_hostname as 'app_comp_hostname'
+ --> @dm:enrich dict = 'temp_appd_applications' & src_key_cols = 'app_name' & dict_key_cols = 'app_name' & enrich_cols = 'app_id'
+ --> @dm:save name = 'cfx-appd-app-table'
+ ## AppDynamics Application Inventory Consolidated Output
+
+ --> @c:new-block
+ --> @dm:concat names = 'cfx-appd-db-table|cfx-appd-app-table|temp_appd_applications_logical_nodes'
+ --> @dm:save name = 'cfx-appd-app-db-table'
+ ## #############################################################################################
+
+ ## AppDynamics Application Dependency Relationship - Topology
+
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-appd-app-db-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'Webserver'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter * get node_id as 'left',relation_type,app_id as 'right'
+ --> @dm:save name = 'temp_webserver_to_app_relationship'
+ --> @dm:recall name = 'cfx-appd-app-db-table' & empty_as_null = 'no'
+ --> *dm:filter node_type = 'Database'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'member-of'
+ --> *dm:filter * get node_id as 'left',relation_type,app_id as 'right'
+ --> @dm:save name = 'temp_database_to_app_relationship'
+ --> @c:new-block
+ --> @dm:recall name = 'cfx-appd-app-table' & empty_as_null = 'no'
+ --> @dm:enrich dict = 'cfx-appd-db-table' & src_key_cols = 'app_name' & dict_key_cols = 'app_name' & enrich_cols = 'node_id' & enrich_cols_as = 'db_comp_node_id'
+ --> @dm:map to = 'relation_type' & func = 'fixed' & value = 'depended-by'
+ --> *dm:filter * get db_comp_node_id as 'left',relation_type,node_id as 'right'
+ --> @dm:save name = 'temp_web_to_db_relationship'
+ --> @c:new-block
+ --> @dm:concat names = 'temp_webserver_to_app_relationship|temp_database_to_app_relationship|temp_web_to_db_relationship'
+ --> @dm:map from = 'left' & to = 'left_id'
+ --> @dm:map from = 'right' & to = 'right_id'
+ --> @dm:save name = 'cfx-appd-app-web-db-relationship-table'
+ ## #########################################
+
+ ## # AppDynamics Stacks - Topology Pipeline
+
+ ## #########################################
+
+ --> @c:new-block
+ --> @dm:stack-create topology_nodes="cfx-appd-app-db-table" and topology_edges="cfx-appd-app-web-db-relationship-table" and name = "appdynamics_stack"
+ --> @dm:stack-save name="appdynamics_topology_stacks"
+ ## Enrichment Block
+
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow datasetname = 'cfx-appd-app-db-table' & condition = "(app_comp_ip_address == '$assetIpAddress' or app_comp_hostname == '$assetName')" &  enrichcolumns = ''
+ --> @dm:save name = 'alert-enrichment-definition-appdynamics'
+ --> @c:new-block
+ --> @dm:empty
+ --> @dm:addrow datasetname = 'alert-enrichment-definition-appdynamics'
+ --> @rn:write-stream name = "alert-enrichment-pipeline-changes"

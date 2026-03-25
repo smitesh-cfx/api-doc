@@ -1,0 +1,191 @@
+{
+  "name": "topology-edge-details",
+  "label": "Edge Details for Topology with alerts",
+  "description": "Edge Details for Topology with alerts",
+  "version": "25.5.26",
+  "enabled": true,
+  "live_edit": false,
+  "exportable": false,
+  "dashboard_style": "auto",
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "template_variables": {
+    "PROJECT_ID": {
+      "default": null,
+      "contextId": "projectid"
+    },
+    "LEFT_ID": {
+      "default": null,
+      "contextId": "source"
+    },
+    "RIGHT_ID": {
+      "default": null,
+      "contextId": "target"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Edge Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Edge Connections",
+          "widget_type0": "custom_widget",
+          "widget_implementation": "topology-edge-details/edge_detail_widget",
+          "min_width": 12,
+          "min_height": 3,
+          "height": 3,
+          "widget_id": "484c8867"
+        },
+        {
+          "title": "Selected Edge Details",
+          "widget_type": "tabular",
+          "stream": "graphdb://cfx_rdaf_topology/cfx_rdaf_topology_edges",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "left_id",
+            "right_id",
+            "left_label",
+            "right_label"
+          ],
+          "ts_column": "collection_timestamp",
+          "paginated": true,
+          "extra_filter0": "(left_id is '{{LEFT_ID}}' and right_id is '{{RIGHT_ID}}'",
+          "extra_filter": "(left_id is '{{LEFT_ID}}' and right_id is '{{RIGHT_ID}}') or (left_id is '{{RIGHT_ID}}' and right_id is '{{LEFT_ID}}') ",
+          "height": 4,
+          "min_wdith": 12,
+          "columns": {
+            "left_id": {
+              "title": "Left Node Id",
+              "key": true,
+              "visible": false
+            },
+            "left_label": {
+              "title": "Left Node"
+            },
+            "right_id": {
+              "title": "Right Node Id",
+              "key": true,
+              "visible": false
+            },
+            "right_label": {
+              "title": "Right Node"
+            },
+            "direction": {
+              "title": "Direction"
+            },
+            "relation_type": {
+              "title": "Relation"
+            },
+            "interface_name": {
+              "title": "Interface"
+            },
+            "collection_timestamp": {
+              "title": "Collection Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "collection_timestamp",
+              "sortable": false
+            }
+          },
+          "widget_id": "9a21b5c6"
+        }
+      ]
+    }
+  ],
+  "custom_widgets": {
+    "edge_detail_widget": {
+      "artifacts": {
+        "main": {
+          "attachment": "edge_detail_widget.html",
+          "content_type": "text/html",
+          "is_template": true
+        }
+      }
+    }
+  },
+  "attachments": [
+    {
+      "name": "edge_detail_widget.html",
+      "value": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>D3 Nodes with Icons and Labels</title>\n    <script src=\"https://d3js.org/d3.v7.min.js\"></script>\n    <style>\n      *{\n        margin: 0;\n        padding: 0;\n      }\n      html, body, .container{\n        height: 100%;\n      }\n      svg {\n        display: flex;\n        justify-self: center;\n        align-self: center;\n        height: 100%;\n        width: 100%;\n      }\n      .link {\n        stroke: #888;\n        stroke-width: 2;\n        fill: none;\n      }\n      .node circle {\n        fill: #69b3a2;\n        stroke: #333;\n        stroke-width: 1.5;\n      }\n      .icon {\n        font-size: 18px;\n        pointer-events: none;\n      }\n      .label {\n        font: 12px sans-serif;\n        fill: #000;\n        pointer-events: none;\n      }\n      .edge-label {\n        font: 12px sans-serif;\n        fill: #000;\n        pointer-events: none;\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <svg viewBox=\"70 300 600 160\" preserveAspectRatio=\"xMidYMid meet\"></svg>\n    </div>\n    <script>\n      const data = [];\n      const context = {{all_variables.get(\"context\") | tojson}}\n      console.log(\"faisal context\",context);\n      async function fetchData(api_url, api_endpoint) {\n        try {\n          const response = await fetch(api_url, {\n            method: \"POST\",\n            body: JSON.stringify(api_endpoint),\n            headers: {\n              \"Content-Type\": \"application/json\",\n            },\n          });\n          console.log(\"reh before data\", response);\n          const data = await response.json();\n          console.log(\"aaa data\", data);\n          console.log(\"aaa dataresults\", data.serviceResult.dataResults);\n          return data.serviceResult.dataResults;\n        } catch (error) {\n          console.log(\"aaa error\", error);\n        }\n      }\n\n      const api_url = \"/api/portal/rdac/browseapi\";\n      console.log(\"aaa apiurl\", api_url);\n      const api_endpoint = {\n        serviceRequestDescriptor: {\n          serviceName: \"saas-reports\",\n          version: \"*\",\n          params: {\n            params: [\n              {\n                reportId: \"dynamic_v2_tabular_report_0_1\",\n                context: context,\n                dashboardId: \"Edge Details\",\n                properties: {\n                  offset: 0,\n                  maxResults: 20,\n                },\n              },\n            ],\n          },\n          methodName: \"getReport\",\n          ignoreCall: true,\n          parseOutput: true,\n        },\n      };\n      console.log(\"faisal api_endpoint\",api_endpoint)\n      fetchData(api_url, api_endpoint).then((dataResults) => {\n\n        console.log(\"aaa data final\", dataResults);\n       \n        const nodesMap = {};\n        dataResults.forEach((d) => {\n          nodesMap[d.left_id] = { id: d.left_id, label: d.left_label };\n          nodesMap[d.right_id] = { id: d.right_id, label: d.right_label };\n        });\n        const nodes = Object.values(nodesMap);\n        console.log(\"aaa nodes\", nodes);\n        \n        const linkGroups = {};\n        dataResults.forEach((d) => {\n          const key = `${d.left_id}-${d.right_id}`;\n          if (!linkGroups[key]) linkGroups[key] = [];\n          linkGroups[key].push({ ...d, groupIndex: linkGroups[key].length });\n        });\n        const links = Object.values(linkGroups).flat();\n        \n        const edgeGroups = {};\n        links.forEach((link) => {\n          const pairKey = [link.left_id, link.right_id].sort().join(\"__\");\n          if (!edgeGroups[pairKey]) edgeGroups[pairKey] = [];\n          edgeGroups[pairKey].push(link);\n        });\n\n        \n        Object.values(edgeGroups).forEach((group) => {\n          const mid = Math.floor(group.length / 2);\n          group.forEach((link, i) => {\n            link.groupIndex = i - mid;\n            if (group.length % 2 === 0 && i >= mid) link.groupIndex += 1; \n          });\n        });\n        \n        const nodePositions = {};\n        const centerX = 400;\n        const centerY = 400;\n        const radius = 150;\n\n        nodes.forEach((node, i) => {\n          const angle = (i / nodes.length) * 2 * Math.PI;\n          nodePositions[node.id] = {\n            x: centerX + radius * Math.cos(angle),\n            y: centerY + radius * Math.sin(angle),\n          };\n        });\n\n        const svg = d3.select(\"svg\");\n\n        \n        const linkLines = svg\n          .selectAll(\"path.link\")\n          .data(links)\n          .enter()\n          .append(\"path\")\n          .attr(\"class\", \"link\")\n          .attr(\"id\", (d, i) => \"link\" + i)\n          .attr(\"fill\", \"none\")\n          .attr(\"stroke\", \"#888\")\n          .attr(\"stroke-width\", 2)\n          .attr(\"d\", (d) => {\n            const s = nodePositions[d.left_id];\n            const t = nodePositions[d.right_id];\n            const offset = d.groupIndex * 40; // Curve offset\n\n            const mx = (s.x + t.x) / 2;\n            const my = (s.y + t.y) / 2 + offset;\n\n            return `M${s.x},${s.y} Q${mx},${my} ${t.x},${t.y}`;\n          });\n\n        \n        const edgeLabelGroups = svg\n          .selectAll(\".edge-label-group\")\n          .data(links)\n          .enter()\n          .append(\"g\")\n          .attr(\"class\", \"edge-label-group\")\n          .attr(\"transform\", (d) => {\n            const s = nodePositions[d.left_id];\n            const t = nodePositions[d.right_id];\n            const offset = d.groupIndex * 40; \n            const cx = (s.x + t.x) / 2;\n            const cy = (s.y + t.y) / 2 + offset;\n            return `translate(${cx},${cy})`;\n          });\n\n        const padding = 6;\n        const textElements = edgeLabelGroups\n          .append(\"text\")\n          .attr(\"class\", \"edge-label\")\n          .attr(\"text-anchor\", \"middle\")\n          .attr(\"dominant-baseline\", \"middle\")\n          .attr(\"font-size\", \"11px\")\n          .text((d) => d.relation_type);\n\n        \n        textElements.each(function (d) {\n          const bbox = this.getBBox();\n          d3.select(this.parentNode)\n            .insert(\"rect\", \"text\")\n            .attr(\"x\", bbox.x - padding)\n            .attr(\"y\", bbox.y - padding)\n            .attr(\"width\", bbox.width + 2 * padding)\n            .attr(\"height\", bbox.height + 2 * padding)\n            .attr(\"rx\", 6)\n            .attr(\"fill\", \"#fff\")\n            .attr(\"stroke\", \"#333\")\n            .attr(\"stroke-width\", 1);\n        });\n\n        const nodeGroup = svg\n          .selectAll(\"g.node\")\n          .data(nodes)\n          .enter()\n          .append(\"g\")\n          .attr(\"class\", \"node\")\n          .attr(\"transform\", (d) => {\n            const pos = nodePositions[d.id];\n            return `translate(${pos.x},${pos.y})`;\n          });\n\n        \n        nodeGroup.append(\"circle\").attr(\"r\", 35);\n\n        \n        nodeGroup\n          .append(\"text\")\n          .attr(\"class\", \"icon\")\n          .attr(\"text-anchor\", \"middle\")\n          .attr(\"dy\", \"0.35em\")\n          .text(\"\ud83d\udda7\"); // Example: network icon\n\n        nodeGroup\n          .append(\"text\")\n          .attr(\"class\", \"label\")\n          .attr(\"text-anchor\", \"middle\")\n          .attr(\"dy\", \"4em\")\n          .text((d) => d.label);\n      });\n    </script>\n  </body>\n</html>\n"
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Edge Details",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Edge Connections",
+          "widget_type0": "custom_widget",
+          "widget_implementation": "topology-edge-details/edge_detail_widget",
+          "min_width": 12,
+          "min_height": 3,
+          "height": 3,
+          "widget_id": "484c8867"
+        },
+        {
+          "title": "Selected Edge Details",
+          "widget_type": "tabular",
+          "stream": "graphdb://cfx_rdaf_topology/cfx_rdaf_topology_edges",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "left_id",
+            "right_id",
+            "left_label",
+            "right_label"
+          ],
+          "ts_column": "collection_timestamp",
+          "paginated": true,
+          "extra_filter0": "(left_id is '{{LEFT_ID}}' and right_id is '{{RIGHT_ID}}'",
+          "extra_filter": "(left_id is '{{LEFT_ID}}' and right_id is '{{RIGHT_ID}}') or (left_id is '{{RIGHT_ID}}' and right_id is '{{LEFT_ID}}') ",
+          "height": 4,
+          "min_wdith": 12,
+          "columns": {
+            "left_id": {
+              "title": "Left Node Id",
+              "key": true,
+              "visible": false
+            },
+            "left_label": {
+              "title": "Left Node"
+            },
+            "right_id": {
+              "title": "Right Node Id",
+              "key": true,
+              "visible": false
+            },
+            "right_label": {
+              "title": "Right Node"
+            },
+            "direction": {
+              "title": "Direction"
+            },
+            "relation_type": {
+              "title": "Relation"
+            },
+            "interface_name": {
+              "title": "Interface"
+            },
+            "collection_timestamp": {
+              "title": "Collection Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "collection_timestamp",
+              "sortable": false
+            }
+          },
+          "widget_id": "9a21b5c6"
+        }
+      ]
+    }
+  ]
+}

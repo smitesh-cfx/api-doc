@@ -1,0 +1,45 @@
+{
+  "name": "rda-mgmt-page-network",
+  "label": "Network",
+  "description": " Network Information",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "exportable": false,
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Network",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Network",
+          "widget_type": "portal_html",
+          "widget_template": "saas/rda-network-config",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "49d2a33d"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Network",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "Network",
+          "widget_type": "portal_html",
+          "widget_template": "saas/rda-network-config",
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "49d2a33d"
+        }
+      ]
+    }
+  ]
+}

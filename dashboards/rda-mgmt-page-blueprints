@@ -1,0 +1,693 @@
+{
+  "name": "rda-mgmt-page-blueprints",
+  "label": "Service Blueprints",
+  "description": " Service Blueprints Management Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "stream": "rda_blueprints_meta",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [
+      {
+        "id": "enabled",
+        "label": "Enabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "id": "auto_deploy",
+        "label": "Auto Deploy",
+        "type": "BOOLEAN"
+      },
+      {
+        "id": "errors",
+        "label": "Audit Errors",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "warnings",
+        "label": "Audit Warnings",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "id",
+        "label": "ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "comment",
+        "label": "Description",
+        "type": "TEXT"
+      },
+      {
+        "id": "category",
+        "label": "Category",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Service Blueprints",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Service Blueprints",
+          "widget_type": "tabular",
+          "stream": "rda_blueprints_meta",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "id",
+            "name",
+            "comment",
+            "category",
+            "note",
+            "url"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "id": {
+              "title": "Id",
+              "key": true
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "comment": {
+              "title": "Description"
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "auto_deploy": {
+              "title": "Auto Deploy"
+            },
+            "note": {
+              "title": "Note"
+            },
+            "url": {
+              "title": "URL",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'true' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "warningColor",
+              "label": "Warning Color",
+              "expr": "['#FFA726'] if warnings > 0 else ['#03A9F4']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "errorColor",
+              "label": "Error Color",
+              "expr": "['#B71C1C'] if errors > 0  else ['#03A9F4']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "errors",
+              "label": "Audit Errors",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.errorColor }}' > {{ row.errors }} </span>"
+            },
+            {
+              "id": "warnings",
+              "label": "Audit Warnings",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.warningColor }}' > {{ row.warnings }} </span>"
+            },
+            {
+              "id": "artifact_name",
+              "label": "Artifact Name",
+              "expr": "id",
+              "key": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "artifact_type",
+              "label": "Artifact Type",
+              "expr": "'blueprint'",
+              "key": true,
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:deploymentspec:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dspec-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.add.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:import",
+              "title": "Import from Catalog",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dspec-import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.import"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:import",
+              "title": "Dashboard",
+              "type": "GO_TO_APP_STATE",
+              "appName": "dynamic-dashboard",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-view-dashboard",
+              "drillDownLinkField": "name"
+            },
+            {
+              "permission": "rda:deploymentspec:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-view-spec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:edit",
+              "title": "Edit Layout",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-edit-layout",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.edit.layout"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-edit-spec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-delete",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:enable",
+              "title": "Enable",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-activate-dspec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "false",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:disable",
+              "title": "Disable",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-deactivate-dspec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "true",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:view",
+              "appName": "user-dashboard/rda-artifact-dependencies-app",
+              "identifier": "launch.url.dashboard",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Dependencies",
+              "type": "GO_TO_APP_STATE"
+            }
+          ],
+          "widget_id": "b283bfab"
+        },
+        {
+          "title": "Deployed Blueprints",
+          "widget_type": "portal_tabular",
+          "reportId": "apps.deployed.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "c8689a20"
+        },
+        {
+          "title": "Service Blueprint Catalog",
+          "widget_type": "portal_tabular",
+          "reportId": "apps.available.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "57d54731"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Service Blueprints",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Service Blueprints",
+          "widget_type": "tabular",
+          "stream": "rda_blueprints_meta",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "id",
+            "name",
+            "comment",
+            "category",
+            "note",
+            "url"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "id": {
+              "title": "Id",
+              "key": true
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "comment": {
+              "title": "Description"
+            },
+            "category": {
+              "title": "Category",
+              "key": true
+            },
+            "auto_deploy": {
+              "title": "Auto Deploy"
+            },
+            "note": {
+              "title": "Note"
+            },
+            "url": {
+              "title": "URL",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'true' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "warningColor",
+              "label": "Warning Color",
+              "expr": "['#FFA726'] if warnings > 0 else ['#03A9F4']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "errorColor",
+              "label": "Error Color",
+              "expr": "['#B71C1C'] if errors > 0  else ['#03A9F4']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "errors",
+              "label": "Audit Errors",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.errorColor }}' > {{ row.errors }} </span>"
+            },
+            {
+              "id": "warnings",
+              "label": "Audit Warnings",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.warningColor }}' > {{ row.warnings }} </span>"
+            },
+            {
+              "id": "artifact_name",
+              "label": "Artifact Name",
+              "expr": "id",
+              "key": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "artifact_type",
+              "label": "Artifact Type",
+              "expr": "'blueprint'",
+              "key": true,
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:deploymentspec:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dspec-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.add.yaml"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:import",
+              "title": "Import from Catalog",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dspec-import",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.import"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:import",
+              "title": "Dashboard",
+              "type": "GO_TO_APP_STATE",
+              "appName": "dynamic-dashboard",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-view-dashboard",
+              "drillDownLinkField": "name"
+            },
+            {
+              "permission": "rda:deploymentspec:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-view-spec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.view"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:edit",
+              "title": "Edit Layout",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-edit-layout",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.edit.layout"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspecs-edit-spec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": false,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.edit"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-delete",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:enable",
+              "title": "Enable",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-activate-dspec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "false",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:disable",
+              "title": "Disable",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dspec-deactivate-dspec",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.deploymentspec.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "true",
+                    "fieldId": "enabled"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:deploymentspec:view",
+              "appName": "user-dashboard/rda-artifact-dependencies-app",
+              "identifier": "launch.url.dashboard",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Dependencies",
+              "type": "GO_TO_APP_STATE"
+            }
+          ],
+          "widget_id": "b283bfab"
+        },
+        {
+          "title": "Deployed Blueprints",
+          "widget_type": "portal_tabular",
+          "reportId": "apps.deployed.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "c8689a20"
+        },
+        {
+          "title": "Service Blueprint Catalog",
+          "widget_type": "portal_tabular",
+          "reportId": "apps.available.tabular",
+          "height": 10,
+          "min_width": 12,
+          "paginated": true,
+          "widget_id": "57d54731"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "name": "rda-pstreams-archives",
+  "label": "Archives",
+  "description": "Pstream Archives Page",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "Last 12 months"
+    ],
+    "columns_filter": [
+      {
+        "id": "stream",
+        "label": "Name",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "sorting": [
+    {
+      "stream": "asc"
+    }
+  ],
+  "dashboard_sections": [
+    {
+      "title": "Archives",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Archives",
+          "widget_type": "tabular",
+          "stream": "rda_system_pstream_archival_metadata",
+          "paginated": true,
+          "columns": {
+            "stream": {
+              "title": "Stream Name",
+              "key": true
+            },
+            "archive_date": {
+              "title": "Archive Date",
+              "visible": false
+            }
+          },
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "2ea74a7d",
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "stream"
+            ],
+            "series": [
+              {
+                "column": "stream",
+                "label": "Archives Count",
+                "agg": "value_count"
+              }
+            ]
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:archives",
+              "appName": "user-dashboard/rda-pstream-archives-app",
+              "title": "View Archives",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "identifier": "saas-service-action:pstream-archive"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Archives",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Archives",
+          "widget_type": "tabular",
+          "stream": "rda_system_pstream_archival_metadata",
+          "paginated": true,
+          "columns": {
+            "stream": {
+              "title": "Stream Name",
+              "key": true
+            },
+            "archive_date": {
+              "title": "Archive Date",
+              "visible": false
+            }
+          },
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "2ea74a7d",
+          "pivot": {
+            "pivot_type": "advanced",
+            "group_by": [
+              "stream"
+            ],
+            "series": [
+              {
+                "column": "stream",
+                "label": "Archives Count",
+                "agg": "value_count"
+              }
+            ]
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:archives",
+              "appName": "user-dashboard/rda-pstream-archives-app",
+              "title": "View Archives",
+              "type": "GO_TO_APP_STATE",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "identifier": "saas-service-action:pstream-archive"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

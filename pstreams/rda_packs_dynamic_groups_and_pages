@@ -1,0 +1,45 @@
+{
+  "name": "rda_packs_dynamic_groups_and_pages",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 365,
+    "unique_keys": [
+      "pack_id",
+      "pack_version",
+      "customer_tag",
+      "dashboard_group_name",
+      "dashboard_page_name"
+    ],
+    "search_case_insensitive": true,
+    "_settings": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
+      "refresh_interval": "30s"
+    },
+    "_mappings": {
+      "properties": {
+        "pack_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "pack_version": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-ad550f72-rda_packs_dynamic_groups_and_pages"
+}

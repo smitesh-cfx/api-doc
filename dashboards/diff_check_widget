@@ -1,0 +1,70 @@
+{
+  "name": "diff_check_widget",
+  "label": "View Difference",
+  "live_edit": true,
+  "version": "25.2.25.1",
+  "description": "Documentation Widgets",
+  "context_label_id": "component_name",
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "enabled": false,
+  "dashboard_sections": [
+    {
+      "title": "Documentation",
+      "widgets": [
+        {
+          "title": "Documentation",
+          "widget_type": "custom_widget",
+          "widget_implementation": "diff_check_widget/dashboard_documentation_widget",
+          "min_width": 12,
+          "min_height": 12,
+          "widget_id": "4e2d534c",
+          "fixed_variables": {
+            "help_yaml_source_dashboard": "dashboard_documentation",
+            "help_yaml_source_attachment": "exampleHelp1.yml",
+            "help_title": "Documentation",
+            "help_default": "{ \"sections\": [ { \"title\": \"Documentation not found\" } ] }"
+          }
+        }
+      ]
+    }
+  ],
+  "custom_widgets": {
+    "dashboard_documentation_widget": {
+      "artifacts": {
+        "main": {
+          "attachment": "v3",
+          "content_type": "text/html",
+          "is_template": true
+        }
+      }
+    }
+  },
+  "attachments": [
+    {
+      "name": "v3",
+      "value": "{%- set stream_name = pstream_name -%}\r\n{%- set comp_name = component_name -%}\r\n{%- set curr_version = version -%}\r\n{%- set sel_version = selected_version -%}\r\n{%- set content_col = content_column_name -%}\r\n{%- set lhs_data = engine.query_stream_data(stream=stream_name, cfxql_query=lhs_query) -%}\r\n{%- set rhs_data = engine.query_stream_data(stream=stream_name, cfxql_query=rhs_query) -%}\r\n{%- set lhs_output = (lhs_data | map(attribute=content_col) | list | first) -%}\r\n{%- set rhs_output = (rhs_data | map(attribute=content_col) | list | first) -%}\r\n````\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n  <meta charset=\"UTF-8\" />\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n  <title>Version Diff Viewer</title>\r\n  <style>\r\n    html, body {\r\n      margin: 0;\r\n      padding: 0;\r\n      height: 100%;\r\n      width: 100%;\r\n      background: #1e1e2f;\r\n      color: #ffffff;\r\n      font-family: \"Segoe UI\", Roboto, sans-serif;\r\n    }\r\n\r\n    #version-heading {\r\n      text-align: center;\r\n      padding: 12px 0;\r\n      background: #2b2b3d;\r\n      font-size: 17px;\r\n      font-weight: 600;\r\n      border-bottom: 1px solid #3a3a4d;\r\n      letter-spacing: 0.3px;\r\n    }\r\n\r\n    #version-heading span {\r\n      color: #7dcfff;\r\n    }\r\n\r\n    #diff-container {\r\n      height: calc(100% - 50px);\r\n      width: 100%;\r\n    }\r\n  </style>\r\n  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js\"></script>\r\n</head>\r\n<body>\r\n  <div id=\"version-heading\">\r\n    Version Difference for <span>{{ comp_name }}</span><br/>\r\n    Comparing <span>Version {{ curr_version }}</span> \u2192 <span>Version {{ sel_version }}</span>\r\n  </div>\r\n\r\n  <div id=\"diff-container\"></div>\r\n\r\n  <script>\r\n    const lhs = {{ lhs_output | default(\"\") | tojson }};\r\n    const rhs = {{ rhs_output | default(\"\") | tojson }};\r\n\r\n    window.require.config({\r\n      paths: {\r\n        vs: \"https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs\"\r\n      }\r\n    });\r\n\r\n    window.require([\"vs/editor/editor.main\"], function () {\r\n      const container = document.getElementById(\"diff-container\");\r\n\r\n      if (!lhs || !rhs) {\r\n        container.innerHTML = \"<div style='padding: 20px; text-align: center;'>\";\r\n        container.innerHTML += \"<h3>Unable to load version data</h3>\";\r\n        container.innerHTML += \"<p>Please ensure both versions exist in the registry.</p>\";\r\n        container.innerHTML += \"<p>Component: {{ comp_name }}<br/>\";\r\n        container.innerHTML += \"Current Version: {{ curr_version }}<br/>\";\r\n        container.innerHTML += \"Compare Version: {{ sel_version }}</p>\";\r\n        container.innerHTML += \"</div>\";\r\n        return;\r\n      }\r\n\r\n      const originalModel = monaco.editor.createModel(lhs, \"text/plain\");\r\n      const modifiedModel = monaco.editor.createModel(rhs, \"text/plain\");\r\n\r\n      monaco.editor.createDiffEditor(container, {\r\n        theme: \"vs-dark\",\r\n        readOnly: true,\r\n        enableSplitViewResizing: true,\r\n        automaticLayout: true\r\n      }).setModel({\r\n        original: originalModel,\r\n        modified: modifiedModel\r\n      });\r\n    });\r\n  </script>\r\n</body>\r\n</html>\r\n"
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Documentation",
+      "widgets": [
+        {
+          "title": "Documentation",
+          "widget_type": "custom_widget",
+          "widget_implementation": "diff_check_widget/dashboard_documentation_widget",
+          "min_width": 12,
+          "min_height": 12,
+          "widget_id": "4e2d534c",
+          "fixed_variables": {
+            "help_yaml_source_dashboard": "dashboard_documentation",
+            "help_yaml_source_attachment": "exampleHelp1.yml",
+            "help_title": "Documentation",
+            "help_default": "{ \"sections\": [ { \"title\": \"Documentation not found\" } ] }"
+          }
+        }
+      ]
+    }
+  ]
+}

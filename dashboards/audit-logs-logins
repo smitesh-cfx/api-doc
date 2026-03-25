@@ -1,0 +1,282 @@
+{
+  "name": "audit-logs-logins",
+  "label": "Audit Logs - Logins",
+  "description": "User Activity",
+  "dashboard_folder": "System",
+  "version": "26.3.5.1",
+  "enabled": false,
+  "live_edit": false,
+  "stream": "rda_system_audit_logs",
+  "dashboard_type": "template",
+  "computedContext": {
+    "DAY_1_AGO": {
+      "expr": "now().replace(hour = 0, minute = 0, second = 0, microsecond = 0).isoformat()"
+    },
+    "DAY_7_AGO": {
+      "expr": "(now().replace(hour = 0, minute = 0, second = 0, microsecond = 0) - timedelta(days=7)).isoformat()"
+    },
+    "DAY_30_AGO": {
+      "expr": "(now().replace(hour = 0, minute = 0, second = 0, microsecond = 0) - timedelta(days=30)).isoformat()"
+    }
+  },
+  "template_variables": {
+    "DAY_1_AGO": {
+      "contextId": "DAY_1_AGO"
+    },
+    "DAY_7_AGO": {
+      "contextId": "DAY_7_AGO"
+    },
+    "DAY_30_AGO": {
+      "contextId": "DAY_30_AGO"
+    }
+  },
+  "dashboard_filters": {
+    "time_filter": true,
+    "extra_filter": "operation is 'LOGIN'",
+    "default_time_filter_labels": [
+      "Last 1 month"
+    ],
+    "default_time_range0": {
+      "label": "Select Range",
+      "from_time": "{{DAY_30_AGO}}"
+    },
+    "columns_filter": [
+      {
+        "id": "description",
+        "label": "Description",
+        "type": "TEXT"
+      },
+      {
+        "id": "user_id",
+        "label": "User Id",
+        "type": "TEXT"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_system_audit_logs",
+        "title": "Description",
+        "limit": 200,
+        "group_by": [
+          "description"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Audit Logs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Total Logins Count",
+          "widget_type": "custom_counter",
+          "max_width": 3,
+          "min_width": 3,
+          "height": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "column": "user_id",
+          "agg": "value_count",
+          "type": "int",
+          "widget_id": "a23050af"
+        },
+        {
+          "title": "Login Activity Over Time (Daily)",
+          "widget_type": "timeseries",
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "max_width": 9,
+          "height": 3,
+          "min_width": 9,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "none"
+          },
+          "interval": "1d",
+          "series_spec": [
+            {
+              "column": "user_id",
+              "agg": "value_count",
+              "type": "int",
+              "display_type": "vertical-line"
+            }
+          ],
+          "widget_id": "e07f6a22"
+        },
+        {
+          "title": "Unique Logins Count",
+          "widget_type": "custom_counter",
+          "max_width": 3,
+          "min_width": 3,
+          "height": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "column": "user_id",
+          "agg": "cardinality",
+          "type": "int",
+          "widget_id": "635ae8ac"
+        },
+        {
+          "title": "Unique Login Activity Over Time (Daily)",
+          "widget_type": "timeseries",
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "max_width": 9,
+          "height": 3,
+          "min_width": 9,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "none"
+          },
+          "interval": "1d",
+          "series_spec": [
+            {
+              "column": "user_id",
+              "agg": "cardinality",
+              "type": "int",
+              "display_type": "vertical-line"
+            }
+          ],
+          "widget_id": "1704af80"
+        },
+        {
+          "widget_type": "bar_chart",
+          "title": "Top 20 Users",
+          "stream": "rda_system_audit_logs",
+          "top_n": 20,
+          "ts_column": "timestamp",
+          "column": "count_",
+          "agg": "sum",
+          "group_by": [
+            "user_id"
+          ],
+          "chartProperties": {
+            "yAxisLabel": "User",
+            "xAxisLabel": "",
+            "stacked": true,
+            "legendLocation": "none",
+            "orientation": "horizontal"
+          },
+          "type": "int",
+          "min_width": 12,
+          "height": 8,
+          "max_width": 12,
+          "widget_id": "4de13388"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Audit Logs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Total Logins Count",
+          "widget_type": "custom_counter",
+          "max_width": 3,
+          "min_width": 3,
+          "height": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "column": "user_id",
+          "agg": "value_count",
+          "type": "int",
+          "widget_id": "a23050af"
+        },
+        {
+          "title": "Login Activity Over Time (Daily)",
+          "widget_type": "timeseries",
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "max_width": 9,
+          "height": 3,
+          "min_width": 9,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "none"
+          },
+          "interval": "1d",
+          "series_spec": [
+            {
+              "column": "user_id",
+              "agg": "value_count",
+              "type": "int",
+              "display_type": "vertical-line"
+            }
+          ],
+          "widget_id": "e07f6a22"
+        },
+        {
+          "title": "Unique Logins Count",
+          "widget_type": "custom_counter",
+          "max_width": 3,
+          "min_width": 3,
+          "height": 3,
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "column": "user_id",
+          "agg": "cardinality",
+          "type": "int",
+          "widget_id": "635ae8ac"
+        },
+        {
+          "title": "Unique Login Activity Over Time (Daily)",
+          "widget_type": "timeseries",
+          "stream": "rda_system_audit_logs",
+          "ts_column": "timestamp",
+          "max_width": 9,
+          "height": 3,
+          "min_width": 9,
+          "chartProperties": {
+            "yAxisLabel": "Count",
+            "xAxisLabel": null,
+            "legendLocation": "none"
+          },
+          "interval": "1d",
+          "series_spec": [
+            {
+              "column": "user_id",
+              "agg": "cardinality",
+              "type": "int",
+              "display_type": "vertical-line"
+            }
+          ],
+          "widget_id": "1704af80"
+        },
+        {
+          "widget_type": "bar_chart",
+          "title": "Top 20 Users",
+          "stream": "rda_system_audit_logs",
+          "top_n": 20,
+          "ts_column": "timestamp",
+          "column": "count_",
+          "agg": "sum",
+          "group_by": [
+            "user_id"
+          ],
+          "chartProperties": {
+            "yAxisLabel": "User",
+            "xAxisLabel": "",
+            "stacked": true,
+            "legendLocation": "none",
+            "orientation": "horizontal"
+          },
+          "type": "int",
+          "min_width": 12,
+          "height": 8,
+          "max_width": 12,
+          "widget_id": "4de13388"
+        }
+      ]
+    }
+  ]
+}

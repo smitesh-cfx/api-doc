@@ -1,0 +1,116 @@
+{
+  "name": "topology-details-app",
+  "label": "Components",
+  "description": "Components",
+  "dashboard_folder": "System",
+  "version": "23.4.14.2",
+  "enabled": true,
+  "short_label": "Stack",
+  "context_label_id": "stack_name",
+  "dashboard_type": "dashboard",
+  "dashboard_filters": {},
+  "navigation_dashboards": {
+    "tree_data": {
+      "column_name": "node_type",
+      "context_pstream_attr": "nodes_pstream",
+      "context_query_attr": "nodes_query"
+    },
+    "tree_detail": {
+      "context_pstream_attr": "nodes_pstream",
+      "context_query_attr": "nodes_query",
+      "display_column": "node_label"
+    },
+    "showNodeIcon": true,
+    "showSearchBox": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Topology",
+      "widgets": [
+        {
+          "title": "Topology",
+          "widget_type": "topology",
+          "register_search_endpoints": true,
+          "reportId": "rda.saas.stack.view.topo",
+          "auto_group": true,
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "182287d8"
+        }
+      ]
+    },
+    {
+      "title": "Node Details",
+      "widgets": [
+        {
+          "title": "Summary",
+          "widget_type": "portal_summary",
+          "reportId": "rda.saas.topology.node_details.report",
+          "max_width": 4,
+          "height": 5,
+          "min_width": 4,
+          "widget_id": "182229d8"
+        }
+      ]
+    },
+    {
+      "title": "Edge Details",
+      "widgets": [
+        {
+          "title": "Edge Details",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.topology.edges.summary.report",
+          "max_width": 8,
+          "height": 5,
+          "min_width": 8,
+          "widget_id": "dcfc7e8d"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Topology",
+      "widgets": [
+        {
+          "title": "Topology",
+          "widget_type": "topology",
+          "register_search_endpoints": true,
+          "reportId": "rda.saas.stack.view.topo",
+          "auto_group": true,
+          "height": 10,
+          "min_wdith": 12,
+          "widget_id": "182287d8"
+        }
+      ]
+    },
+    {
+      "title": "Node Details",
+      "widgets": [
+        {
+          "title": "Summary",
+          "widget_type": "portal_summary",
+          "reportId": "rda.saas.topology.node_details.report",
+          "max_width": 4,
+          "height": 5,
+          "min_width": 4,
+          "widget_id": "182229d8"
+        }
+      ]
+    },
+    {
+      "title": "Edge Details",
+      "widgets": [
+        {
+          "title": "Edge Details",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.topology.edges.summary.report",
+          "max_width": 8,
+          "height": 5,
+          "min_width": 8,
+          "widget_id": "dcfc7e8d"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_snapshots_errors",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "snapshot_name"
+    ],
+    "retention_days": 365
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream logging snapshot operation errors including snapshot_name, error messages, operation type, and failure timestamps",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-ac7190b9-rda_system_snapshots_errors"
+}

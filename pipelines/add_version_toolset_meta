@@ -1,0 +1,14 @@
+folder: AI
+name: add_version_toolset
+description: test pipeline
+data_path: pipelines/data/add_version_toolset/2026.3.5/data.json
+usecase: ''
+category: ''
+sources: {}
+artifacts:
+- artifact_type: dataset
+  artifact_name: ai_mcp_toolset
+  access: write
+version: 2026.3.5
+file_type: json
+checksum: 283ce891

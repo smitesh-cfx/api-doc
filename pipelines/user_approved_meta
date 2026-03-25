@@ -1,0 +1,29 @@
+folder: AI
+name: user_approved
+description: test pipeline
+data_path: pipelines/data/user_approved/2025.10.10.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+  slack:
+    name: slack
+    type: slack
+artifacts:
+- artifact_type: dataset
+  artifact_name: test-approve
+  access: write
+- artifact_type: dataset
+  artifact_name: test-approval
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: user_approval_stream
+  access: write
+- artifact_type: dataset
+  artifact_name: test-approval
+  access: write
+version: 2025.10.10.1
+file_type: json
+checksum: c8c92de1

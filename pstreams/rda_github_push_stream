@@ -1,0 +1,14 @@
+{
+  "name": "rda_github_push_stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 1,
+    "unique_keys": [
+      "filepath"
+    ],
+    "system_defined": "yes"
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-dbc9c598-rda_github_push_stream"
+}

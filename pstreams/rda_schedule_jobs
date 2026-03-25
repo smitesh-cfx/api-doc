@@ -1,0 +1,24 @@
+{
+  "name": "rda_schedule_jobs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "job_id"
+    ],
+    "flatten_json": false,
+    "retention_days": 30,
+    "retention_purge_extra_filter": "expired = 'yes'",
+    "_mappings": {
+      "properties": {
+        "start_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream 'rda_schedule_jobs' for internal operations",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-579fdc70-rda_schedule_jobs"
+}

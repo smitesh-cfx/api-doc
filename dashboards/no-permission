@@ -1,0 +1,43 @@
+{
+  "name": "no-permission",
+  "label": "No Permission",
+  "description": "No Permission Landing Dashboard",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "No Permission",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "No Permission",
+          "widget_type": "portal_html",
+          "widget_template": "common/access-denied-screen",
+          "height": 12,
+          "min_wdith": 12,
+          "widget_id": "186d9a0f"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "No Permission",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "No Permission",
+          "widget_type": "portal_html",
+          "widget_template": "common/access-denied-screen",
+          "height": 12,
+          "min_wdith": 12,
+          "widget_id": "186d9a0f"
+        }
+      ]
+    }
+  ]
+}

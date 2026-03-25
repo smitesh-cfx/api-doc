@@ -1,0 +1,126 @@
+{
+  "name": "rda-github-configuration",
+  "label": "RDA Git Configuration",
+  "is_template": true,
+  "description": "Configure GitHub integration for RDA Git push/pull",
+  "version": "23.11.7.2",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "default",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [],
+    "group_filters": []
+  },
+  "dashboard_sections": [
+    {
+      "title": "Git Configuration",
+      "widgets": [
+        {
+          "title": "Current Push Status",
+          "widget_type": "github_push_details",
+          "widget_id": "gitcfg_push_status_01"
+        },
+        {
+          "title": "Current Pull Status",
+          "widget_type": "github_pull_details",
+          "widget_id": "gitcfg_pull_status_01"
+        },
+        {
+          "title": "Git Configuration",
+          "widget_type": "tabular",
+          "stream": "rda_github_push_stream",
+          "timebased": false,
+          "remote_searchable": false,
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "timestamp": {
+              "title": "Last Updated",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:github:push",
+              "title": "Configure Git",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:github-settings",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.settings"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "gitcfg_action_01"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Git Configuration",
+      "widgets": [
+        {
+          "title": "Current Push Status",
+          "widget_type": "github_push_details",
+          "widget_id": "gitcfg_push_status_01"
+        },
+        {
+          "title": "Current Pull Status",
+          "widget_type": "github_pull_details",
+          "widget_id": "gitcfg_pull_status_01"
+        },
+        {
+          "title": "Git Configuration",
+          "widget_type": "tabular",
+          "stream": "rda_github_push_stream",
+          "timebased": false,
+          "remote_searchable": false,
+          "ts_column": "timestamp",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "timestamp": {
+              "title": "Last Updated",
+              "type": "DATETIME"
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:github:push",
+              "title": "Configure Git",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:github-settings",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.git.settings"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "gitcfg_action_01"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "rda_system_gw_endpoint_metrics",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream aggregating gateway endpoint metrics including ep_type, ep_name, stream name, byte_count, event count, and gateway hostname for data ingestion monitoring",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-a79229c9-rda_system_gw_endpoint_metrics"
+}

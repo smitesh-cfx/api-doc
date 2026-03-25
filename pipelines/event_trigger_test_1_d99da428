@@ -1,0 +1,4 @@
+@rn:read-stream name = "test" and group = 'cfx'
+ --> *dm:filter name == 'test'
+ --> @dm:skip-block-if-shape row_count=0
+ --> @workflow:execute_workflow workflow_name = 'AI Observability Agent' and is_template = 'no' and ai_project_name = 'Base' and trigger_name = 'test_1' and trigger_description = 'test' and trigger_message = 'testing'

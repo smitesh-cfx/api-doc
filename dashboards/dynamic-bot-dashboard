@@ -1,0 +1,801 @@
+{
+  "name": "dynamic-bot-dashboard",
+  "label": "Dynamic Bot Dashboard",
+  "is_template": false,
+  "description": "Dynamic Bot Management Dashboard",
+  "live_edit": true,
+  "version": "1.0.0",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "All Time"
+    ],
+    "columns_filter": [
+      {
+        "id": "bot_name",
+        "label": "Bot Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "version",
+        "label": "Version",
+        "type": "TEXT"
+      },
+      {
+        "id": "folder",
+        "label": "Folder",
+        "type": "TEXT"
+      },
+      {
+        "id": "category",
+        "label": "Category",
+        "type": "TEXT"
+      }
+    ],
+    "group_filters": [
+      {
+        "stream": "cfx_bots_registry",
+        "title": "Category",
+        "group_by": [
+          "category"
+        ],
+        "ts_column": "timestamp",
+        "agg": "value_count",
+        "column": "_id",
+        "type": "int"
+      },
+      {
+        "stream": "cfx_bots_registry",
+        "title": "Folder",
+        "group_by": [
+          "folder"
+        ],
+        "ts_column": "timestamp",
+        "agg": "value_count",
+        "column": "_id",
+        "type": "int"
+      }
+    ]
+  },
+  "dashboard_folder": "System",
+  "dashboard_sections": [
+    {
+      "title": "Dynamic Bots",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Dynamic Bots",
+          "widget_type": "tabular",
+          "stream": "cfx_bots_registry",
+          "extra_filter": "default_version is 'True'",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "bot_name",
+            "version",
+            "folder",
+            "category"
+          ],
+          "max_rows": 50,
+          "sorting": [
+            {
+              "saved_time": "desc"
+            }
+          ],
+          "columns": {
+            "bot_name": {
+              "title": "Bot Name",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 150
+            },
+            "description": {
+              "title": "Description",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 200
+            },
+            "version": {
+              "title": "Default Version",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 80
+            },
+            "folder": {
+              "title": "Folder",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 100
+            },
+            "category": {
+              "title": "Category",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 100
+            },
+            "timestamp": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 150
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:add",
+              "title": "Add Bot",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dynamic-bot-add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.add",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-view-template",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  },
+                  {
+                    "paramKey": "mako_template",
+                    "paramId": "mako_template"
+                  },
+                  {
+                    "paramKey": "json_schema",
+                    "paramId": "json_schema"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "version"
+                  },
+                  {
+                    "paramKey": "imports",
+                    "paramId": "imports"
+                  },
+                  {
+                    "paramKey": "allowed_credential_types",
+                    "paramId": "allowed_credential_types"
+                  },
+                  {
+                    "paramKey": "description",
+                    "paramId": "description"
+                  },
+                  {
+                    "paramKey": "folder",
+                    "paramId": "folder"
+                  },
+                  {
+                    "paramKey": "category",
+                    "paramId": "category"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.view.template",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "icon": "mdi mdi-pencil",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-edit-template",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  },
+                  {
+                    "paramKey": "mako_template",
+                    "paramId": "mako_template"
+                  },
+                  {
+                    "paramKey": "json_schema",
+                    "paramId": "json_schema"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "version"
+                  },
+                  {
+                    "paramKey": "imports",
+                    "paramId": "imports"
+                  },
+                  {
+                    "paramKey": "allowed_credential_types",
+                    "paramId": "allowed_credential_types"
+                  },
+                  {
+                    "paramKey": "description",
+                    "paramId": "description"
+                  },
+                  {
+                    "paramKey": "folder",
+                    "paramId": "folder"
+                  },
+                  {
+                    "paramKey": "category",
+                    "paramId": "category"
+                  },
+                  {
+                    "paramKey": "default_version",
+                    "paramId": "default_version"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.edit.template",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:delete",
+              "title": "Delete All",
+              "type": "POPUP_FORM",
+              "icon": "mdi mdi-delete",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-delete-all",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "default_version",
+                    "paramId": "default_version"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.delete.all",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "appName": "user-dashboard/dynamic-bot-version-history-dashboard",
+              "title": "Version History",
+              "type": "GO_TO_APP_STATE",
+              "icon": "mdi mdi-history",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-version-history",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:github:view",
+              "title": "View Difference",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.form",
+                    "formActionList": {
+                      "formActions": [
+                        {
+                          "identifier": "Submit",
+                          "actionLabel": "View"
+                        }
+                      ]
+                    },
+                    "formDefinition": {
+                      "id": "rda.saas.dynamic.form",
+                      "refreshRequired": true,
+                      "formFieldList": [
+                        {
+                          "fieldId": "bot_name",
+                          "label": "Verify Bot Name",
+                          "help": "Verify the Bot Name",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "hidden": false,
+                          "server-validation": true,
+                          "editable": false,
+                          "required": true
+                        },
+                        {
+                          "fieldId": "version",
+                          "label": "Current Version",
+                          "help": "Current Version",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "hidden": false,
+                          "server-validation": true,
+                          "editable": false,
+                          "required": true
+                        },
+                        {
+                          "help": "Version to compare",
+                          "dataType": "string",
+                          "controlType": "COMBO_BOX",
+                          "required": false,
+                          "editable": true,
+                          "label": "Version to compare",
+                          "hidden": false,
+                          "fieldId": "selected_version",
+                          "lovSourceType": "pstream",
+                          "lovSourceParams": {
+                            "name": "cfx_bots_registry",
+                            "valueColumn": "version",
+                            "labelColumn": "version",
+                            "query": "bot_name is '$bot_name' and version is not '$version'"
+                          }
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "appName": "user-dashboard/diff_check_widget",
+                        "messageType": "without_message",
+                        "type": "GO_TO_APP_STATE",
+                        "computedContext": {
+                          "component_name": {
+                            "expr": "bot_name",
+                            "defaultValue": ""
+                          },
+                          "pstream_name": {
+                            "expr": "'cfx_bots_registry'",
+                            "defaultValue": "cfx_bots_registry"
+                          },
+                          "content_column_name": {
+                            "expr": "'mako_template'",
+                            "defaultValue": "mako_template"
+                          },
+                          "lhs_query": {
+                            "expr": "\"bot_name is '\" + bot_name + \"' and version is '\" + version + \"'\"",
+                            "defaultValue": ""
+                          },
+                          "rhs_query": {
+                            "expr": "\"bot_name is '\" + bot_name + \"' and version is '\" + selected_version + \"'\"",
+                            "defaultValue": ""
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "dynamic-bot-widget-001"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Dynamic Bots",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Dynamic Bots",
+          "widget_type": "tabular",
+          "stream": "cfx_bots_registry",
+          "extra_filter": "default_version is 'True'",
+          "ts_column": "timestamp",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "bot_name",
+            "version",
+            "folder",
+            "category"
+          ],
+          "max_rows": 50,
+          "sorting": [
+            {
+              "saved_time": "desc"
+            }
+          ],
+          "columns": {
+            "bot_name": {
+              "title": "Bot Name",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 150
+            },
+            "description": {
+              "title": "Description",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 200
+            },
+            "version": {
+              "title": "Default Version",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 80
+            },
+            "folder": {
+              "title": "Folder",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 100
+            },
+            "category": {
+              "title": "Category",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 100
+            },
+            "timestamp": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "key": false,
+              "visible": true,
+              "defaultWidth": 150
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:add",
+              "title": "Add Bot",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:dynamic-bot-add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.add",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-view-template",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  },
+                  {
+                    "paramKey": "mako_template",
+                    "paramId": "mako_template"
+                  },
+                  {
+                    "paramKey": "json_schema",
+                    "paramId": "json_schema"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "version"
+                  },
+                  {
+                    "paramKey": "imports",
+                    "paramId": "imports"
+                  },
+                  {
+                    "paramKey": "allowed_credential_types",
+                    "paramId": "allowed_credential_types"
+                  },
+                  {
+                    "paramKey": "description",
+                    "paramId": "description"
+                  },
+                  {
+                    "paramKey": "folder",
+                    "paramId": "folder"
+                  },
+                  {
+                    "paramKey": "category",
+                    "paramId": "category"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.view.template",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:edit",
+              "title": "Edit",
+              "type": "POPUP_FORM",
+              "icon": "mdi mdi-pencil",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-edit-template",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  },
+                  {
+                    "paramKey": "mako_template",
+                    "paramId": "mako_template"
+                  },
+                  {
+                    "paramKey": "json_schema",
+                    "paramId": "json_schema"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "version"
+                  },
+                  {
+                    "paramKey": "imports",
+                    "paramId": "imports"
+                  },
+                  {
+                    "paramKey": "allowed_credential_types",
+                    "paramId": "allowed_credential_types"
+                  },
+                  {
+                    "paramKey": "description",
+                    "paramId": "description"
+                  },
+                  {
+                    "paramKey": "folder",
+                    "paramId": "folder"
+                  },
+                  {
+                    "paramKey": "category",
+                    "paramId": "category"
+                  },
+                  {
+                    "paramKey": "default_version",
+                    "paramId": "default_version"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.edit.template",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:delete",
+              "title": "Delete All",
+              "type": "POPUP_FORM",
+              "icon": "mdi mdi-delete",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-delete-all",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "default_version",
+                    "paramId": "default_version"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.bot.delete.all",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "appName": "user-dashboard/dynamic-bot-version-history-dashboard",
+              "title": "Version History",
+              "type": "GO_TO_APP_STATE",
+              "icon": "mdi mdi-history",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:dynamic-bot-version-history",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "bot_name",
+                    "paramId": "bot_name"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:github:view",
+              "title": "View Difference",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:userdashboard-add-yaml",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dynamic.form",
+                    "formActionList": {
+                      "formActions": [
+                        {
+                          "identifier": "Submit",
+                          "actionLabel": "View"
+                        }
+                      ]
+                    },
+                    "formDefinition": {
+                      "id": "rda.saas.dynamic.form",
+                      "refreshRequired": true,
+                      "formFieldList": [
+                        {
+                          "fieldId": "bot_name",
+                          "label": "Verify Bot Name",
+                          "help": "Verify the Bot Name",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "hidden": false,
+                          "server-validation": true,
+                          "editable": false,
+                          "required": true
+                        },
+                        {
+                          "fieldId": "version",
+                          "label": "Current Version",
+                          "help": "Current Version",
+                          "dataType": "string",
+                          "controlType": "TEXT_FIELD",
+                          "hidden": false,
+                          "server-validation": true,
+                          "editable": false,
+                          "required": true
+                        },
+                        {
+                          "help": "Version to compare",
+                          "dataType": "string",
+                          "controlType": "COMBO_BOX",
+                          "required": false,
+                          "editable": true,
+                          "label": "Version to compare",
+                          "hidden": false,
+                          "fieldId": "selected_version",
+                          "lovSourceType": "pstream",
+                          "lovSourceParams": {
+                            "name": "cfx_bots_registry",
+                            "valueColumn": "version",
+                            "labelColumn": "version",
+                            "query": "bot_name is '$bot_name' and version is not '$version'"
+                          }
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "appName": "user-dashboard/diff_check_widget",
+                        "messageType": "without_message",
+                        "type": "GO_TO_APP_STATE",
+                        "computedContext": {
+                          "component_name": {
+                            "expr": "bot_name",
+                            "defaultValue": ""
+                          },
+                          "pstream_name": {
+                            "expr": "'cfx_bots_registry'",
+                            "defaultValue": "cfx_bots_registry"
+                          },
+                          "content_column_name": {
+                            "expr": "'mako_template'",
+                            "defaultValue": "mako_template"
+                          },
+                          "lhs_query": {
+                            "expr": "\"bot_name is '\" + bot_name + \"' and version is '\" + version + \"'\"",
+                            "defaultValue": ""
+                          },
+                          "rhs_query": {
+                            "expr": "\"bot_name is '\" + bot_name + \"' and version is '\" + selected_version + \"'\"",
+                            "defaultValue": ""
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "dynamic-bot-widget-001"
+        }
+      ]
+    }
+  ]
+}

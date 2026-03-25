@@ -1,0 +1,630 @@
+{
+  "name": "rda-administration-dashboard-schedule",
+  "label": "Export Schedules",
+  "description": "rda_dashboards_dashboard_schedule: Insights",
+  "dashboard_folder": "System",
+  "version": "24.5.29.1",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_labels": [
+      "Last 1 month"
+    ],
+    "columns_filter": [
+      {
+        "id": "job_id",
+        "label": "RDA ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "schedule_id",
+        "label": "Job ID",
+        "type": "TEXT"
+      },
+      {
+        "id": "dashboard_name",
+        "label": "Dashboard Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "dashboard_title",
+        "label": "Dashboard Label",
+        "type": "TEXT"
+      },
+      {
+        "id": "filters",
+        "label": "Condition Filters",
+        "type": "TEXT"
+      },
+      {
+        "id": "name",
+        "label": "Export Filename",
+        "type": "TEXT"
+      },
+      {
+        "id": "include_csv_files",
+        "label": "Include CSV Files",
+        "type": "TEXT"
+      },
+      {
+        "id": "descr",
+        "label": "Description",
+        "type": "TEXT"
+      },
+      {
+        "id": "email_id",
+        "label": "Send To",
+        "type": "TEXT"
+      },
+      {
+        "id": "start_time",
+        "label": "Schedule Start Time",
+        "type": "DATETIME"
+      },
+      {
+        "id": "next_run_time",
+        "label": "Next Run Time",
+        "type": "DATETIME"
+      },
+      {
+        "id": "end_time",
+        "label": "Schedule End Time",
+        "type": "DATETIME"
+      },
+      {
+        "id": "frequency",
+        "label": "Schedule Frequency",
+        "type": "TEXT"
+      },
+      {
+        "id": "created_by",
+        "label": "Created By",
+        "type": "TEXT"
+      },
+      {
+        "id": "expired",
+        "label": "Job Expired",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Dashboard Schedules",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Schedule Details",
+          "widget_type": "tabular",
+          "paginated": true,
+          "stream": "rda_dashboard_export_schedules",
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "job_id": {
+              "title": "RDA ID",
+              "key": true,
+              "visible": false
+            },
+            "schedule_id": {
+              "title": "Job ID"
+            },
+            "created_by": {
+              "title": "Created By"
+            },
+            "dashboard_name": {
+              "title": "Dashboard Name",
+              "visible": false
+            },
+            "dashboard_title": {
+              "title": "Dashboard Label"
+            },
+            "filters": {
+              "title": "Condition Filters"
+            },
+            "name": {
+              "title": "Export Filename"
+            },
+            "include_csv_files": {
+              "title": "Include CSV Files",
+              "visible": false
+            },
+            "descr": {
+              "title": "Description"
+            },
+            "email_id": {
+              "title": "Send To"
+            },
+            "start_time": {
+              "title": "Schedule Start Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "next_run_time": {
+              "title": "Next Run Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "end_time": {
+              "title": "Schedule End Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "frequency": {
+              "title": "Schedule Frequency"
+            },
+            "expired": {
+              "title": "Job Expired"
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'yes' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "0custom_columns": [
+            {
+              "id": "id",
+              "label": "JOB",
+              "expr": "job_id if job_id else None",
+              "visible": false,
+              "key": true
+            }
+          ],
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 60000
+          },
+          "actions": [
+            {
+              "permission": "rda:schedules:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-schedule",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:schedules:edit",
+              "title": "Update",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:update-schedule",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.update"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "appName": "user-dashboard/rda-dashboard-view-logs",
+              "permission": "rda:schedules:view",
+              "identifier": "view_logs",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Logs",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "permission": "rda:user_dashboard:enable",
+              "title": "Enable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:schedule-enable",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.enable"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "enabled"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:disable",
+              "title": "Disable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:schedule-disable",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.disable"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "enabled"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "cdc398bc"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Dashboard Schedules",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Schedule Details",
+          "widget_type": "tabular",
+          "paginated": true,
+          "stream": "rda_dashboard_export_schedules",
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "job_id": {
+              "title": "RDA ID",
+              "key": true,
+              "visible": false
+            },
+            "schedule_id": {
+              "title": "Job ID"
+            },
+            "created_by": {
+              "title": "Created By"
+            },
+            "dashboard_name": {
+              "title": "Dashboard Name",
+              "visible": false
+            },
+            "dashboard_title": {
+              "title": "Dashboard Label"
+            },
+            "filters": {
+              "title": "Condition Filters"
+            },
+            "name": {
+              "title": "Export Filename"
+            },
+            "include_csv_files": {
+              "title": "Include CSV Files",
+              "visible": false
+            },
+            "descr": {
+              "title": "Description"
+            },
+            "email_id": {
+              "title": "Send To"
+            },
+            "start_time": {
+              "title": "Schedule Start Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "next_run_time": {
+              "title": "Next Run Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "end_time": {
+              "title": "Schedule End Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "frequency": {
+              "title": "Schedule Frequency"
+            },
+            "expired": {
+              "title": "Job Expired"
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'yes' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "0custom_columns": [
+            {
+              "id": "id",
+              "label": "JOB",
+              "expr": "job_id if job_id else None",
+              "visible": false,
+              "key": true
+            }
+          ],
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 60000
+          },
+          "actions": [
+            {
+              "permission": "rda:schedules:delete",
+              "title": "Delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-schedule",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.delete"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:schedules:edit",
+              "title": "Update",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:update-schedule",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.update"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "appName": "user-dashboard/rda-dashboard-view-logs",
+              "permission": "rda:schedules:view",
+              "identifier": "view_logs",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "View Logs",
+              "type": "GO_TO_APP_STATE"
+            },
+            {
+              "permission": "rda:user_dashboard:enable",
+              "title": "Enable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:schedule-enable",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.enable"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "enabled"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:disable",
+              "title": "Disable",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:schedule-disable",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "job_id",
+                    "paramId": "id"
+                  },
+                  {
+                    "paramKey": "dashboard_title",
+                    "paramId": "dashboard_title"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.dashboard.schedule.disable"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "yes",
+                    "fieldId": "enabled"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "no",
+                    "fieldId": "expired"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "cdc398bc"
+        }
+      ]
+    }
+  ]
+}

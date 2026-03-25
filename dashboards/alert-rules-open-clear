@@ -1,0 +1,443 @@
+{
+  "name": "alert-rules-open-clear",
+  "label": "Alert rules based Open and Clear Alerts",
+  "description": "Alert rules based Open and Clear Alerts",
+  "version": "25.12.5.1",
+  "enabled": true,
+  "live_edit": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "status_poller": {
+    "stream": "rda_alert_state_management_data",
+    "frequency": 15,
+    "columns": [
+      "timestamp"
+    ],
+    "sorting": [
+      {
+        "timestamp": "desc"
+      }
+    ],
+    "query": "timestamp is after '$timestamp'",
+    "defaults": {
+      "timestamp": "$UTCNOW"
+    },
+    "action": "refresh"
+  },
+  "dashboard_filters": {
+    "time_filter": true,
+    "default_time_filter_non_removable": true,
+    "show_default_time_filter": false,
+    "columns_filter": [
+      {
+        "id": "type",
+        "label": "Alert Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "name",
+        "label": "Alert Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "state",
+        "label": "State",
+        "type": "TEXT"
+      },
+      {
+        "id": "severity",
+        "label": "Open Severity",
+        "type": "TEXT"
+      },
+      {
+        "id": "clear_severity",
+        "label": "Clear Severity",
+        "type": "TEXT"
+      },
+      {
+        "id": "md5",
+        "label": "Alert Id",
+        "type": "TEXT"
+      },
+      {
+        "id": "unique_keys",
+        "label": "Alert Keys",
+        "type": "TEXT"
+      },
+      {
+        "id": "payload",
+        "label": "Payload",
+        "type": "TEXT"
+      }
+    ],
+    "default_time_filter_labels": [
+      "Last 24 hours"
+    ],
+    "group_filters": [
+      {
+        "stream": "rda_alert_state_management_data",
+        "title": "Alert Type",
+        "group_by": [
+          "type"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "str"
+      },
+      {
+        "stream": "rda_alert_state_management_data",
+        "title": "Alert Name",
+        "group_by": [
+          "name"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "str"
+      },
+      {
+        "stream": "rda_alert_state_management_data",
+        "title": "State",
+        "group_by": [
+          "state"
+        ],
+        "ts_column": "timestamp",
+        "agg": "sum",
+        "column": "count_",
+        "type": "str"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "alerts",
+      "show_filter": true,
+      "widgets": [
+        {
+          "extends": [
+            "self:alerts_tabular_widget",
+            "self:actions_lib.alerts_tabular_widget_actions"
+          ],
+          "extend_vars": {
+            "alerts_tabular_widget_extra_filter": "state in ['OPEN', 'CLEAR']"
+          },
+          "widget_id": "94a3fc99"
+        }
+      ]
+    }
+  ],
+  "library": {
+    "widgets": {
+      "alerts_tabular_widget": {
+        "extra_filter": "$alerts_tabular_widget_extra_filter",
+        "title": "Alerts",
+        "widget_type": "tabular",
+        "stream": "rda_alert_state_management_data",
+        "min_width": 12,
+        "height": 12,
+        "max_width": 12,
+        "paginated": true,
+        "resizableColumns": false,
+        "remote_searchable": true,
+        "remote_searchable_cols": [
+          "type",
+          "name",
+          "state",
+          "severity",
+          "clear_severity",
+          "md5",
+          "unique_keys",
+          "oia_a_incident_id",
+          "oia_a_ticket_id"
+        ],
+        "refreshRequired": true,
+        "timebased": false,
+        "max_rows": 50,
+        "columns": {
+          "type": {
+            "title": "Alert Type",
+            "key": true
+          },
+          "name": {
+            "title": "Alert Name",
+            "key": true
+          },
+          "md5": {
+            "title": "Alert Id",
+            "key": true
+          },
+          "unique_keys": {
+            "title": "Alert Keys"
+          },
+          "state_color": {
+            "type": "COLOR-MAP",
+            "source-column": "state",
+            "color-map": {
+              "CLEAR": "#4CAF50",
+              "OPEN": "#FFA726"
+            }
+          },
+          "state": {
+            "title": "State",
+            "htmlTemplateForRow": "<span class='badge' style='background-color: {{'{{ row.state_color }}'}}' > {{'{{ row.state }}'}} </span>",
+            "defaultWidth": 150,
+            "key": true
+          },
+          "severity_color": {
+            "type": "COLOR-MAP",
+            "source-column": "severity",
+            "color-map": {
+              "SEVERE": "#B71C1C",
+              "CRITICAL": "#E53935",
+              "MAJOR": "#F57C00",
+              "MINOR": "#FFA726",
+              "WARNING": "#FFD54F",
+              "NOTIFICATION": "#4DD0E1",
+              "INFORMATION": "#03A9F4"
+            }
+          },
+          "severity": {
+            "title": "Open Severity",
+            "type": "DYNAMIC_HTML",
+            "htmlTemplate": "<span class='badge' v-if='rowData.severity' :style='{ backgroundColor: rowData.severity_color }'>{{'{{ rowData.severity }}'}}</span>",
+            "defaultWidth": 150
+          },
+          "clear_severity_color": {
+            "type": "COLOR-MAP",
+            "source-column": "clear_severity",
+            "color-map": {
+              "SEVERE": "#B71C1C",
+              "CRITICAL": "#E53935",
+              "MAJOR": "#F57C00",
+              "MINOR": "#FFA726",
+              "WARNING": "#FFD54F",
+              "NOTIFICATION": "#4DD0E1",
+              "INFORMATION": "#03A9F4"
+            }
+          },
+          "clear_severity": {
+            "title": "Clear Severity",
+            "type": "DYNAMIC_HTML",
+            "htmlTemplate": "<span class='badge' v-if='rowData.clear_severity' :style='{ backgroundColor: rowData.clear_severity_color }'>{{'{{ rowData.clear_severity }}'}}</span>",
+            "defaultWidth": 150,
+            "visible": false
+          },
+          "open_timestamp": {
+            "title": "Open Timestamp",
+            "type": "DATETIME"
+          },
+          "oia_a_id": {
+            "title": "OIA Alert Id",
+            "visible": false
+          },
+          "oia_a_status": {
+            "title": "OIA Alert Status",
+            "visible": false
+          },
+          "oia_a_correlation_status": {
+            "title": "OIA Alert Correlation Status",
+            "visible": false
+          },
+          "oia_a_incident_id": {
+            "title": "OIA Incident Id"
+          },
+          "oia_a_ticket_id": {
+            "title": "OIA Ticket Id"
+          },
+          "oia_a_cleared_ts": {
+            "title": "OIA Alert Cleared Timestamp",
+            "type": "DATETIME",
+            "visible": false
+          },
+          "clear_timestamp": {
+            "title": "Clear Timestamp",
+            "type": "DATETIME",
+            "visible": false
+          },
+          "timestamp": {
+            "title": "Timestamp",
+            "type": "DATETIME",
+            "visible": false
+          }
+        }
+      }
+    },
+    "actions_lib": {
+      "alerts_tabular_widget_actions": {
+        "actions": [
+          {
+            "permission": "rda:user_dashboard:clear",
+            "title": "Clear Alerts",
+            "type": "POPUP_FORM",
+            "selectionType": "NONE",
+            "identifier": "saas-service-action:alertrule-clear-batch",
+            "api-endpoint": {
+              "service-name": "saas-reports",
+              "methodName": "getForm",
+              "stringified-params": true,
+              "parse-output": false,
+              "params": [
+                {
+                  "formId": "rda.saas.dynamic.form",
+                  "formDefinition": {
+                    "id": "rda.saas.dynamic.form",
+                    "refreshRequired": true,
+                    "formFieldList": [
+                      {
+                        "help": "Clear Alerts",
+                        "dataType": "string",
+                        "controlType": "SELECTOR_TABLE",
+                        "controlPropertyList": [
+                          {
+                            "attribute": "column-key",
+                            "value": "md5"
+                          },
+                          {
+                            "attribute": "selection",
+                            "value": "MULTIPLE"
+                          }
+                        ],
+                        "widget": {
+                          "extends": "self:alerts_tabular_widget",
+                          "extend_vars": {
+                            "alerts_tabular_widget_extra_filter": "state in ['OPEN']"
+                          }
+                        },
+                        "required": true,
+                        "editable": true,
+                        "label": "Alerts",
+                        "hidden": false,
+                        "fieldId": "selectedAlerts"
+                      },
+                      {
+                        "fieldId": "notification",
+                        "dataType": "boolean",
+                        "controlType": "BOOLEAN_FIELD",
+                        "hidden": false,
+                        "required": false,
+                        "editable": true,
+                        "defaultValue": false,
+                        "label": "Send Notification",
+                        "help": "Send Clear Notification"
+                      }
+                    ]
+                  },
+                  "formActionList": {
+                    "formActions": [
+                      {
+                        "identifier": "Submit",
+                        "actionLabel": "Clear",
+                        "type": "SUBMIT"
+                      }
+                    ]
+                  },
+                  "actions": [
+                    {
+                      "type": "UPDATE_PSTREAM",
+                      "pstreamName": "alert_rules_clear_jobs_custom_nats_stream",
+                      "collapse_json": true,
+                      "collapsed_json_column": "payload"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "permission": "rda:user_dashboard:view",
+            "title": "Clear Alert",
+            "type": "POPUP_FORM",
+            "selectionType": "SINGLE",
+            "identifier": "saas-service-action:alertrule-clear",
+            "api-endpoint": {
+              "service-name": "saas-reports",
+              "methodName": "getForm",
+              "stringified-params": true,
+              "parse-output": false,
+              "params": [
+                {
+                  "formId": "rda.saas.alertrule.clear_alert"
+                }
+              ]
+            },
+            "actionCondition": {
+              "actionControl": "SHOW_IF",
+              "conditionalField": [
+                {
+                  "conditionType": "EQUAL",
+                  "conditionValue": "OPEN",
+                  "fieldId": "state"
+                }
+              ]
+            }
+          },
+          {
+            "permission": "rda:user_dashboard:view",
+            "title": "View Open Payload",
+            "type": "POPUP_FORM",
+            "selectionType": "SINGLE",
+            "identifier": "saas-service-action:alertrule-view-payload",
+            "api-endpoint": {
+              "service-name": "saas-reports",
+              "methodName": "getForm",
+              "stringified-params": true,
+              "parse-output": false,
+              "params": [
+                {
+                  "formId": "rda.saas.alertrule.view_payload"
+                }
+              ]
+            }
+          },
+          {
+            "permission": "rda:user_dashboard:view",
+            "title": "View Clear Payload",
+            "type": "POPUP_FORM",
+            "selectionType": "SINGLE",
+            "identifier": "saas-service-action:alertrule-view-clear-payload",
+            "api-endpoint": {
+              "service-name": "saas-reports",
+              "methodName": "getForm",
+              "stringified-params": true,
+              "parse-output": false,
+              "params": [
+                {
+                  "formId": "rda.saas.alertrule.view_clear_payload"
+                }
+              ]
+            },
+            "actionCondition": {
+              "actionControl": "SHOW_IF",
+              "conditionalField": [
+                {
+                  "conditionType": "EQUAL",
+                  "conditionValue": "CLEAR",
+                  "fieldId": "state"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "pstream_dashboards": [
+    {
+      "title": "alerts",
+      "show_filter": true,
+      "widgets": [
+        {
+          "extends": [
+            "self:alerts_tabular_widget",
+            "self:actions_lib.alerts_tabular_widget_actions"
+          ],
+          "extend_vars": {
+            "alerts_tabular_widget_extra_filter": "state in ['OPEN', 'CLEAR']"
+          },
+          "widget_id": "94a3fc99"
+        }
+      ]
+    }
+  ]
+}

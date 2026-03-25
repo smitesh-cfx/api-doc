@@ -1,0 +1,15 @@
+{
+  "name": "rda_staging_area_ingest_metrics",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "_settings": {
+      "number_of_shards": 1
+    },
+    "retention_days": 31
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream monitoring staging area data ingestion performance metrics including file counts, ingestion rates, and staging area status",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-e106747f-rda_staging_area_ingest_metrics"
+}

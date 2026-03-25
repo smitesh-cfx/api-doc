@@ -1,0 +1,25 @@
+{
+  "name": "oia-alerts-delta-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "a_delta_id"
+    ],
+    "drop_columns": [],
+    "default_values": {
+      "a_source_systemname": "Not Available",
+      "a_status": "Not Available",
+      "a_severity": "Not Available",
+      "a_cluster_label": "Not Available",
+      "a_alert_type": "Not Available",
+      "a_rule_name": "Not Available",
+      "a_incident_id": "Not Available",
+      "a_ticket_id": "Not Available"
+    },
+    "retention_days": 7,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-12a7ed16-oia-alerts-delta-stream"
+}

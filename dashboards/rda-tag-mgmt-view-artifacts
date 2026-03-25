@@ -1,0 +1,1073 @@
+{
+  "name": "rda-tag-mgmt-view-artifacts",
+  "label": "Tag Management View Artifacts",
+  "description": "Tag Management View Artifacts",
+  "enabled": true,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [
+      {
+        "id": "mem_size_mb",
+        "label": "Size",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_rows",
+        "label": "Rows",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "num_columns",
+        "label": "Columns",
+        "type": "DOUBLE"
+      },
+      {
+        "id": "enabled",
+        "label": "Enabled",
+        "type": "BOOLEAN"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.tags.tabular",
+          "height": 6,
+          "min_wdith": 12,
+          "widget_id": "f7d8b5be"
+        },
+        {
+          "title": "Dashboards",
+          "widget_type": "tabular",
+          "stream": "rda_dashboards_meta",
+          "duration_hours": 87600,
+          "timebased": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "dashboard_folder",
+            "dashboard_type",
+            "label",
+            "description"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true,
+              "type": "TEXT"
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "dashboard_folder": {
+              "title": "Dashboard Folder",
+              "type": "TEXT"
+            },
+            "type": {
+              "title": "Type",
+              "type": "FIXED_VALUE",
+              "value": "Dashboard",
+              "visible": false,
+              "sortable": false
+            },
+            "dashboard_type": {
+              "title": "Dashboard Type",
+              "type": "TEXT"
+            },
+            "label": {
+              "title": "Label",
+              "key": true,
+              "type": "TEXT"
+            },
+            "description": {
+              "title": "description",
+              "type": "TEXT"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "menu_folder": {
+              "title": "Menu Folder",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "dashboards",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "expr": "'yes' if enabled else 'no'",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "url",
+              "label": "URL",
+              "expr": "'/workspace/dashboard/user-dashboard-' + name",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'yes' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visible": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:user_dashboard:tag_add_dashboards",
+              "title": "Add Dashboards",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.dashboards"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-dashboard-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "82765333"
+        },
+        {
+          "title": "Persistent Streams",
+          "widget_type": "tabular",
+          "stream": "rda_pstreams_meta",
+          "duration_hours": 87600,
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "datastore_type",
+            "index_name",
+            "collection_status",
+            "system_defined",
+            "database"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "datastore_type": {
+              "title": "Datastore"
+            },
+            "index_name": {
+              "title": "Index / Table Name"
+            },
+            "collection_status": {
+              "title": "Collection Status"
+            },
+            "retention_days": {
+              "title": "Retention (Days)",
+              "sortable": false
+            },
+            "system_defined": {
+              "title": "System PStream",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "ts_column": {
+              "title": "Timestamp Column",
+              "visible": false,
+              "key": true
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "pstreams",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pstream_name",
+              "title": "PSTREAM",
+              "expr": "name",
+              "visible": false,
+              "key": true
+            },
+            {
+              "id": "database",
+              "title": "Database",
+              "expr": "'default' if not database else database"
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visiblle": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:pstream:tag_add_pstreams",
+              "title": "Add Pstreams",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.pstreams"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-dashboard-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "aaa264be"
+        },
+        {
+          "title": "Datasets",
+          "widget_type": "tabular",
+          "stream": "rda_datasets_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "folder",
+            "format",
+            "schema"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "folder": {
+              "title": "Folder"
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "format": {
+              "title": "Format"
+            },
+            "mem_size_mb": {
+              "title": "Size (MB)"
+            },
+            "num_rows": {
+              "title": "Rows"
+            },
+            "num_columns": {
+              "title": "Columns"
+            },
+            "saved_time": {
+              "title": "Dataset Saved",
+              "type": "DATETIME"
+            },
+            "schema": {
+              "title": "Schema"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "datasets",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:dataset:tag_add_datasets",
+              "title": "Add Datasets",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.datasets"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "daec62a7"
+        },
+        {
+          "title": "Credentials",
+          "widget_type": "tabular",
+          "stream": "rda_secrets_meta",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "type",
+            "typeDescription",
+            "checksum"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "type": {
+              "title": "Type",
+              "key": true
+            },
+            "typeDescription": {
+              "title": "description"
+            },
+            "has_credential_check": {
+              "title": "Credential Check",
+              "visible": false
+            },
+            "checksum": {
+              "title": "Checksum"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "secrets",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visiblle": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None"
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:credential:tag_add_credential",
+              "title": "Add Credentials",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.credentials"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:credential:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "26a99d24"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "User Groups",
+      "widgets": [
+        {
+          "title": "User Groups",
+          "widget_type": "portal_tabular",
+          "reportId": "rda.saas.user.group.tags.tabular",
+          "height": 6,
+          "min_wdith": 12,
+          "widget_id": "f7d8b5be"
+        },
+        {
+          "title": "Dashboards",
+          "widget_type": "tabular",
+          "stream": "rda_dashboards_meta",
+          "duration_hours": 87600,
+          "timebased": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "dashboard_folder",
+            "dashboard_type",
+            "label",
+            "description"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true,
+              "type": "TEXT"
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "dashboard_folder": {
+              "title": "Dashboard Folder",
+              "type": "TEXT"
+            },
+            "type": {
+              "title": "Type",
+              "type": "FIXED_VALUE",
+              "value": "Dashboard",
+              "visible": false,
+              "sortable": false
+            },
+            "dashboard_type": {
+              "title": "Dashboard Type",
+              "type": "TEXT"
+            },
+            "label": {
+              "title": "Label",
+              "key": true,
+              "type": "TEXT"
+            },
+            "description": {
+              "title": "description",
+              "type": "TEXT"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "menu_folder": {
+              "title": "Menu Folder",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "dashboards",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "enabled",
+              "label": "Enabled",
+              "expr": "'yes' if enabled else 'no'",
+              "htmlTemplateForRow": "<span class='badge' style='background-color: {{ row.enableColor }}' > {{ row.enabled }} </span>"
+            },
+            {
+              "id": "id",
+              "label": "ID",
+              "expr": "'user-dashboard-' + name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "url",
+              "label": "URL",
+              "expr": "'/workspace/dashboard/user-dashboard-' + name",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "enableColor",
+              "label": "Enable Color",
+              "expr": "['#4CAF50'] if enabled == 'yes' else ['#9E9E9E']",
+              "hidden": true,
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visible": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:user_dashboard:tag_add_dashboards",
+              "title": "Add Dashboards",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.dashboards"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-dashboard-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "82765333"
+        },
+        {
+          "title": "Persistent Streams",
+          "widget_type": "tabular",
+          "stream": "rda_pstreams_meta",
+          "duration_hours": 87600,
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "datastore_type",
+            "index_name",
+            "collection_status",
+            "system_defined",
+            "database"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "datastore_type": {
+              "title": "Datastore"
+            },
+            "index_name": {
+              "title": "Index / Table Name"
+            },
+            "collection_status": {
+              "title": "Collection Status"
+            },
+            "retention_days": {
+              "title": "Retention (Days)",
+              "sortable": false
+            },
+            "system_defined": {
+              "title": "System PStream",
+              "visible": false
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "ts_column": {
+              "title": "Timestamp Column",
+              "visible": false,
+              "key": true
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "pstreams",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pstream_name",
+              "title": "PSTREAM",
+              "expr": "name",
+              "visible": false,
+              "key": true
+            },
+            {
+              "id": "database",
+              "title": "Database",
+              "expr": "'default' if not database else database"
+            },
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visiblle": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None",
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:pstream:tag_add_pstreams",
+              "title": "Add Pstreams",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.pstreams"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-dashboard-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "aaa264be"
+        },
+        {
+          "title": "Datasets",
+          "widget_type": "tabular",
+          "stream": "rda_datasets_meta",
+          "timebased": false,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "folder",
+            "format",
+            "schema"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 6,
+          "min_wdith": 12,
+          "columns": {
+            "folder": {
+              "title": "Folder"
+            },
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "tags": {
+              "title": "Tags",
+              "type": "TEXT"
+            },
+            "format": {
+              "title": "Format"
+            },
+            "mem_size_mb": {
+              "title": "Size (MB)"
+            },
+            "num_rows": {
+              "title": "Rows"
+            },
+            "num_columns": {
+              "title": "Columns"
+            },
+            "saved_time": {
+              "title": "Dataset Saved",
+              "type": "DATETIME"
+            },
+            "schema": {
+              "title": "Schema"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "datasets",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:dataset:tag_add_datasets",
+              "title": "Add Datasets",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.datasets"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:dataset:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "daec62a7"
+        },
+        {
+          "title": "Credentials",
+          "widget_type": "tabular",
+          "stream": "rda_secrets_meta",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "type",
+            "typeDescription",
+            "checksum"
+          ],
+          "include_context_in_query": true,
+          "include_context_keys": [
+            "tags"
+          ],
+          "ts_column": "saved_time",
+          "paginated": true,
+          "height": 10,
+          "min_wdith": 12,
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true
+            },
+            "type": {
+              "title": "Type",
+              "key": true
+            },
+            "typeDescription": {
+              "title": "description"
+            },
+            "has_credential_check": {
+              "title": "Credential Check",
+              "visible": false
+            },
+            "checksum": {
+              "title": "Checksum"
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME"
+            },
+            "timestamp": {
+              "title": "When",
+              "type": "HUMANIZE_TIME_DELTA",
+              "source-column": "saved_time",
+              "sortable": false
+            },
+            "artifact_type": {
+              "title": "Artifact Type",
+              "value": "secrets",
+              "key": true,
+              "type": "FIXED_VALUE",
+              "visible": false,
+              "hidded": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "rowStyleClass",
+              "hidden": true,
+              "visiblle": false,
+              "expr": "'bg-fading-blue' if time_now_as_ms() - isoformat_to_ms(saved_time) <= 120000 else None"
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:credential:tag_add_credential",
+              "title": "Add Credentials",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:add-artifact",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.tag.add.credentials"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:credential:remove_tag",
+              "title": "Remove Tag",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:remove-tag",
+              "api-endpoint": {
+                "methodName": "getForm",
+                "params": [
+                  {
+                    "formId": "rda.saas.tags.remove"
+                  }
+                ],
+                "parse-output": false,
+                "service-name": "saas-reports",
+                "stringified-params": true
+              }
+            }
+          ],
+          "widget_id": "26a99d24"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "rda-health-agents",
+  "label": "Agents",
+  "description": "Agents",
+  "enabled": false,
+  "dashboard_type": "dashboard",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "dashboard_filters": {
+    "time_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "Agents",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "RDA Agents",
+          "widget_type": "portal_tabular",
+          "reportId": "registry.agents.tabular",
+          "paginated": true,
+          "height": 6,
+          "min_width": 10,
+          "widget_id": "c2488225"
+        },
+        {
+          "title": "Event Gateway Endpoints",
+          "widget_type": "portal_tabular",
+          "reportId": "eventgw.status.tabular",
+          "height": 6,
+          "min_width": 10,
+          "widget_id": "3a5cb505"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Agents",
+      "show_filter": false,
+      "widgets": [
+        {
+          "title": "RDA Agents",
+          "widget_type": "portal_tabular",
+          "reportId": "registry.agents.tabular",
+          "paginated": true,
+          "height": 6,
+          "min_width": 10,
+          "widget_id": "c2488225"
+        },
+        {
+          "title": "Event Gateway Endpoints",
+          "widget_type": "portal_tabular",
+          "reportId": "eventgw.status.tabular",
+          "height": 6,
+          "min_width": 10,
+          "widget_id": "3a5cb505"
+        }
+      ]
+    }
+  ]
+}

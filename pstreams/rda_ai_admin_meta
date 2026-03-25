@@ -1,0 +1,22 @@
+{
+  "name": "rda_ai_admin_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "name"
+    ],
+    "flatten_json": false,
+    "_mappings": {
+      "properties": {
+        "saved_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing AI administration metadata including AI model configurations, AI project settings, and AI administration policies",
+  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-39f3c80c-rda_ai_admin_meta"
+}
