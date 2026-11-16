@@ -1,0 +1,14 @@
+folder: Default
+name: test
+description: test pipeline
+data_path: draft-pipelines/data/test/2026_11_16_1/data.json
+usecase: ''
+category: ''
+sources:
+  restclient_oia:
+    name: restclient_oia
+    type: restclient
+artifacts: []
+version: '2026_11_16_1'
+file_type: json
+checksum: 163751bc

@@ -1,0 +1,15 @@
+{
+  "name": "network_access_verification_final",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "ip_address",
+      "customer_tag"
+    ],
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-08bb992a-network_access_verification_final"
+}

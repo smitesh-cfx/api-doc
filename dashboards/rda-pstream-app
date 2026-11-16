@@ -23,8 +23,13 @@
   "dashboard_type": "app",
   "dashboard_pages": [
     {
-      "name": "rda-pstream-data-preview-template",
+      "name": "rda-pstream-data-preview-new-template",
       "label": "Data Preview",
+      "icon": "Analytics.svg"
+    },
+    {
+      "name": "rda-pstream-data-preview-template",
+      "label": "Data Preview (Old)",
       "icon": "Analytics.svg"
     },
     {

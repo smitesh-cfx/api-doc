@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream tracking collector ingestion job status with ingest_job_name, stream name, file_name, dataset, row_count, status, index_name, started_at, duration, and replace flag",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3833bd36-rda_system_collector_ingestion_job_status"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-3833bd36-rda_system_collector_ingestion_job_status"
 }

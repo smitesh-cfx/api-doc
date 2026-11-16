@@ -1,0 +1,38 @@
+folder: NetworkDevicePack
+name: fortinet_discovery_main_pipeline
+description: test pipeline
+data_path: pipelines/data/fortinet_discovery_main_pipeline/2025.12.31.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+  asset-discovery:
+    name: asset-discovery
+    type: asset-discovery
+artifacts:
+- artifact_type: rda-network-stream
+  artifact_name: discovery_logs
+  access: write
+- artifact_type: dataset
+  artifact_name: ifTypeLabel_dict
+  access: read
+- artifact_type: rda-network-stream
+  artifact_name: network_devices_cdp
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: network_device_inventory
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: network_device_inventory
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: network_device_interfaces
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: discovery_logs
+  access: write
+version: 2025.12.31.1
+file_type: json
+checksum: b2ac0b89

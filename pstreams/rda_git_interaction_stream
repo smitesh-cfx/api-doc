@@ -1,0 +1,13 @@
+{
+  "name": "rda_git_interaction_stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 7,
+    "unique_keys": [],
+    "system_defined": "yes"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-8c44c16c-rda_git_interaction_stream"
+}

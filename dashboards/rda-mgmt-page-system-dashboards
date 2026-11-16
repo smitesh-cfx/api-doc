@@ -135,7 +135,7 @@
             "dashboard_type"
           ],
           "type": "int",
-          "widget_id": "51074892"
+          "widget_id": "c8ba047c"
         },
         {
           "title": "Dashboards",
@@ -458,7 +458,7 @@
             "dashboard_type"
           ],
           "type": "int",
-          "widget_id": "51074892"
+          "widget_id": "c8ba047c"
         },
         {
           "title": "Dashboards",

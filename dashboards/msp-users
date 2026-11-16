@@ -30,13 +30,21 @@
       "title": "API Users",
       "widgets": [
         {
+          "widget_type": "label",
+          "label": "<div style='width:100%;padding:16px 20px;background:#fff8e6;border:1px solid #e6c200;border-radius:8px;text-align:left;height:100%;overflow:auto;box-sizing:border-box;'><h3 style='margin:0 0 8px 0;color:#856404;font-size:1.1em;font-weight:600;'>&#9888; Deprecation notice</h3><p style='margin:0 0 12px 0;color:#555;font-size:14px;line-height:1.6;'>The <strong>API Users</strong> feature shown below is being deprecated. Please migrate to <strong>API Access Keys</strong> &mdash; user-generated access keys with configurable validity and scoped permissions.</p><p style='margin:0 0 10px 0;color:#333;font-size:14px;font-weight:600;'>How to create and manage API Users:</p><p style='margin:0 0 8px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>1. Go to the <strong>Users</strong> page and create a new user with the user group of this particular API user.</p><p style='margin:0 0 8px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>2. Select the <strong>Manage API Access Keys</strong> row-level action for this newly created user &mdash; this opens the <strong>API Access Keys</strong> page.</p><p style='margin:0 0 12px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>3. Use <strong>Generate API Access Key</strong> to create a new access key.</p><blockquote style='margin:8px 0 0 0;padding:4px 10px;border-left:4px solid #a88a00;background:rgba(133,100,4,0.08);border-radius:0 4px 4px 0;color:#5a4a2a;font-size:13px;line-height:1.4;'>For more information on API Access Keys &mdash; including generation, permissions, validity, and admin workflows &mdash; refer to the <strong>official product documentation</strong>.</blockquote></div>",
+          "visibility_on_error": false,
+          "min_width": 12,
+          "height": 5,
+          "widget_id": "a7b3c9d2"
+        },
+        {
           "title": "API Users",
           "widget_type": "portal_tabular",
           "reportId": "tenant.api.users.list.tabular",
           "height": 10,
           "min_width": 12,
           "paginated": true,
-          "widget_id": "e6477e74"
+          "widget_id": "fc60e1e7"
         }
       ]
     },
@@ -188,13 +196,21 @@
       "title": "API Users",
       "widgets": [
         {
+          "widget_type": "label",
+          "label": "<div style='width:100%;padding:16px 20px;background:#fff8e6;border:1px solid #e6c200;border-radius:8px;text-align:left;height:100%;overflow:auto;box-sizing:border-box;'><h3 style='margin:0 0 8px 0;color:#856404;font-size:1.1em;font-weight:600;'>&#9888; Deprecation notice</h3><p style='margin:0 0 12px 0;color:#555;font-size:14px;line-height:1.6;'>The <strong>API Users</strong> feature shown below is being deprecated. Please migrate to <strong>API Access Keys</strong> &mdash; user-generated access keys with configurable validity and scoped permissions.</p><p style='margin:0 0 10px 0;color:#333;font-size:14px;font-weight:600;'>How to create and manage API Users:</p><p style='margin:0 0 8px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>1. Go to the <strong>Users</strong> page and create a new user with the user group of this particular API user.</p><p style='margin:0 0 8px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>2. Select the <strong>Manage API Access Keys</strong> row-level action for this newly created user &mdash; this opens the <strong>API Access Keys</strong> page.</p><p style='margin:0 0 12px 0;padding-left:16px;color:#555;font-size:14px;line-height:1.7;'>3. Use <strong>Generate API Access Key</strong> to create a new access key.</p><blockquote style='margin:8px 0 0 0;padding:4px 10px;border-left:4px solid #a88a00;background:rgba(133,100,4,0.08);border-radius:0 4px 4px 0;color:#5a4a2a;font-size:13px;line-height:1.4;'>For more information on API Access Keys &mdash; including generation, permissions, validity, and admin workflows &mdash; refer to the <strong>official product documentation</strong>.</blockquote></div>",
+          "visibility_on_error": false,
+          "min_width": 12,
+          "height": 5,
+          "widget_id": "a7b3c9d2"
+        },
+        {
           "title": "API Users",
           "widget_type": "portal_tabular",
           "reportId": "tenant.api.users.list.tabular",
           "height": 10,
           "min_width": 12,
           "paginated": true,
-          "widget_id": "e6477e74"
+          "widget_id": "fc60e1e7"
         }
       ]
     },

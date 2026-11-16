@@ -4,7 +4,7 @@
   "description": "Alert rules based Open and Clear Alerts",
   "version": "25.12.5.1",
   "enabled": true,
-  "live_edit": true,
+  "live_edit": false,
   "dashboard_type": "template",
   "dashboard_folder": "System",
   "status_poller": {

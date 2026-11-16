@@ -22,5 +22,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing RDA pack metadata including pack id, version, description, activated_customers count, pack configuration, and pack deployment information",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-994f00a8-rda_packs_meta"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-994f00a8-rda_packs_meta"
 }

@@ -1,0 +1,546 @@
+{
+  "name": "rda-packs-view-customer-deployed-artifacts",
+  "label": "RDA Packs activation status for a customer",
+  "context_label_id": "activation_status_page_label",
+  "description": "customer-rda-packs-artifacts: Insights",
+  "dashboard_folder": "System",
+  "enabled": false,
+  "dashboard_style": "auto",
+  "dashboard_type": "template",
+  "dashboard_filters": {
+    "time_filter": false,
+    "default_time_filter_labels": [
+      "Last 12 months"
+    ],
+    "columns_filter": [],
+    "group_filters": []
+  },
+  "template_variables": {
+    "ACTIVATION_ID": {
+      "contextId": "activation_id"
+    },
+    "PACK_NAME": {
+      "contextId": "pack_name"
+    },
+    "PACK_VERSION": {
+      "contextId": "pack_version"
+    },
+    "CUST_TAG": {
+      "contextId": [
+        "customerTag"
+      ]
+    },
+    "CUSTOMER_ID": {
+      "contextId": [
+        "customerId"
+      ]
+    },
+    "STATUS_COLUMN_NAME": {
+      "contextId": [
+        "status_column_name"
+      ]
+    },
+    "PAGE_LABEL_ID": {
+      "contextId": [
+        "activation_status_page_label"
+      ]
+    },
+    "DEPLOYMENT_TYPE": {
+      "contextId": [
+        "deployment_type"
+      ]
+    }
+  },
+  "computedContext": {
+    "deploy_type": {
+      "expr": "'single_tenant' if view_single_tenant is 'true' else 'common'",
+      "defaultValue": "common"
+    },
+    "status_column_name": {
+      "expr": "'single_tenant_status' if view_single_tenant is 'true'  else 'status'",
+      "defaultValue": "status"
+    }
+  },
+  "dashboard_sections": [
+    {
+      "title": "Activated Versions",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{CUST_TAG}}: {{ PACK_NAME }} Deployment Status </h1></div>",
+          "label0": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "30c6dfca"
+        },
+        {
+          "title": "Activated Versions",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "customer-rda-packs",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and {{STATUS_COLUMN_NAME}} is not 'NOT ACTIVATED'",
+          "extra_filter": "name is '{{PACK_NAME}}' and customer is '{{CUST_TAG}}'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "sorting": [
+            {
+              "activation_time": "desc"
+            }
+          ],
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#4CAF50"
+              }
+            },
+            "status": {
+              "title": "Deployment Status",
+              "hidden": false,
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer Tag",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "customer + ':' + name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "17d09276"
+        }
+      ]
+    },
+    {
+      "title": "Artifacts Deployment Status",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{CUST_TAG}}: {{ PACK_NAME }} Artifacts Deployment Details </h1></div>",
+          "label1": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "3e6e95a9"
+        },
+        {
+          "title": "Artifacts Deployment Status",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "customer-rda-packs-artifacts",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and  deploy_type is '{{DEPLOYMENT_TYPE}}' and status in ['success','created','skipped','error']",
+          "extra_filter2": "name is '{{PACK_NAME}}' and ( deploy_type in ['common','single_tenant'] or deploy_type is empty) and status in ['success','created','skipped','error']",
+          "extra_filter": "name is '{{PACK_NAME}}' and ( (deploy_type is 'common' and customer is empty) or (deploy_type is 'customer' and customer is '{{CUST_TAG}}') or (deploy_type is empty and customer is '{{CUST_TAG}}')) and  status in ['success','created','updated', 'skipped','error']",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "deploy_type": {
+              "title": "Deployment Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_name": {
+              "title": "Artifact Name",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_type": {
+              "title": "Artifact Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_version": {
+              "title": "Artifact Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "success": "#4CAF50",
+                "created": "#4CAF50",
+                "updated": "#4CAF50",
+                "skipped": "#4CAF50",
+                "error": "#FF0000"
+              }
+            },
+            "status": {
+              "title": "Status",
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME",
+              "hidden": false
+            }
+          },
+          "widget_id": "4a15dd4f"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Activated Versions",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{CUST_TAG}}: {{ PACK_NAME }} Deployment Status </h1></div>",
+          "label0": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "30c6dfca"
+        },
+        {
+          "title": "Activated Versions",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "customer-rda-packs",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and {{STATUS_COLUMN_NAME}} is not 'NOT ACTIVATED'",
+          "extra_filter": "name is '{{PACK_NAME}}' and customer is '{{CUST_TAG}}'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "sorting": [
+            {
+              "activation_time": "desc"
+            }
+          ],
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#4CAF50"
+              }
+            },
+            "status": {
+              "title": "Deployment Status",
+              "hidden": false,
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer Tag",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "customer + ':' + name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "17d09276"
+        }
+      ]
+    },
+    {
+      "title": "Artifacts Deployment Status",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{CUST_TAG}}: {{ PACK_NAME }} Artifacts Deployment Details </h1></div>",
+          "label1": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "3e6e95a9"
+        },
+        {
+          "title": "Artifacts Deployment Status",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "customer-rda-packs-artifacts",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and  deploy_type is '{{DEPLOYMENT_TYPE}}' and status in ['success','created','skipped','error']",
+          "extra_filter2": "name is '{{PACK_NAME}}' and ( deploy_type in ['common','single_tenant'] or deploy_type is empty) and status in ['success','created','skipped','error']",
+          "extra_filter": "name is '{{PACK_NAME}}' and ( (deploy_type is 'common' and customer is empty) or (deploy_type is 'customer' and customer is '{{CUST_TAG}}') or (deploy_type is empty and customer is '{{CUST_TAG}}')) and  status in ['success','created','updated', 'skipped','error']",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "deploy_type": {
+              "title": "Deployment Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "customer": {
+              "title": "Customer",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_name": {
+              "title": "Artifact Name",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_type": {
+              "title": "Artifact Type",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "art_version": {
+              "title": "Artifact Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "success": "#4CAF50",
+                "created": "#4CAF50",
+                "updated": "#4CAF50",
+                "skipped": "#4CAF50",
+                "error": "#FF0000"
+              }
+            },
+            "status": {
+              "title": "Status",
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "timestamp": {
+              "title": "Timestamp",
+              "type": "DATETIME",
+              "hidden": false
+            }
+          },
+          "widget_id": "4a15dd4f"
+        }
+      ]
+    }
+  ]
+}

@@ -29,5 +29,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream containing current persistent stream usage metrics including name, datastore_type, docs_count, size_in_mb, shards status, read_only flag, and index_name for real-time monitoring",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3a5649aa-rda_system_pstream_current_usage_stats"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-3a5649aa-rda_system_pstream_current_usage_stats"
 }

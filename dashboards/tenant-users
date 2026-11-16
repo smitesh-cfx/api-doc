@@ -21,7 +21,7 @@
           "reportId": "tenant.users.list.tabular",
           "height": 10,
           "min_wdith": 12,
-          "widget_id": "87f6842d"
+          "widget_id": "4152cfb1"
         }
       ]
     },
@@ -34,7 +34,7 @@
           "reportId": "rda.saas.user.group.list.tabular",
           "height": 10,
           "min_wdith": 12,
-          "widget_id": "a351bf0e"
+          "widget_id": "31e3451d"
         }
       ]
     }
@@ -49,7 +49,7 @@
           "reportId": "tenant.users.list.tabular",
           "height": 10,
           "min_wdith": 12,
-          "widget_id": "87f6842d"
+          "widget_id": "4152cfb1"
         }
       ]
     },
@@ -62,7 +62,7 @@
           "reportId": "rda.saas.user.group.list.tabular",
           "height": 10,
           "min_wdith": 12,
-          "widget_id": "a351bf0e"
+          "widget_id": "31e3451d"
         }
       ]
     }

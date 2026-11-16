@@ -1,0 +1,11 @@
+folder: NetworkDevicePack
+name: ondemand_discovery_main
+description: test pipeline
+data_path: pipelines/data/ondemand_discovery_main/2025.12.31.1/data.json
+usecase: ''
+category: ''
+sources: {}
+artifacts: {}
+version: 2025.12.31.1
+file_type: json
+checksum: dfe563df

@@ -7,7 +7,7 @@
   "enabled": false,
   "stream": "rda_collector_query_failures",
   "dashboard_type": "template",
-  "live_edit": true,
+  "live_edit": false,
   "template_variables": {
     "NOW": {
       "contextId": [
@@ -89,7 +89,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "12d5e93d"
+          "widget_id": "83066f8e"
         },
         {
           "title": "1 Day Ago",
@@ -106,7 +106,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "bd720a56"
+          "widget_id": "c703cfcc"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -123,7 +123,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fc5f9269"
+          "widget_id": "6371cdd8"
         },
         {
           "title": "Top Streams",
@@ -191,7 +191,7 @@
               }
             ]
           },
-          "widget_id": "96eb5185"
+          "widget_id": "2e4659e6"
         },
         {
           "title": "Top Streams",
@@ -225,7 +225,7 @@
               }
             ]
           },
-          "widget_id": "937ef405"
+          "widget_id": "4560e6d7"
         },
         {
           "title": "Top Streams",
@@ -259,7 +259,7 @@
               }
             ]
           },
-          "widget_id": "2a7e44ae"
+          "widget_id": "9815f2f7"
         },
         {
           "widget_type": "label",
@@ -267,7 +267,7 @@
           "min_width": 12,
           "max_width": 12,
           "height": 1,
-          "widget_id": "89a1d5a7"
+          "widget_id": "a73036dd"
         },
         {
           "title": "3 Days Ago",
@@ -284,7 +284,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "76649303"
+          "widget_id": "4a5af9ec"
         },
         {
           "title": "2 Days Ago",
@@ -301,7 +301,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "98b6bc28"
+          "widget_id": "cc013a8b"
         },
         {
           "title": "1 Day Ago",
@@ -318,7 +318,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "a6a8c263"
+          "widget_id": "1fcda6c1"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -335,7 +335,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "91819fcc"
+          "widget_id": "1169b1c8"
         },
         {
           "title": "Top Streams",
@@ -369,7 +369,7 @@
               }
             ]
           },
-          "widget_id": "0901da02"
+          "widget_id": "52ba555c"
         },
         {
           "title": "Top Streams",
@@ -403,7 +403,7 @@
               }
             ]
           },
-          "widget_id": "fe8d8653"
+          "widget_id": "09c21cff"
         },
         {
           "title": "Top Streams",
@@ -437,7 +437,7 @@
               }
             ]
           },
-          "widget_id": "9f394cb8"
+          "widget_id": "b86a4a6f"
         },
         {
           "title": "Top Streams",
@@ -471,7 +471,7 @@
               }
             ]
           },
-          "widget_id": "326602e9"
+          "widget_id": "db6a7973"
         }
       ]
     }
@@ -521,7 +521,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "12d5e93d"
+          "widget_id": "83066f8e"
         },
         {
           "title": "1 Day Ago",
@@ -538,7 +538,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "bd720a56"
+          "widget_id": "c703cfcc"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -555,7 +555,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fc5f9269"
+          "widget_id": "6371cdd8"
         },
         {
           "title": "Top Streams",
@@ -623,7 +623,7 @@
               }
             ]
           },
-          "widget_id": "96eb5185"
+          "widget_id": "2e4659e6"
         },
         {
           "title": "Top Streams",
@@ -657,7 +657,7 @@
               }
             ]
           },
-          "widget_id": "937ef405"
+          "widget_id": "4560e6d7"
         },
         {
           "title": "Top Streams",
@@ -691,7 +691,7 @@
               }
             ]
           },
-          "widget_id": "2a7e44ae"
+          "widget_id": "9815f2f7"
         },
         {
           "widget_type": "label",
@@ -699,7 +699,7 @@
           "min_width": 12,
           "max_width": 12,
           "height": 1,
-          "widget_id": "89a1d5a7"
+          "widget_id": "a73036dd"
         },
         {
           "title": "3 Days Ago",
@@ -716,7 +716,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "76649303"
+          "widget_id": "4a5af9ec"
         },
         {
           "title": "2 Days Ago",
@@ -733,7 +733,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "98b6bc28"
+          "widget_id": "cc013a8b"
         },
         {
           "title": "1 Day Ago",
@@ -750,7 +750,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "a6a8c263"
+          "widget_id": "1fcda6c1"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -767,7 +767,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "91819fcc"
+          "widget_id": "1169b1c8"
         },
         {
           "title": "Top Streams",
@@ -801,7 +801,7 @@
               }
             ]
           },
-          "widget_id": "0901da02"
+          "widget_id": "52ba555c"
         },
         {
           "title": "Top Streams",
@@ -835,7 +835,7 @@
               }
             ]
           },
-          "widget_id": "fe8d8653"
+          "widget_id": "09c21cff"
         },
         {
           "title": "Top Streams",
@@ -869,7 +869,7 @@
               }
             ]
           },
-          "widget_id": "9f394cb8"
+          "widget_id": "b86a4a6f"
         },
         {
           "title": "Top Streams",
@@ -903,7 +903,7 @@
               }
             ]
           },
-          "widget_id": "326602e9"
+          "widget_id": "db6a7973"
         }
       ]
     }

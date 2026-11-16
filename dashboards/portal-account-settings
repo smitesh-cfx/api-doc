@@ -21,12 +21,13 @@
     {
       "name": "portal-account-change-password-page",
       "label": "Change Password",
-      "icon": "credentials.svg"
+      "icon": "credentials.svg",
+      "context_filter": "ENV_APP_TYPE != 'saas'"
     },
     {
       "name": "portal-account-api-access-page",
-      "label": "API Access Key",
-      "icon": "rda.svg"
+      "label": "Access Keys",
+      "icon": "key.svg"
     },
     {
       "name": "portal-account-notifications-page",

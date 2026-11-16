@@ -7,7 +7,7 @@
   "enabled": false,
   "stream": "rda_system_audit_logs",
   "dashboard_type": "template",
-  "live_edit": true,
+  "live_edit": false,
   "template_variables": {
     "NOW": {
       "contextId": [
@@ -89,7 +89,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "b7d6799e"
+          "widget_id": "02deac00"
         },
         {
           "title": "1 Day Ago",
@@ -106,7 +106,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "16977fb1"
+          "widget_id": "16dc96fe"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -123,7 +123,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "67980803"
+          "widget_id": "0195ac10"
         },
         {
           "title": "Top Users",
@@ -191,7 +191,7 @@
               }
             ]
           },
-          "widget_id": "38eed328"
+          "widget_id": "84747656"
         },
         {
           "title": "Top Users",
@@ -225,7 +225,7 @@
               }
             ]
           },
-          "widget_id": "1296858c"
+          "widget_id": "062dc22c"
         },
         {
           "title": "Top Users",
@@ -259,7 +259,7 @@
               }
             ]
           },
-          "widget_id": "c6cc3720"
+          "widget_id": "3a300a4d"
         },
         {
           "widget_type": "label",
@@ -267,7 +267,7 @@
           "min_width": 12,
           "max_width": 12,
           "height": 1,
-          "widget_id": "c6a601f0"
+          "widget_id": "8b0bd2aa"
         },
         {
           "title": "3 Days Ago",
@@ -284,7 +284,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "2cc3e981"
+          "widget_id": "0ea4cf82"
         },
         {
           "title": "2 Days Ago",
@@ -301,7 +301,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fa3ca118"
+          "widget_id": "3627efd0"
         },
         {
           "title": "1 Day Ago",
@@ -318,7 +318,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "4128985e"
+          "widget_id": "045310af"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -335,7 +335,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "67f20b92"
+          "widget_id": "bd06f2fd"
         },
         {
           "title": "Top Users",
@@ -369,7 +369,7 @@
               }
             ]
           },
-          "widget_id": "5e0b24ce"
+          "widget_id": "64fcfddf"
         },
         {
           "title": "Top Users",
@@ -403,7 +403,7 @@
               }
             ]
           },
-          "widget_id": "5e32e262"
+          "widget_id": "f56ebb14"
         },
         {
           "title": "Top Users",
@@ -437,7 +437,7 @@
               }
             ]
           },
-          "widget_id": "c549816a"
+          "widget_id": "0a2e3942"
         },
         {
           "title": "Top Users",
@@ -471,7 +471,7 @@
               }
             ]
           },
-          "widget_id": "518d606a"
+          "widget_id": "25864ee0"
         }
       ]
     }
@@ -521,7 +521,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "b7d6799e"
+          "widget_id": "02deac00"
         },
         {
           "title": "1 Day Ago",
@@ -538,7 +538,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "16977fb1"
+          "widget_id": "16dc96fe"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -555,7 +555,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "67980803"
+          "widget_id": "0195ac10"
         },
         {
           "title": "Top Users",
@@ -623,7 +623,7 @@
               }
             ]
           },
-          "widget_id": "38eed328"
+          "widget_id": "84747656"
         },
         {
           "title": "Top Users",
@@ -657,7 +657,7 @@
               }
             ]
           },
-          "widget_id": "1296858c"
+          "widget_id": "062dc22c"
         },
         {
           "title": "Top Users",
@@ -691,7 +691,7 @@
               }
             ]
           },
-          "widget_id": "c6cc3720"
+          "widget_id": "3a300a4d"
         },
         {
           "widget_type": "label",
@@ -699,7 +699,7 @@
           "min_width": 12,
           "max_width": 12,
           "height": 1,
-          "widget_id": "c6a601f0"
+          "widget_id": "8b0bd2aa"
         },
         {
           "title": "3 Days Ago",
@@ -716,7 +716,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "2cc3e981"
+          "widget_id": "0ea4cf82"
         },
         {
           "title": "2 Days Ago",
@@ -733,7 +733,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fa3ca118"
+          "widget_id": "3627efd0"
         },
         {
           "title": "1 Day Ago",
@@ -750,7 +750,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "4128985e"
+          "widget_id": "045310af"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -767,7 +767,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "67f20b92"
+          "widget_id": "bd06f2fd"
         },
         {
           "title": "Top Users",
@@ -801,7 +801,7 @@
               }
             ]
           },
-          "widget_id": "5e0b24ce"
+          "widget_id": "64fcfddf"
         },
         {
           "title": "Top Users",
@@ -835,7 +835,7 @@
               }
             ]
           },
-          "widget_id": "5e32e262"
+          "widget_id": "f56ebb14"
         },
         {
           "title": "Top Users",
@@ -869,7 +869,7 @@
               }
             ]
           },
-          "widget_id": "c549816a"
+          "widget_id": "0a2e3942"
         },
         {
           "title": "Top Users",
@@ -903,7 +903,7 @@
               }
             ]
           },
-          "widget_id": "518d606a"
+          "widget_id": "25864ee0"
         }
       ]
     }

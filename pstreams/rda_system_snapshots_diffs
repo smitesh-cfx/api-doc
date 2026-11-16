@@ -8,5 +8,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream tracking snapshot differences and changes between snapshot versions including added, modified, and deleted artifacts",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-d622d545-rda_system_snapshots_diffs"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-d622d545-rda_system_snapshots_diffs"
 }

@@ -1,0 +1,16 @@
+{
+  "name": "oia-tools-descriptor",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "type",
+      "tool_id"
+    ],
+    "drop_columns": [],
+    "default_values": {},
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-b41ee019-oia-tools-descriptor"
+}

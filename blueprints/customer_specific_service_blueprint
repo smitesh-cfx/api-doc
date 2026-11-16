@@ -1,0 +1,19 @@
+name: Testing customer context in worker with service pipeline
+id: customer specific service blueprint
+version: '1'
+category: TEST_CTX_WORKER
+comment: customer specific service pipeline
+enabled: true
+type: Service
+provider: FabrixAI, Inc.
+run_context:
+  customer_tag: cust2
+service_pipelines:
+- cron_expression: '*/2 * * * *'
+  label: testing customer context in worker
+  name: test_customer_ctx_restclient
+  site: rda.*
+  site_type: regex
+  version: '*'
+action_pipelines: []
+scheduled_pipelines: []

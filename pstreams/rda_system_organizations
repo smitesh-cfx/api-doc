@@ -8,6 +8,6 @@
   },
   "status": "Read Only",
   "description": "System-defined SQL-based persistent stream containing organization and tenant management data from PostgreSQL database including customer records, organization metadata, and tenant information",
-  "database_name": "1aef62f5872d416a8dd237483bfa58c9_cfxdimensions_app_resource_man",
+  "database_name": "f54ffeb44dac435ba28e3dd3080446a5_cfxdimensions_app_resource_man",
   "table_name": "customer"
 }

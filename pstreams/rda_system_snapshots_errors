@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream logging snapshot operation errors including snapshot_name, error messages, operation type, and failure timestamps",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-ac7190b9-rda_system_snapshots_errors"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-ac7190b9-rda_system_snapshots_errors"
 }

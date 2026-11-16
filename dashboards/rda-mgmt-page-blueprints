@@ -348,7 +348,7 @@
               "type": "GO_TO_APP_STATE"
             }
           ],
-          "widget_id": "b283bfab"
+          "widget_id": "5bef5f28"
         },
         {
           "title": "Deployed Blueprints",
@@ -667,7 +667,7 @@
               "type": "GO_TO_APP_STATE"
             }
           ],
-          "widget_id": "b283bfab"
+          "widget_id": "5bef5f28"
         },
         {
           "title": "Deployed Blueprints",

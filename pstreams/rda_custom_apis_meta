@@ -1,0 +1,23 @@
+{
+  "name": "rda_custom_apis_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "name"
+    ],
+    "retention_days": 365,
+    "flatten_json": false,
+    "_mappings": {
+      "properties": {
+        "saved_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing customer custom API definitions including name, relative path, HTTP method, template type, template body, OpenAPI request schema, and enablement status",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-2262958c-rda_custom_apis_meta"
+}

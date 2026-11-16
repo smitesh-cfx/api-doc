@@ -1,0 +1,463 @@
+{
+  "name": "custom-api-dashboard",
+  "label": "Custom API Dashboard",
+  "is_template": false,
+  "description": "Manage custom APIs",
+  "live_edit": false,
+  "version": "1.0.0",
+  "enabled": true,
+  "dashboard_type": "template",
+  "dashboard_folder": "System",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": [
+      {
+        "id": "name",
+        "label": "Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "http_method",
+        "label": "HTTP Method",
+        "type": "TEXT"
+      },
+      {
+        "id": "relative_path",
+        "label": "Relative Path",
+        "type": "TEXT"
+      },
+      {
+        "id": "bot_name",
+        "label": "Dynamic Bot Name",
+        "type": "TEXT"
+      },
+      {
+        "id": "template_type",
+        "label": "Template Type",
+        "type": "TEXT"
+      },
+      {
+        "id": "enabled",
+        "label": "Enabled",
+        "type": "TEXT"
+      },
+      {
+        "id": "description",
+        "label": "Description",
+        "type": "TEXT"
+      }
+    ]
+  },
+  "dashboard_sections": [
+    {
+      "title": "Custom APIs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Custom APIs",
+          "widget_type": "tabular",
+          "stream": "rda_custom_apis_meta",
+          "duration_hours": 87600,
+          "ts_column": "saved_time",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "relative_path",
+            "http_method",
+            "bot_name",
+            "description",
+            "template_type"
+          ],
+          "max_rows": 50,
+          "sorting": [
+            {
+              "saved_time": "desc"
+            }
+          ],
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 150
+            },
+            "http_method": {
+              "title": "HTTP Method",
+              "visible": true,
+              "defaultWidth": 110
+            },
+            "relative_path": {
+              "title": "Relative Path",
+              "visible": true,
+              "defaultWidth": 250
+            },
+            "bot_name": {
+              "title": "Dynamic Bot",
+              "visible": true,
+              "defaultWidth": 180
+            },
+            "bot_version": {
+              "title": "Bot Version",
+              "visible": true,
+              "defaultWidth": 130
+            },
+            "enabled": {
+              "title": "Enabled",
+              "visible": true,
+              "defaultWidth": 90
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "defaultWidth": 220
+            },
+            "template_type": {
+              "title": "Template Type",
+              "visible": true,
+              "defaultWidth": 120
+            },
+            "user_id": {
+              "title": "Updated By",
+              "visible": true,
+              "defaultWidth": 180
+            },
+            "request_schema": {
+              "title": "Request Schema",
+              "visible": false,
+              "defaultWidth": 260
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "visible": true,
+              "defaultWidth": 180
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:custom-api-add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.add",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-view",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.view",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-pencil",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-edit",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.edit",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:delete",
+              "title": "Delete",
+              "icon": "mdi mdi-delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-delete",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.delete",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "526ea347"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "Custom APIs",
+      "show_filter": true,
+      "widgets": [
+        {
+          "title": "Custom APIs",
+          "widget_type": "tabular",
+          "stream": "rda_custom_apis_meta",
+          "duration_hours": 87600,
+          "ts_column": "saved_time",
+          "min_width": 12,
+          "height": 12,
+          "max_width": 12,
+          "paginated": true,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "name",
+            "relative_path",
+            "http_method",
+            "bot_name",
+            "description",
+            "template_type"
+          ],
+          "max_rows": 50,
+          "sorting": [
+            {
+              "saved_time": "desc"
+            }
+          ],
+          "columns": {
+            "name": {
+              "title": "Name",
+              "key": true,
+              "visible": true,
+              "defaultWidth": 150
+            },
+            "http_method": {
+              "title": "HTTP Method",
+              "visible": true,
+              "defaultWidth": 110
+            },
+            "relative_path": {
+              "title": "Relative Path",
+              "visible": true,
+              "defaultWidth": 250
+            },
+            "bot_name": {
+              "title": "Dynamic Bot",
+              "visible": true,
+              "defaultWidth": 180
+            },
+            "bot_version": {
+              "title": "Bot Version",
+              "visible": true,
+              "defaultWidth": 130
+            },
+            "enabled": {
+              "title": "Enabled",
+              "visible": true,
+              "defaultWidth": 90
+            },
+            "description": {
+              "title": "Description",
+              "visible": true,
+              "defaultWidth": 220
+            },
+            "template_type": {
+              "title": "Template Type",
+              "visible": true,
+              "defaultWidth": 120
+            },
+            "user_id": {
+              "title": "Updated By",
+              "visible": true,
+              "defaultWidth": 180
+            },
+            "request_schema": {
+              "title": "Request Schema",
+              "visible": false,
+              "defaultWidth": 260
+            },
+            "saved_time": {
+              "title": "Saved Time",
+              "type": "DATETIME",
+              "visible": true,
+              "defaultWidth": 180
+            }
+          },
+          "actions": [
+            {
+              "permission": "rda:pstream:add",
+              "title": "Add",
+              "icon": "mdi mdi-plus",
+              "type": "POPUP_FORM",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:custom-api-add",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.add",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:view",
+              "title": "View",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-view",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.view",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:edit",
+              "title": "Edit",
+              "icon": "mdi mdi-pencil",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-edit",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.edit",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:pstream:delete",
+              "title": "Delete",
+              "icon": "mdi mdi-delete",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:custom-api-delete",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "name"
+                  }
+                ]
+              },
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "useReportContext": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.custom.api.delete",
+                    "is_pstream_dashboard": true,
+                    "context": {}
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "526ea347"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "dashboard_filters": {
+    "columns_filter": [],
+    "group_filters": [],
+    "time_filter": true
+  },
+  "dashboard_pages": [],
+  "dashboard_sections": [],
+  "dashboard_style": "tabbed",
+  "dashboard_type": "app",
+  "description": "RDAF Platform service's log analysis dashboard",
+  "enabled": true,
+  "label": "RDAF Platform Logs",
+  "name": "example_dashboard",
+  "status_poller": {},
+  "version": "24.4.10.1",
+  "created_by": null,
+  "last_updated_by": null,
+  "dashboard_folder": "Default"
+}

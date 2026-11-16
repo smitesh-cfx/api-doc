@@ -3,7 +3,7 @@ id: alerts-enricher
 version: '2023_04_19'
 category: Alert Enrichment
 comment: Enriches alerts ingested into the system
-enabled: false
+enabled: true
 type: Service
 provider: alert-ingester
 service_pipelines:
@@ -16,3 +16,4 @@ service_pipelines:
   scaling_policy:
     min_instances: 1
     max_instances: 1
+dashboard_type: dashboard

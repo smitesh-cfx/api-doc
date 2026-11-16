@@ -1,0 +1,21 @@
+{
+  "name": "oia-external-tickets-payload",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "_mappings": {
+      "properties": {
+        "attempt_count": {
+          "type": "int"
+        },
+        "elapse_time_millis": {
+          "type": "double"
+        }
+      }
+    },
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-c9b3ee8d-oia-external-tickets-payload"
+}

@@ -372,6 +372,7 @@
               },
               "actionCondition": {
                 "actionControl": "SHOW_IF",
+                "operator": "AND",
                 "conditionalField": [
                   {
                     "conditionType": "EQUAL",
@@ -382,6 +383,16 @@
                     "conditionType": "EQUAL",
                     "conditionValue": "system",
                     "fieldId": "scope"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "DEACTIVATING",
+                    "fieldId": "single_tenant_status"
                   }
                 ]
               }
@@ -487,7 +498,7 @@
               }
             }
           ],
-          "widget_id": "e1dfd834"
+          "widget_id": "353e9340"
         }
       ]
     }
@@ -732,6 +743,7 @@
               },
               "actionCondition": {
                 "actionControl": "SHOW_IF",
+                "operator": "AND",
                 "conditionalField": [
                   {
                     "conditionType": "EQUAL",
@@ -742,6 +754,16 @@
                     "conditionType": "EQUAL",
                     "conditionValue": "system",
                     "fieldId": "scope"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "DEACTIVATING",
+                    "fieldId": "single_tenant_status"
                   }
                 ]
               }
@@ -847,7 +869,7 @@
               }
             }
           ],
-          "widget_id": "e1dfd834"
+          "widget_id": "353e9340"
         }
       ]
     }

@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream recording service blueprint deployment events including deployment_id, deployment_name, deployment_type, job status, severity (INFO/ERROR), and activity messages",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-c74c5382-rda_system_deployment_updates"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-c74c5382-rda_system_deployment_updates"
 }

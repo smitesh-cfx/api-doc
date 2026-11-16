@@ -14,5 +14,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing alert state management data including alert type, name, md5 hash, state transitions, clear_timestamp, and state history for alert lifecycle tracking",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-d94033a4-rda_alert_state_management_data"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-d94033a4-rda_alert_state_management_data"
 }

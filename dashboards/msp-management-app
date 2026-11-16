@@ -29,6 +29,12 @@
     }
   ],
   "dashboard_type": "app",
+  "dashboard_groups": {
+    "Licenses": {
+      "icon": "license.svg",
+      "label": "Licenses"
+    }
+  },
   "dashboard_pages": [
     {
       "name": "msp-users",
@@ -54,7 +60,14 @@
     {
       "name": "license",
       "label": "License",
-      "icon": "license.svg"
+      "icon": "license.svg",
+      "group": "Licenses"
+    },
+    {
+      "name": "partner_licenses",
+      "label": "Partner Licenses",
+      "icon": "license.svg",
+      "group": "Licenses"
     },
     {
       "name": "white-labeling",

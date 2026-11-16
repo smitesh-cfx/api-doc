@@ -4,7 +4,7 @@
   "description": "Robotic Data Automation Administration",
   "version": "1.0.0",
   "enabled": true,
-  "live_edit": true,
+  "live_edit": false,
   "dashboard_filters": {
     "time_filter": false,
     "columns_filter": []

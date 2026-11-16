@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream capturing dashboard debug console logs including widget queries, query results, error messages, os_queries, and diagnostic information for troubleshooting dashboard issues",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-78e3435c-rda_dashboards_debug_console"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-78e3435c-rda_dashboards_debug_console"
 }

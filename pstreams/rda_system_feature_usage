@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream tracking UI and Studio feature usage metrics with user_id, feature_type, feature name, category (ui/studio), and count for analytics",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-d3b5dd5a-rda_system_feature_usage"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-d3b5dd5a-rda_system_feature_usage"
 }

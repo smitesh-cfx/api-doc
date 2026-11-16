@@ -234,7 +234,7 @@
               }
             },
             {
-              "permission": "rda:deploymentspec:import",
+              "permission1": "rda:deploymentspec:import",
               "title": "Import from Catalog",
               "icon": "mdi mdi-plus",
               "type": "POPUP_FORM",
@@ -688,7 +688,7 @@
               }
             },
             {
-              "permission": "rda:deploymentspec:import",
+              "permission1": "rda:deploymentspec:import",
               "title": "Import from Catalog",
               "icon": "mdi mdi-plus",
               "type": "POPUP_FORM",

@@ -9,5 +9,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing detailed worker execution traces with jobid, pipeline_name, bot name, status_type (in-progress/completed/failed), num_rows, num_cols, df_size_kb, query, error_message, and trace sequence data",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-7baadf11-rda_system_worker_traces"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-7baadf11-rda_system_worker_traces"
 }

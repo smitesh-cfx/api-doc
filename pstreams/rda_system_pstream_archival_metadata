@@ -19,5 +19,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing persistent stream archival metadata including archive status, archival timestamps, archive locations, and archival configuration",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-f021646f-rda_system_pstream_archival_metadata"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-f021646f-rda_system_pstream_archival_metadata"
 }

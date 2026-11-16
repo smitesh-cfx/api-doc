@@ -5,7 +5,7 @@
   "dashboard_folder": "System",
   "version": "1.0.2",
   "enabled": false,
-  "live_edit": true,
+  "live_edit": false,
   "stream": "rda_system_snapshots_main",
   "dashboard_type": "dashboard",
   "dashboard_filters": {

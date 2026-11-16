@@ -135,7 +135,7 @@
             "dashboard_type"
           ],
           "type": "int",
-          "widget_id": "670328f4"
+          "widget_id": "06b96c53"
         },
         {
           "title": "Dashboards",
@@ -263,6 +263,24 @@
             }
           ],
           "actions": [
+            {
+              "permission": "rda:user_dashboard:add",
+              "title": "New Dashboard Builder",
+              "icon": "mdi mdi-view-dashboard-edit-outline",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda_dashboard_builder",
+              "identifier": "user.dashboard.dashboard-builder-canvas-create",
+              "selectionType": "NONE",
+              "stateName": "app.featureapp",
+              "contexts": {
+                "createNew": true,
+                "identifier": "user.dashboard.dashboard-builder-canvas-create",
+                "name": "",
+                "id": "",
+                "label": "",
+                "artifact_name": ""
+              }
+            },
             {
               "permission": "rda:user_dashboard:add",
               "title": "Add",
@@ -458,6 +476,48 @@
                   }
                 ]
               },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "appName": "user-dashboard/rda_dashboard_builder",
+              "identifier": "user.dashboard.dashboard-builder-canvas-edit",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Open Dashboard Builder",
+              "type": "GO_TO_APP_STATE",
+              "contexts": {
+                "edit_dashboard": true,
+                "identifier": "user.dashboard.dashboard-builder-canvas-edit"
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "appName": "new-app/dashboard-studio",
+              "identifier": "user.dashboard.dashboard-studio",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Dashboard Editor",
+              "type": "GO_TO_APP_STATE",
               "actionCondition": {
                 "actionControl": "HIDE_IF",
                 "conditionalField": [
@@ -649,7 +709,7 @@
             "dashboard_type"
           ],
           "type": "int",
-          "widget_id": "670328f4"
+          "widget_id": "06b96c53"
         },
         {
           "title": "Dashboards",
@@ -777,6 +837,24 @@
             }
           ],
           "actions": [
+            {
+              "permission": "rda:user_dashboard:add",
+              "title": "New Dashboard Builder",
+              "icon": "mdi mdi-view-dashboard-edit-outline",
+              "type": "GO_TO_APP_STATE",
+              "appName": "user-dashboard/rda_dashboard_builder",
+              "identifier": "user.dashboard.dashboard-builder-canvas-create",
+              "selectionType": "NONE",
+              "stateName": "app.featureapp",
+              "contexts": {
+                "createNew": true,
+                "identifier": "user.dashboard.dashboard-builder-canvas-create",
+                "name": "",
+                "id": "",
+                "label": "",
+                "artifact_name": ""
+              }
+            },
             {
               "permission": "rda:user_dashboard:add",
               "title": "Add",
@@ -972,6 +1050,48 @@
                   }
                 ]
               },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "appName": "user-dashboard/rda_dashboard_builder",
+              "identifier": "user.dashboard.dashboard-builder-canvas-edit",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Open Dashboard Builder",
+              "type": "GO_TO_APP_STATE",
+              "contexts": {
+                "edit_dashboard": true,
+                "identifier": "user.dashboard.dashboard-builder-canvas-edit"
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "System",
+                    "fieldId": "dashboard_folder"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:user_dashboard:edit",
+              "appName": "new-app/dashboard-studio",
+              "identifier": "user.dashboard.dashboard-studio",
+              "selectionType": "SINGLE",
+              "stateName": "app.featureapp",
+              "title": "Dashboard Editor",
+              "type": "GO_TO_APP_STATE",
               "actionCondition": {
                 "actionControl": "HIDE_IF",
                 "conditionalField": [

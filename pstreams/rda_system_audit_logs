@@ -10,5 +10,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream logging all artifact operations (ADD/UPDATE/DELETE) with user_id, artifact_type (PersistentStream/AlertRule/Dashboard/etc), artifact_name, operation, description, service, hostname, and timestamp for compliance tracking",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-c65fa617-rda_system_audit_logs"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-c65fa617-rda_system_audit_logs"
 }

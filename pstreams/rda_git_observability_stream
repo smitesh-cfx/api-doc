@@ -1,0 +1,16 @@
+{
+  "name": "rda_git_observability_stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 30,
+    "unique_keys": [
+      "org",
+      "repo"
+    ],
+    "system_defined": "yes"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-df719d7a-rda_git_observability_stream"
+}

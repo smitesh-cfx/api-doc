@@ -34,6 +34,10 @@
       "label": "Dashboards",
       "pageName": "Dashboards"
     },
+    "auditLogs": {
+      "icon": "history.svg",
+      "label": "Audit Logs"
+    },
     "Dataset": {
       "icon": "datasource.svg",
       "label": "Datasets",
@@ -179,8 +183,13 @@
     },
     {
       "name": "rda-administration-audit-logs",
-      "label": "Audit Logs",
-      "icon": "history.svg"
+      "label": "All Audit Logs",
+      "group": "auditLogs"
+    },
+    {
+      "name": "audit-logs-logins",
+      "label": "Login Activity",
+      "group": "auditLogs"
     },
     {
       "name": "rda-github-push",

@@ -1,0 +1,12 @@
+{
+  "name": "discovery_status",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "retention_days": 7,
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-083bb637-discovery_status"
+}

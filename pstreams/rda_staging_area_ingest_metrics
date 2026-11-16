@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream monitoring staging area data ingestion performance metrics including file counts, ingestion rates, and staging area status",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-e106747f-rda_staging_area_ingest_metrics"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-e106747f-rda_staging_area_ingest_metrics"
 }

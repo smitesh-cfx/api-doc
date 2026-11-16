@@ -1,0 +1,25 @@
+{
+  "name": "rda_partner_licenses_meta",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "partner_id"
+    ],
+    "flatten_json": false,
+    "_mappings": {
+      "properties": {
+        "partner_id": {
+          "type": "keyword"
+        },
+        "saved_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing partner license metadata including license id, partner id, partner name, partner location, license type, license comments, license status, license expiry date, license revision, and saved time",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-78d4b19f-rda_partner_licenses_meta"
+}

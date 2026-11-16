@@ -7,6 +7,6 @@
   },
   "status": "Read Only",
   "description": "System-defined SQL-based persistent stream storing alert APScheduler job scheduling records from PostgreSQL database including job_id, next_run_time, job_state, and alert schedule configuration",
-  "database_name": "1aef62f5872d416a8dd237483bfa58c9_rda",
+  "database_name": "f54ffeb44dac435ba28e3dd3080446a5_rda",
   "table_name": "alert_apscheduler_view_jobs"
 }

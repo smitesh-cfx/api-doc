@@ -144,7 +144,7 @@
             "category"
           ],
           "type": "int",
-          "widget_id": "092ce8da"
+          "widget_id": "27e45e1b"
         },
         {
           "title": "Draft Pipelines",
@@ -562,7 +562,7 @@
             "category"
           ],
           "type": "int",
-          "widget_id": "092ce8da"
+          "widget_id": "27e45e1b"
         },
         {
           "title": "Draft Pipelines",

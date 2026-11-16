@@ -11,5 +11,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream recording log replay operations including replay event counts, replay status, and timestamp for archival data access tracking",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-753bdfca-rda_system_log_replays"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-753bdfca-rda_system_log_replays"
 }

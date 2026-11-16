@@ -135,7 +135,7 @@
             "format"
           ],
           "type": "int",
-          "widget_id": "49f86ef0"
+          "widget_id": "8849d9c4"
         },
         {
           "title": "Datasets",
@@ -454,7 +454,7 @@
             "format"
           ],
           "type": "int",
-          "widget_id": "49f86ef0"
+          "widget_id": "8849d9c4"
         },
         {
           "title": "Datasets",

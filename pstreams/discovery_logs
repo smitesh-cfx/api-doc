@@ -1,0 +1,15 @@
+{
+  "name": "discovery_logs",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "unique_id",
+      "customer_tag"
+    ],
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-19742a1b-discovery_logs"
+}

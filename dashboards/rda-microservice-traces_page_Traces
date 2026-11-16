@@ -116,7 +116,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "6d9020cf"
+          "widget_id": "0b71036d"
         },
         {
           "title": "By Status",
@@ -138,7 +138,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "ed975e08"
+          "widget_id": "38095186"
         },
         {
           "title": "Service Topology",
@@ -231,7 +231,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "4a7b9d64"
+          "widget_id": "53eab120"
         }
       ]
     }
@@ -305,7 +305,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "6d9020cf"
+          "widget_id": "0b71036d"
         },
         {
           "title": "By Status",
@@ -327,7 +327,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "ed975e08"
+          "widget_id": "38095186"
         },
         {
           "title": "Service Topology",
@@ -420,7 +420,7 @@
           "column": "duration",
           "agg": "value_count",
           "type": "int",
-          "widget_id": "4a7b9d64"
+          "widget_id": "53eab120"
         }
       ]
     }

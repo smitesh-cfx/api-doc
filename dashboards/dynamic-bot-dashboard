@@ -3,15 +3,13 @@
   "label": "Dynamic Bot Dashboard",
   "is_template": false,
   "description": "Dynamic Bot Management Dashboard",
-  "live_edit": true,
+  "live_edit": false,
   "version": "1.0.0",
   "enabled": true,
   "dashboard_type": "template",
   "dashboard_filters": {
     "time_filter": true,
-    "default_time_filter_labels": [
-      "All Time"
-    ],
+    "extra_filter": "default_version is 'True'",
     "columns_filter": [
       {
         "id": "bot_name",
@@ -70,6 +68,7 @@
           "widget_type": "tabular",
           "stream": "cfx_bots_registry",
           "extra_filter": "default_version is 'True'",
+          "duration_hours": 87600,
           "ts_column": "timestamp",
           "min_width": 12,
           "height": 12,
@@ -258,6 +257,10 @@
                   {
                     "paramKey": "default_version",
                     "paramId": "default_version"
+                  },
+                  {
+                    "paramKey": "sample_input",
+                    "paramId": "sample_input"
                   }
                 ]
               },
@@ -439,6 +442,7 @@
           "widget_type": "tabular",
           "stream": "cfx_bots_registry",
           "extra_filter": "default_version is 'True'",
+          "duration_hours": 87600,
           "ts_column": "timestamp",
           "min_width": 12,
           "height": 12,
@@ -627,6 +631,10 @@
                   {
                     "paramKey": "default_version",
                     "paramId": "default_version"
+                  },
+                  {
+                    "paramKey": "sample_input",
+                    "paramId": "sample_input"
                   }
                 ]
               },

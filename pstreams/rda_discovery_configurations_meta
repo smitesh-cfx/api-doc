@@ -23,5 +23,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing discovery configuration metadata including discovery rules, network ranges, device patterns, and discovery schedules",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-0ee4d64d-rda_discovery_configurations_meta"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-0ee4d64d-rda_discovery_configurations_meta"
 }

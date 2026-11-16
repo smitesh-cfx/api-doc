@@ -1,0 +1,5 @@
+@c:new-block
+ --> @dm:empty
+ --> @restclient_oia:write url='https://10.95.125.93/api/v2/current_user' and method='GET' and debug_dataset="test_restclient"
+ --> @dm:explode-json column="_response"
+ --> @dm:save name="temp-login-details"

@@ -17,29 +17,9 @@
       "number_of_replicas": 1,
       "refresh_interval": "30s"
     },
-    "_mappings": {
-      "properties": {
-        "pack_id": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        },
-        "pack_version": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        }
-      }
-    },
     "system_defined": "no"
   },
   "status": "Running",
   "description": "",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-ad550f72-rda_packs_dynamic_groups_and_pages"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-ad550f72-rda_packs_dynamic_groups_and_pages"
 }

@@ -1,0 +1,623 @@
+{
+  "name": "portal-account-api-tokens-page",
+  "label": "API Access Keys",
+  "enabled": true,
+  "dashboard_type": "template",
+  "template_variables": {
+    "USER_ID": {
+      "contextId": "USER_ID"
+    },
+    "USER_ROLE": {
+      "contextId": "USER_ROLE"
+    },
+    "userId": {
+      "contextId": "userId"
+    }
+  },
+  "description": "API Access Keys Page",
+  "dashboard_folder": "System",
+  "dashboard_style": "auto",
+  "version": "26.4.29.1",
+  "dashboard_filters": {
+    "time_filter": false,
+    "columns_filter": false
+  },
+  "dashboard_sections": [
+    {
+      "title": "API Access Keys",
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<style>.tk-meta .userid-fallback{display:none;} .tk-meta .userid-actual[data-val=\"None\"]{display:none;} .tk-meta .userid-actual[data-val=\"None\"]+.userid-fallback{display:inline;}</style><div class='tk-meta' style='text-align:center;width:100%;'><h2 style='margin:6px 0;'><a style='text-decoration:none;'><span class='lbl'>Owner: </span><span class='v userid-actual' data-val='{{userId}}'>{{userId}}</span><span class='v userid-fallback'>{{USER_ID}}</span></a></h2></div>",
+          "context_filter": "userId is not null and userId != '' and USER_ID != userId",
+          "visibility_on_error": false,
+          "min_width": 12,
+          "height": 1,
+          "widget_id": "c2f1a30e"
+        },
+        {
+          "title": "API Access Keys",
+          "widget_type": "tabular",
+          "stream": "rda_api_token_users",
+          "timebased": false,
+          "ts_column": "createdAt",
+          "extra_filter": "createdFor is '{{ userId or USER_ID }}'",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "tokenName",
+            "status",
+            "tokenUserId",
+            "createdFor",
+            "createdBy"
+          ],
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "tokenName": {
+              "title": "API Access Key Description/Name",
+              "key": true
+            },
+            "status": {
+              "title": "Status",
+              "visible": false
+            },
+            "expiresAt": {
+              "title": "Expires At",
+              "type": "DATETIME",
+              "key": true
+            },
+            "createdFor": {
+              "title": "Owner",
+              "key": true
+            },
+            "createdBy": {
+              "title": "Created By"
+            },
+            "createdAt": {
+              "title": "Created At",
+              "type": "DATETIME"
+            },
+            "userGroup": {
+              "title": "User Group",
+              "key": true,
+              "visible": false
+            },
+            "profile": {
+              "title": "User Profile",
+              "key": true,
+              "visible": false
+            },
+            "tokenUserId": {
+              "title": "Token User ID",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "status_display",
+              "title": "Access Key Status",
+              "expr": "'Expired' if isnull(expiresAt) or max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<60 else status"
+            },
+            {
+              "id": "valid_for",
+              "title": "Valid For",
+              "expr": "'' if isnull(expiresAt) else ('Expired' if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<60 else ((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//60)+' minutes') if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<3600 else (((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//3600)+' hours')+((' '+str((max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%3600)//60)+' minutes') if (max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%3600)//60>0 else '')) if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<86400 else ((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//86400)+' days')+((' '+str((max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%86400)//3600)+' hours') if (max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%86400)//3600>0 else '')))))"
+            },
+            {
+              "id": "is_api_token_user",
+              "title": "API Token",
+              "expr": "True",
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "emailId",
+              "title": "Email ID",
+              "expr": "tokenUserId",
+              "key": true,
+              "hidden": true
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:accesskey:generate",
+              "title": "Generate API Access Key",
+              "type": "POPUP_WIZARD",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:generate-api-token-through-wizard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getWizard",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "wizard_id": "rda.saas.generate.api.token.wizard"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:update",
+              "title": "Edit API Access Key Details",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-tenant-api-token",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.api.token.edit",
+                    "edit_token": true
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:generate",
+              "title": "Regenerate API Access Key",
+              "type": "POPUP_WIZARD",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:regenerate-tenant-api-token-wizard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getWizard",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "wizard_id": "rda.tenant.api.token.regenerate.wizard",
+                    "regenerate_token": true
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "Suspended",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:deactivate",
+              "title": "Deactivate API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:deactivate-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.deactivate"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "HIDE_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:activate",
+              "title": "Activate API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:activate-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.activate"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:delete",
+              "title": "Delete API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.delete"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:update",
+              "title": "View API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-tenant-api-token",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.api.token.view"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "Active",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "a1b2c3d4"
+        }
+      ]
+    }
+  ],
+  "pstream_dashboards": [
+    {
+      "title": "API Access Keys",
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<style>.tk-meta .userid-fallback{display:none;} .tk-meta .userid-actual[data-val=\"None\"]{display:none;} .tk-meta .userid-actual[data-val=\"None\"]+.userid-fallback{display:inline;}</style><div class='tk-meta' style='text-align:center;width:100%;'><h2 style='margin:6px 0;'><a style='text-decoration:none;'><span class='lbl'>Owner: </span><span class='v userid-actual' data-val='{{userId}}'>{{userId}}</span><span class='v userid-fallback'>{{USER_ID}}</span></a></h2></div>",
+          "context_filter": "userId is not null and userId != '' and USER_ID != userId",
+          "visibility_on_error": false,
+          "min_width": 12,
+          "height": 1,
+          "widget_id": "c2f1a30e"
+        },
+        {
+          "title": "API Access Keys",
+          "widget_type": "tabular",
+          "stream": "rda_api_token_users",
+          "timebased": false,
+          "ts_column": "createdAt",
+          "extra_filter": "createdFor is '{{ userId or USER_ID }}'",
+          "duration_hours": 87600,
+          "remote_searchable": true,
+          "remote_searchable_cols": [
+            "tokenName",
+            "status",
+            "tokenUserId",
+            "createdFor",
+            "createdBy"
+          ],
+          "paginated": true,
+          "height": 10,
+          "min_width": 12,
+          "columns": {
+            "tokenName": {
+              "title": "API Access Key Description/Name",
+              "key": true
+            },
+            "status": {
+              "title": "Status",
+              "visible": false
+            },
+            "expiresAt": {
+              "title": "Expires At",
+              "type": "DATETIME",
+              "key": true
+            },
+            "createdFor": {
+              "title": "Owner",
+              "key": true
+            },
+            "createdBy": {
+              "title": "Created By"
+            },
+            "createdAt": {
+              "title": "Created At",
+              "type": "DATETIME"
+            },
+            "userGroup": {
+              "title": "User Group",
+              "key": true,
+              "visible": false
+            },
+            "profile": {
+              "title": "User Profile",
+              "key": true,
+              "visible": false
+            },
+            "tokenUserId": {
+              "title": "Token User ID",
+              "key": true,
+              "visible": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "status_display",
+              "title": "Access Key Status",
+              "expr": "'Expired' if isnull(expiresAt) or max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<60 else status"
+            },
+            {
+              "id": "valid_for",
+              "title": "Valid For",
+              "expr": "'' if isnull(expiresAt) else ('Expired' if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<60 else ((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//60)+' minutes') if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<3600 else (((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//3600)+' hours')+((' '+str((max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%3600)//60)+' minutes') if (max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%3600)//60>0 else '')) if max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))<86400 else ((str(max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))//86400)+' days')+((' '+str((max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%86400)//3600)+' hours') if (max(0,int((float(to_datetime(expiresAt).timestamp())*1000-float(time_now_as_ms()))/1000))%86400)//3600>0 else '')))))"
+            },
+            {
+              "id": "is_api_token_user",
+              "title": "API Token",
+              "expr": "True",
+              "key": true,
+              "hidden": true
+            },
+            {
+              "id": "emailId",
+              "title": "Email ID",
+              "expr": "tokenUserId",
+              "key": true,
+              "hidden": true
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:accesskey:generate",
+              "title": "Generate API Access Key",
+              "type": "POPUP_WIZARD",
+              "selectionType": "NONE",
+              "identifier": "saas-service-action:generate-api-token-through-wizard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getWizard",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "wizard_id": "rda.saas.generate.api.token.wizard"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:update",
+              "title": "Edit API Access Key Details",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:edit-tenant-api-token",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.api.token.edit",
+                    "edit_token": true
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:generate",
+              "title": "Regenerate API Access Key",
+              "type": "POPUP_WIZARD",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:regenerate-tenant-api-token-wizard",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getWizard",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "wizard_id": "rda.tenant.api.token.regenerate.wizard",
+                    "regenerate_token": true
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "HIDE_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "Suspended",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:deactivate",
+              "title": "Deactivate API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:deactivate-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.deactivate"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "HIDE_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:activate",
+              "title": "Activate API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:activate-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.activate"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:delete",
+              "title": "Delete API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:delete-tenant-user",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.user.delete"
+                  }
+                ]
+              },
+              "actionConditions": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "actionCondition": [
+                  {
+                    "conditionalField": [
+                      {
+                        "conditionType": "EQUAL",
+                        "conditionValue": "Suspended",
+                        "fieldId": "status"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:accesskey:update",
+              "title": "View API Access Key",
+              "type": "POPUP_FORM",
+              "selectionType": "SINGLE",
+              "identifier": "saas-service-action:view-tenant-api-token",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.tenant.api.token.view"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "Active",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "a1b2c3d4"
+        }
+      ]
+    }
+  ]
+}

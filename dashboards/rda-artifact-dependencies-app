@@ -141,7 +141,7 @@
               "type": "GO_TO_APP_STATE"
             }
           ],
-          "widget_id": "d9fd0a2f",
+          "widget_id": "e5e693f5",
           "extra_filter": "from_artifact_type is '{{ARTIFACT_TYPE}}' and from_artifact_name is '{{ARTIFACT_NAME}}'"
         }
       ]
@@ -269,7 +269,7 @@
               "type": "GO_TO_APP_STATE"
             }
           ],
-          "widget_id": "d9fd0a2f",
+          "widget_id": "e5e693f5",
           "extra_filter": "from_artifact_type is '{{ARTIFACT_TYPE}}' and from_artifact_name is '{{ARTIFACT_NAME}}'"
         }
       ]

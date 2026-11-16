@@ -39,6 +39,7 @@
             "description": "Description",
             "stream": "Stream",
             "notification_profiles": "Notification Profile",
+            "schedule_mins": "Schedule (minutes)",
             "saved_time": {
               "title": "Saved Time",
               "type": "DATETIME"
@@ -590,6 +591,7 @@
             "description": "Description",
             "stream": "Stream",
             "notification_profiles": "Notification Profile",
+            "schedule_mins": "Schedule (minutes)",
             "saved_time": {
               "title": "Saved Time",
               "type": "DATETIME"

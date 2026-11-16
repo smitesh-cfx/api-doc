@@ -9,7 +9,7 @@
   "title": "Dashboard Data",
   "stream": "rda_worker_traces",
   "dashboard_type": "template",
-  "live_edit": true,
+  "live_edit": false,
   "template_variables": {
     "NOW": {
       "contextId": [
@@ -91,7 +91,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "6594e1cc"
+          "widget_id": "652447ee"
         },
         {
           "title": "1 Day Ago",
@@ -108,7 +108,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "5d477d0e"
+          "widget_id": "ad9fce47"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -125,7 +125,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "7abdfbe5"
+          "widget_id": "c9791465"
         },
         {
           "title": "Top Pipelines",
@@ -193,7 +193,7 @@
               }
             ]
           },
-          "widget_id": "8960d412"
+          "widget_id": "d09f1572"
         },
         {
           "title": "Top Pipelines",
@@ -227,7 +227,7 @@
               }
             ]
           },
-          "widget_id": "bf107364"
+          "widget_id": "13752070"
         },
         {
           "title": "Top Pipelines",
@@ -261,7 +261,7 @@
               }
             ]
           },
-          "widget_id": "291a6507"
+          "widget_id": "a51c3961"
         },
         {
           "title": "Top Errors",
@@ -295,7 +295,7 @@
               }
             ]
           },
-          "widget_id": "cd9288f3"
+          "widget_id": "9296e398"
         },
         {
           "title": "Top Errors",
@@ -329,7 +329,7 @@
               }
             ]
           },
-          "widget_id": "a94bb986"
+          "widget_id": "c9ff1dae"
         },
         {
           "title": "Top Errors",
@@ -363,7 +363,7 @@
               }
             ]
           },
-          "widget_id": "9e27dbe4"
+          "widget_id": "f734ba5a"
         },
         {
           "title": "Top Errors",
@@ -397,7 +397,7 @@
               }
             ]
           },
-          "widget_id": "6d88776a"
+          "widget_id": "c1a6dd67"
         }
       ]
     }
@@ -447,7 +447,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "6594e1cc"
+          "widget_id": "652447ee"
         },
         {
           "title": "1 Day Ago",
@@ -464,7 +464,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "5d477d0e"
+          "widget_id": "ad9fce47"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -481,7 +481,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "7abdfbe5"
+          "widget_id": "c9791465"
         },
         {
           "title": "Top Pipelines",
@@ -549,7 +549,7 @@
               }
             ]
           },
-          "widget_id": "8960d412"
+          "widget_id": "d09f1572"
         },
         {
           "title": "Top Pipelines",
@@ -583,7 +583,7 @@
               }
             ]
           },
-          "widget_id": "bf107364"
+          "widget_id": "13752070"
         },
         {
           "title": "Top Pipelines",
@@ -617,7 +617,7 @@
               }
             ]
           },
-          "widget_id": "291a6507"
+          "widget_id": "a51c3961"
         },
         {
           "title": "Top Errors",
@@ -651,7 +651,7 @@
               }
             ]
           },
-          "widget_id": "cd9288f3"
+          "widget_id": "9296e398"
         },
         {
           "title": "Top Errors",
@@ -685,7 +685,7 @@
               }
             ]
           },
-          "widget_id": "a94bb986"
+          "widget_id": "c9ff1dae"
         },
         {
           "title": "Top Errors",
@@ -719,7 +719,7 @@
               }
             ]
           },
-          "widget_id": "9e27dbe4"
+          "widget_id": "f734ba5a"
         },
         {
           "title": "Top Errors",
@@ -753,7 +753,7 @@
               }
             ]
           },
-          "widget_id": "6d88776a"
+          "widget_id": "c1a6dd67"
         }
       ]
     }

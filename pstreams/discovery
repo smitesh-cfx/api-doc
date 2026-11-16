@@ -1,0 +1,22 @@
+{
+  "name": "discovery",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "device_ip",
+      "customer_tag"
+    ],
+    "retention_days": 60,
+    "search_case_insensitive": true,
+    "_settings": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1,
+      "refresh_interval": "30s"
+    },
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-54818b05-discovery"
+}

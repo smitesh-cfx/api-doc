@@ -9,5 +9,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream capturing worker pod log messages and events for debugging and operational monitoring",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-44c64cae-rda_system_worker_logs"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-44c64cae-rda_system_worker_logs"
 }

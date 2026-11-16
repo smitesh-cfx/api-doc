@@ -23,5 +23,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream storing TextFSM template metadata including template names, parsing patterns, field mappings, and text parsing configurations",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3e7dc78a-rda_textfsm_meta"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-3e7dc78a-rda_textfsm_meta"
 }

@@ -12,5 +12,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream tracking pipeline and workflow job execution status with jobid, pipeline_name, status (Running/Completed/Failed), start_time, ended_time, age, pod_id, site, attributes, and failure reasons",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-3ec3fcb2-rda_system_job_tracker"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-3ec3fcb2-rda_system_job_tracker"
 }

@@ -1,0 +1,27 @@
+{
+  "name": "oia-collab-event-tracker-stream",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "eventtrackerid"
+    ],
+    "_mappings": {
+      "properties": {
+        "event_received": {
+          "type": "date"
+        },
+        "response_received": {
+          "type": "date"
+        },
+        "elapse_time": {
+          "type": "double"
+        }
+      }
+    },
+    "retention_days": 30,
+    "case_insensitive": true
+  },
+  "status": "Running",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-8a827578-oia-collab-event-tracker-stream"
+}

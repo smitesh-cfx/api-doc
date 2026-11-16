@@ -1,0 +1,30 @@
+{
+  "name": "rda_partner_licenses_audit",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "audit_id"
+    ],
+    "flatten_json": false,
+    "retention_days": 365,
+    "search_case_insensitive": true,
+    "_mappings": {
+      "properties": {
+        "audit_id": {
+          "type": "keyword"
+        },
+        "partner_id": {
+          "type": "keyword"
+        },
+        "event_time": {
+          "type": "date"
+        }
+      }
+    }
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing partner license audit events including audit id, event type, partner id, license id, actor, event_time, and related license change metadata",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-9d7c4954-rda_partner_licenses_audit"
+}

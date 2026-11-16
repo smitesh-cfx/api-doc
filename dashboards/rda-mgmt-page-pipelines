@@ -144,7 +144,7 @@
             "category"
           ],
           "type": "int",
-          "widget_id": "b8a56813"
+          "widget_id": "4243a612"
         },
         {
           "title": "Published Pipelines",
@@ -461,7 +461,7 @@
             "category"
           ],
           "type": "int",
-          "widget_id": "b8a56813"
+          "widget_id": "4243a612"
         },
         {
           "title": "Published Pipelines",

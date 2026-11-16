@@ -9,7 +9,7 @@
   "dashboard_generator": {
     "attachment": "generator"
   },
-  "version": "25.6.18.1",
+  "version": "26.06.10.1",
   "live_edit": false,
   "short_label": "Pipeline Traces",
   "dashboard_filters": {
@@ -260,13 +260,12 @@
       "pstream_name": "rda_system_worker_traces",
       "cfxql_query": "pipeline_name in ['{{PIPELINE_NAME}}']",
       "show_counts": false,
-      "include_icon_url": false,
-      "htmlTemplate": "{%raw%}<h1>Hello World</h1>{%endraw%}"
+      "include_icon_url": false
     },
     "tree_detail": {
       "display_column": "jobid",
       "pstream_name": "rda_system_worker_traces",
-      "htmlTemplate": "{%raw%}<div style='overflow:hidden;border-bottom:1px solid #ccc;'><div class='label1' style='overflow:hidden; colot:black'><b>{{data.jobid_trunc}}</b></div><div class='label2'>From: {{(new Date(data.timestamp_min)).toLocaleString('sv-SE').replace(' ', 'T')}}</div><div class='label2'>To: {{(new Date(data.timestamp_max)).toLocaleString('sv-SE').replace(' ', 'T')}}</div><div>Duration: {{data.duration}} msec</div></div>{%endraw%}",
+      "htmlTemplate": "{%raw%}<div :style=\"{'background-color': data.status_color}\" style='float:right;color:white;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:bold;'>{{data.status_type_last_record === 'trace' ? 'Completed' : (data.status_type_last_record === 'failed' ? 'Failed' : data.status_type_last_record)}}</div><div style='overflow:hidden;border-bottom:1px solid #ccc;'><div style='overflow:hidden;color:black;font-size:10px'><b>{{data.jobid_trunc}}</b></div><div style='font-size:10px'>From: {{(new Date(data.timestamp_min)).toLocaleString('sv-SE').replace(' ', 'T')}}</div><div style='font-size:10px'>To: {{(new Date(data.timestamp_max)).toLocaleString('sv-SE').replace(' ', 'T')}}</div><div style='font-size:10px'>Duration: {{data.duration}} msec</div></div>{%endraw%}",
       "report_definition": {
         "title": "Pipeline Executions",
         "widget_type": "tabular",
@@ -291,22 +290,12 @@
             "expr": "'Job ID:' +  str(jobid)[0:8] + ' ' + 'Version:' +  attributes_pipeline_version"
           },
           {
-            "id": "jobId",
-            "expr": "jobid",
-            "visible": false,
-            "key": true
-          },
-          {
             "id": "duration",
             "expr": "timestamp_max - timestamp_min"
           },
           {
-            "id": "label2",
-            "expr": "status_type"
-          },
-          {
-            "id": "color",
-            "expr": "'#4caf50' if int(count_) == 0 else '#E53935' if int(count_) == 1 else '#DB7200'"
+            "id": "status_color",
+            "expr": "'#007BFF' if status_type_last_record == 'in-progress' else '#28A745' if status_type_last_record == 'trace' else '#F44336'"
           }
         ],
         "extra_filter": "attributes_is_draft is '{{IS_DRAFT}}' and pipeline_name in ['{{PIPELINE_NAME}}']",
@@ -320,6 +309,10 @@
             {
               "column": "timestamp",
               "agg": "min"
+            },
+            {
+              "column": "status_type",
+              "agg": "last_record"
             }
           ],
           "group_by": [

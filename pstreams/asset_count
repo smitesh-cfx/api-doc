@@ -1,0 +1,17 @@
+{
+  "name": "asset_count",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "search_case_insensitive": true,
+    "_settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1
+    },
+    "retention_days": 1826,
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-6fe1a5a6-asset_count"
+}

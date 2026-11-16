@@ -1,0 +1,16 @@
+{
+  "name": "routing_protocol_data",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "collection_status",
+      "profile",
+      "source_ip"
+    ],
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-0d537705-routing_protocol_data"
+}

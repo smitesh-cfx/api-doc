@@ -7,7 +7,7 @@
   "enabled": false,
   "stream": "rda_system_audit_logs",
   "dashboard_type": "template",
-  "live_edit": true,
+  "live_edit": false,
   "template_variables": {
     "NOW": {
       "contextId": [
@@ -109,7 +109,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "5ed20b90"
+          "widget_id": "6c4a780a"
         },
         {
           "title": "1 Day Ago",
@@ -136,7 +136,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "cc05a643"
+          "widget_id": "72cef26b"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -163,7 +163,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fac5471a"
+          "widget_id": "966930e6"
         },
         {
           "title": "Top Artifacts",
@@ -251,7 +251,7 @@
               }
             ]
           },
-          "widget_id": "e304a634"
+          "widget_id": "4bd43194"
         },
         {
           "title": "Top Artifacts",
@@ -295,7 +295,7 @@
               }
             ]
           },
-          "widget_id": "5718f9bb"
+          "widget_id": "b0a14ce6"
         },
         {
           "title": "Top Artifacts",
@@ -339,7 +339,7 @@
               }
             ]
           },
-          "widget_id": "90e109c6"
+          "widget_id": "6131b3d0"
         }
       ]
     }
@@ -409,7 +409,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "5ed20b90"
+          "widget_id": "6c4a780a"
         },
         {
           "title": "1 Day Ago",
@@ -436,7 +436,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "cc05a643"
+          "widget_id": "72cef26b"
         },
         {
           "title": "Today (Since 12am UTC)",
@@ -463,7 +463,7 @@
           "column": "count_",
           "agg": "sum",
           "type": "int",
-          "widget_id": "fac5471a"
+          "widget_id": "966930e6"
         },
         {
           "title": "Top Artifacts",
@@ -551,7 +551,7 @@
               }
             ]
           },
-          "widget_id": "e304a634"
+          "widget_id": "4bd43194"
         },
         {
           "title": "Top Artifacts",
@@ -595,7 +595,7 @@
               }
             ]
           },
-          "widget_id": "5718f9bb"
+          "widget_id": "b0a14ce6"
         },
         {
           "title": "Top Artifacts",
@@ -639,7 +639,7 @@
               }
             ]
           },
-          "widget_id": "90e109c6"
+          "widget_id": "6131b3d0"
         }
       ]
     }

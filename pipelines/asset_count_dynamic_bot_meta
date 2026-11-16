@@ -1,0 +1,20 @@
+folder: InventoryCollectionBase
+name: asset_count_dynamic_bot
+description: test pipeline
+data_path: pipelines/data/asset_count_dynamic_bot/2026.06.01.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+artifacts:
+- artifact_type: dynamic_bot
+  artifact_name: asset_count
+  access: read
+- artifact_type: rda-network-stream
+  artifact_name: asset_count
+  access: write
+version: 2026.06.01.1
+file_type: json
+checksum: 485df2a8

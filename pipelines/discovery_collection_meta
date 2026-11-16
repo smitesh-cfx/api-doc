@@ -1,0 +1,38 @@
+folder: NetworkDevicePack
+name: discovery_collection
+description: test pipeline
+data_path: pipelines/data/discovery_collection/2025.12.31.1/data.json
+usecase: ''
+category: ''
+sources:
+  rn:
+    name: rn
+    type: rn
+  asset-discovery:
+    name: asset-discovery
+    type: asset-discovery
+artifacts:
+- artifact_type: rda-network-stream
+  artifact_name: discovery_logs
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: discovery_logs
+  access: write
+- artifact_type: rda-network-stream
+  artifact_name: discovery_logs
+  access: write
+- artifact_type: pipeline
+  artifact_name: cisco_discovery_main_pipeline
+  access: read
+- artifact_type: pipeline
+  artifact_name: juniper_discovery_main_pipeline
+  access: read
+- artifact_type: pipeline
+  artifact_name: fortinet_discovery_main_pipeline
+  access: read
+- artifact_type: pipeline
+  artifact_name: other_vendors_discovery_main_pipeline
+  access: read
+version: 2025.12.31.1
+file_type: json
+checksum: 2cbfac1a

@@ -1,96 +1,412 @@
 {
   "name": "rda-packs-view-deployed-artifacts",
-  "label": "RDA Packs Activation Status",
+  "label": "RDA Packs activation status for administrators",
   "context_label_id": "activation_status_page_label",
   "description": "customer-rda-packs-artifacts: Insights",
   "dashboard_folder": "System",
   "enabled": false,
-  "stream": "customer-rda-packs-artifacts",
-  "extra_filter": "activation_id is '{{ACTIVATION_ID}}'",
   "dashboard_style": "auto",
   "dashboard_type": "template",
+  "dashboard_filters": {
+    "time_filter": false,
+    "default_time_filter_labels": [
+      "Last 12 months"
+    ],
+    "columns_filter": [],
+    "group_filters": []
+  },
   "template_variables": {
     "ACTIVATION_ID": {
       "contextId": "activation_id"
+    },
+    "PACK_NAME": {
+      "contextId": "pack_name"
+    },
+    "PACK_VERSION": {
+      "contextId": "pack_version"
+    },
+    "CUST_TAG": {
+      "contextId": [
+        "customerTag"
+      ]
+    },
+    "CUSTOMER_ID": {
+      "contextId": [
+        "customerId"
+      ]
+    },
+    "STATUS_COLUMN_NAME": {
+      "contextId": [
+        "status_column_name"
+      ]
+    },
+    "PAGE_LABEL_ID": {
+      "contextId": [
+        "activation_status_page_label"
+      ]
+    },
+    "DEPLOYMENT_TYPE": {
+      "contextId": [
+        "deployment_type"
+      ]
     }
   },
-  "dashboard_filters": {
-    "extra_filter": "activation_id is '{{ACTIVATION_ID}}'",
-    "time_filter": true,
-    "default_time_filter_labels": [
-      "Last 24 months"
-    ],
-    "columns_filter": [
-      {
-        "id": "timestamp",
-        "label": "Timestamp",
-        "type": "DATETIME"
-      },
-      {
-        "id": "customer",
-        "label": "Customer",
-        "type": "TEXT"
-      },
-      {
-        "id": "activation_id",
-        "label": "Activation Id",
-        "type": "TEXT"
-      },
-      {
-        "id": "version",
-        "label": "Pack Version",
-        "type": "TEXT"
-      },
-      {
-        "id": "art_type",
-        "label": "Artifact Type",
-        "type": "TEXT"
-      },
-      {
-        "id": "art_name",
-        "label": "Artifact Name",
-        "type": "TEXT"
-      },
-      {
-        "id": "art_version",
-        "label": "Artifact Version",
-        "type": "TEXT"
-      },
-      {
-        "id": "status",
-        "title": "Status",
-        "type": "TEXT"
-      },
-      {
-        "id": "message",
-        "title": "Message",
-        "type": "TEXT"
-      }
-    ],
-    "group_filters": [
-      {
-        "extra_filter": "activation_id is '{{ACTIVATION_ID}}'",
-        "stream": "customer-rda-packs-artifacts",
-        "title": "Artifact Type",
-        "duration_hours": 1080,
-        "limit": 200,
-        "group_by": [
-          "art_type"
-        ],
-        "ts_column": "timestamp",
-        "agg": "sum",
-        "column": "count_",
-        "type": "int"
-      }
-    ]
+  "computedContext": {
+    "deploy_type": {
+      "expr": "'single_tenant' if view_single_tenant is 'true' else 'common'",
+      "defaultValue": "common"
+    },
+    "status_column_name": {
+      "expr": "'single_tenant_status' if view_single_tenant is 'true'  else 'status'",
+      "defaultValue": "status"
+    }
   },
   "dashboard_sections": [
     {
-      "title": "RDA Packs Activation Status",
+      "title": "Deployment Status",
       "show_filter": true,
       "widgets": [
         {
-          "title": "Data",
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{ PACK_NAME }} Deployment Status </h1></div>",
+          "label0": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "30c6dfca"
+        },
+        {
+          "title": "Activated Versions",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "rda_packs_meta",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and {{STATUS_COLUMN_NAME}} is not 'NOT ACTIVATED'",
+          "extra_filter": "name is '{{PACK_NAME}}'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "sorting": [
+            {
+              "activation_time": "desc"
+            }
+          ],
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#4CAF50"
+              }
+            },
+            "status": {
+              "title": "Deployment Status",
+              "hidden": false,
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT"
+            },
+            "single_tenant": {
+              "title": "Contains Single Artifacts",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "single_tenant_state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "single_tenant_status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "ERROR": "#FF0000",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#333333"
+              }
+            },
+            "single_tenant_status": {
+              "title": "Single Tenant Activated",
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.single_tenant_state_color }}' > {{ row.single_tenant_status }} </span>{% endraw %}"
+            },
+            "single_tenant_message": {
+              "title": "Single Tenant Status",
+              "type": "TEXT"
+            },
+            "customers": {
+              "title": "Customers Activated",
+              "type": "TEXT",
+              "hidden": false,
+              "key": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "activation_status_page_label",
+              "label": "Activation Status Page Label",
+              "expr": "name + ' Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "st_activation_status_page_label",
+              "label": "Single Tenant Activation Status Page Label",
+              "expr": "name + ' Single Tenant Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "single_tenant_deployment_type",
+              "label": "Single Tenant Deployent Type",
+              "expr": "'single_tenant'",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "common_deployment_type",
+              "label": "Common Deployment Type",
+              "expr": "'common'",
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Activate Package",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Enable Single Tenant",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activatesystemlevel"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "true",
+                    "fieldId": "single_tenant"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Deactivate package",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "DEACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Disable Single Tenant",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivatesystemlevel"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "single_tenant_status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "17d09276"
+        }
+      ]
+    },
+    {
+      "title": "Artifacts Deployment Status",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{ PACK_NAME }} Activation Details </h1></div>",
+          "label1": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "3e6e95a9"
+        },
+        {
+          "title": "Artifacts Deployment Status",
           "widget_type": "tabular",
           "duration_hours": 1080,
           "max_width": 12,
@@ -99,7 +415,10 @@
           "stream": "customer-rda-packs-artifacts",
           "ts_column": "timestamp",
           "paginated": true,
-          "extra_filter": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and  deploy_type is '{{DEPLOYMENT_TYPE}}' and status in ['success','created','skipped','error']",
+          "extra_filter2": "name is '{{PACK_NAME}}' and ( deploy_type in ['common','single_tenant'] or deploy_type is empty) and status in ['success','created','skipped','error']",
+          "extra_filter": "name is '{{PACK_NAME}}' and status in ['success','created','skipped','updated','error']",
           "refreshOptions": {
             "refreshType": "Periodic",
             "refreshInterval": 30000
@@ -117,6 +436,11 @@
             },
             "version": {
               "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "deploy_type": {
+              "title": "Deployment Type",
               "type": "TEXT",
               "hidden": false
             },
@@ -144,9 +468,9 @@
               "type": "COLOR-MAP",
               "source-column": "status",
               "color-map": {
-                "updated": "#4CAF50",
                 "success": "#4CAF50",
                 "created": "#4CAF50",
+                "updated": "#4CAF50",
                 "skipped": "#4CAF50",
                 "error": "#FF0000"
               }
@@ -166,18 +490,357 @@
               "hidden": false
             }
           },
-          "widget_id": "2128084b"
+          "widget_id": "4a15dd4f"
         }
       ]
     }
   ],
   "pstream_dashboards": [
     {
-      "title": "RDA Packs Activation Status",
+      "title": "Deployment Status",
       "show_filter": true,
       "widgets": [
         {
-          "title": "Data",
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{ PACK_NAME }} Deployment Status </h1></div>",
+          "label0": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "30c6dfca"
+        },
+        {
+          "title": "Activated Versions",
+          "widget_type": "tabular",
+          "duration_hours": 1080,
+          "max_width": 12,
+          "height": 8,
+          "min_width": 12,
+          "stream": "rda_packs_meta",
+          "ts_column": "timestamp",
+          "paginated": true,
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and {{STATUS_COLUMN_NAME}} is not 'NOT ACTIVATED'",
+          "extra_filter": "name is '{{PACK_NAME}}'",
+          "refreshOptions": {
+            "refreshType": "Periodic",
+            "refreshInterval": 30000
+          },
+          "sorting": [
+            {
+              "activation_time": "desc"
+            }
+          ],
+          "columns": {
+            "activation_id": {
+              "title": "Activation Id",
+              "type": "TEXT",
+              "hidden": true
+            },
+            "name": {
+              "title": "Pack Name",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "version": {
+              "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false,
+              "key": true
+            },
+            "state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "INACTIVE": "#333333",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#4CAF50"
+              }
+            },
+            "status": {
+              "title": "Deployment Status",
+              "hidden": false,
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.state_color }}' > {{ row.status }} </span>{% endraw %}"
+            },
+            "activation_time": {
+              "title": "Activation Time",
+              "type": "DATETIME",
+              "hidden": false
+            },
+            "message": {
+              "title": "Message",
+              "type": "TEXT"
+            },
+            "single_tenant": {
+              "title": "Contains Single Artifacts",
+              "type": "TEXT",
+              "hidden": true,
+              "key": true
+            },
+            "single_tenant_state_color": {
+              "type": "COLOR-MAP",
+              "source-column": "single_tenant_status",
+              "color-map": {
+                "ACTIVATED": "#4CAF50",
+                "ERROR": "#FF0000",
+                "NOT ACTIVATED": "#333333",
+                "NOT APPLICABLE": "#333333"
+              }
+            },
+            "single_tenant_status": {
+              "title": "Single Tenant Activated",
+              "htmlTemplateForRow": "{% raw %}<span class='badge' style='background-color: {{ row.single_tenant_state_color }}' > {{ row.single_tenant_status }} </span>{% endraw %}"
+            },
+            "single_tenant_message": {
+              "title": "Single Tenant Status",
+              "type": "TEXT"
+            },
+            "customers": {
+              "title": "Customers Activated",
+              "type": "TEXT",
+              "hidden": false,
+              "key": false
+            }
+          },
+          "custom_columns": [
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "view_detail_page_label",
+              "label": "View Details Page Label",
+              "expr": "name + ' Details'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "activation_status_page_label",
+              "label": "Activation Status Page Label",
+              "expr": "name + ' Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "st_activation_status_page_label",
+              "label": "Single Tenant Activation Status Page Label",
+              "expr": "name + ' Single Tenant Activation Status'",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "single_tenant_deployment_type",
+              "label": "Single Tenant Deployent Type",
+              "expr": "'single_tenant'",
+              "visible": false,
+              "sortable": false
+            },
+            {
+              "id": "common_deployment_type",
+              "label": "Common Deployment Type",
+              "expr": "'common'",
+              "visible": false,
+              "sortable": false
+            }
+          ],
+          "actions": [
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Activate Package",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:activate",
+              "selectionType": "SINGLE",
+              "title": "Enable Single Tenant",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-activate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.activatesystemlevel"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "true",
+                    "fieldId": "single_tenant"
+                  },
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Deactivate package",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivate"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "ACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  },
+                  {
+                    "conditionType": "NOT_EQUAL",
+                    "conditionValue": "DEACTIVATING",
+                    "fieldId": "single_tenant_status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:deactivate",
+              "selectionType": "SINGLE",
+              "title": "Disable Single Tenant",
+              "type": "POPUP_FORM",
+              "identifier": "saas-service-action:rda-packs-deactivate",
+              "api-endpoint": {
+                "service-name": "saas-reports",
+                "methodName": "getForm",
+                "stringified-params": true,
+                "parse-output": false,
+                "params": [
+                  {
+                    "formId": "rda.saas.rdapacks.deactivatesystemlevel"
+                  }
+                ]
+              },
+              "actionCondition": {
+                "actionControl": "SHOW_IF",
+                "operator": "AND",
+                "conditionalField": [
+                  {
+                    "conditionType": "EQUAL",
+                    "conditionValue": "ACTIVATED",
+                    "fieldId": "single_tenant_status"
+                  }
+                ]
+              }
+            },
+            {
+              "permission": "rda:rdapacks:view",
+              "appName": "user-dashboard/rda-packs-view-detail",
+              "drillDownLinkField": "name",
+              "identifier": "launch.dashboard.rda-packs-view-detail",
+              "selectionType": "SINGLE",
+              "title": "View Details",
+              "type": "GO_TO_APP_STATE",
+              "contextParamList": {
+                "contextParams": [
+                  {
+                    "paramKey": "name",
+                    "paramId": "pack_name"
+                  },
+                  {
+                    "paramKey": "version",
+                    "paramId": "pack_version"
+                  },
+                  {
+                    "paramKey": "view_detail_page_label",
+                    "paramId": "view_detail_page_label"
+                  }
+                ]
+              }
+            }
+          ],
+          "widget_id": "17d09276"
+        }
+      ]
+    },
+    {
+      "title": "Artifacts Deployment Status",
+      "show_filter": true,
+      "widgets": [
+        {
+          "widget_type": "label",
+          "label": "<div style='text-align:center;width:100%;'><h1> {{ PACK_NAME }} Activation Details </h1></div>",
+          "label1": "<div style='text-align:center;width:100%;'><h1> {{ PAGE_LABEL_ID }}, Version: {{PACK_VERSION}}</h1></div>",
+          "max_width": 12,
+          "height": 0.5,
+          "min_width": 12,
+          "widget_id": "3e6e95a9"
+        },
+        {
+          "title": "Artifacts Deployment Status",
           "widget_type": "tabular",
           "duration_hours": 1080,
           "max_width": 12,
@@ -186,7 +849,10 @@
           "stream": "customer-rda-packs-artifacts",
           "ts_column": "timestamp",
           "paginated": true,
-          "extra_filter": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter0": "activation_id is '{{ACTIVATION_ID}}'",
+          "extra_filter1": "name is '{{PACK_NAME}}' and  deploy_type is '{{DEPLOYMENT_TYPE}}' and status in ['success','created','skipped','error']",
+          "extra_filter2": "name is '{{PACK_NAME}}' and ( deploy_type in ['common','single_tenant'] or deploy_type is empty) and status in ['success','created','skipped','error']",
+          "extra_filter": "name is '{{PACK_NAME}}' and status in ['success','created','skipped','updated','error']",
           "refreshOptions": {
             "refreshType": "Periodic",
             "refreshInterval": 30000
@@ -204,6 +870,11 @@
             },
             "version": {
               "title": "Pack Version",
+              "type": "TEXT",
+              "hidden": false
+            },
+            "deploy_type": {
+              "title": "Deployment Type",
               "type": "TEXT",
               "hidden": false
             },
@@ -231,9 +902,9 @@
               "type": "COLOR-MAP",
               "source-column": "status",
               "color-map": {
-                "updated": "#4CAF50",
                 "success": "#4CAF50",
                 "created": "#4CAF50",
+                "updated": "#4CAF50",
                 "skipped": "#4CAF50",
                 "error": "#FF0000"
               }
@@ -253,7 +924,7 @@
               "hidden": false
             }
           },
-          "widget_id": "2128084b"
+          "widget_id": "4a15dd4f"
         }
       ]
     }

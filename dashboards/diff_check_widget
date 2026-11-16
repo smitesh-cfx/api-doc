@@ -1,7 +1,7 @@
 {
   "name": "diff_check_widget",
   "label": "View Difference",
-  "live_edit": true,
+  "live_edit": false,
   "version": "25.2.25.1",
   "description": "Documentation Widgets",
   "context_label_id": "component_name",

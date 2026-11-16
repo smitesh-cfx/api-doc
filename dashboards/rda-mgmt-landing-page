@@ -21,6 +21,7 @@
           "reportId": "user_dashboards.active.tabular",
           "height": 10,
           "min_wdith": 12,
+          "paginated": false,
           "exportSupported": false,
           "widget_id": "d053e550"
         }
@@ -39,6 +40,7 @@
           "reportId": "user_dashboards.active.tabular",
           "height": 10,
           "min_wdith": 12,
+          "paginated": false,
           "exportSupported": false,
           "widget_id": "d053e550"
         }

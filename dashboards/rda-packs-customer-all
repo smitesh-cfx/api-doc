@@ -24,6 +24,7 @@
     "default_time_filter_labels": [
       "Last 12 months"
     ],
+    "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
     "columns_filter": [
       {
         "id": "timestamp",
@@ -69,7 +70,7 @@
     "group_filters": [
       {
         "stream": "customer-rda-packs",
-        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
         "extra_filter1": "scope = 'customer'",
         "title": "Pack Type",
         "duration_hours": 1080,
@@ -87,7 +88,7 @@
         "title": "Publisher",
         "duration_hours": 1080,
         "limit": 200,
-        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
         "extra_filter1": "scope = 'customer'",
         "group_by": [
           "publisher"
@@ -102,7 +103,7 @@
         "title": "Status",
         "duration_hours": 1080,
         "limit": 200,
-        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
         "extra_filter1": "scope = 'customer'",
         "group_by": [
           "status"
@@ -117,7 +118,7 @@
         "title": "Version",
         "duration_hours": 1080,
         "limit": 200,
-        "extra_filter": "customer = '{{CUST_TAG}}'",
+        "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
         "extra_filter1": "scope = 'customer'",
         "group_by": [
           "version"
@@ -159,7 +160,7 @@
           "max_width": 12,
           "min_width": 12,
           "stream": "customer-rda-packs",
-          "extra_filter": "customer = '{{CUST_TAG}}'",
+          "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
           "extra_filter1": "scope = 'customer'",
           "refreshOptions": {
             "refreshType": "Periodic",
@@ -271,6 +272,22 @@
               "visible": false,
               "key": true,
               "sortable": false
+            },
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
             }
           ],
           "actions": [
@@ -336,9 +353,9 @@
             },
             {
               "permission": "rda:rdapacks:view",
-              "appName": "user-dashboard/rda-packs-view-deployed-artifacts",
+              "appName": "user-dashboard/rda-packs-view-customer-deployed-artifacts",
               "drillDownLinkField": "name",
-              "identifier": "launch.dashboard.rda-packs-view-deployed-artifacts",
+              "identifier": "launch.dashboard.rda-packs-view-customer-deployed-artifacts",
               "selectionType": "SINGLE",
               "title": "View Activation Status",
               "type": "GO_TO_APP_STATE",
@@ -376,7 +393,7 @@
             {
               "permission": "rda:rdapacks:deactivate",
               "selectionType": "SINGLE",
-              "title": "Disable Pack",
+              "title": "Disable Package",
               "type": "POPUP_FORM",
               "identifier": "saas-service-action:rda-packs-deactivate",
               "api-endpoint": {
@@ -445,7 +462,7 @@
             {
               "permission": "rda:rdapacks:activate",
               "selectionType": "SINGLE",
-              "title": "Enable Pack",
+              "title": "Enable Package",
               "type": "POPUP_FORM",
               "identifier": "saas-service-action:rda-packs-activate",
               "api-endpoint": {
@@ -660,7 +677,7 @@
           "max_width": 12,
           "min_width": 12,
           "stream": "customer-rda-packs",
-          "extra_filter": "customer = '{{CUST_TAG}}'",
+          "extra_filter": "customer = '{{CUST_TAG}}' and is_display_version = 'true'",
           "extra_filter1": "scope = 'customer'",
           "refreshOptions": {
             "refreshType": "Periodic",
@@ -772,6 +789,22 @@
               "visible": false,
               "key": true,
               "sortable": false
+            },
+            {
+              "id": "pack_name",
+              "label": "Pack Name",
+              "expr": "name",
+              "visible": false,
+              "key": true,
+              "sortable": false
+            },
+            {
+              "id": "pack_version",
+              "label": "Pack Version",
+              "expr": "version",
+              "visible": false,
+              "key": true,
+              "sortable": false
             }
           ],
           "actions": [
@@ -837,9 +870,9 @@
             },
             {
               "permission": "rda:rdapacks:view",
-              "appName": "user-dashboard/rda-packs-view-deployed-artifacts",
+              "appName": "user-dashboard/rda-packs-view-customer-deployed-artifacts",
               "drillDownLinkField": "name",
-              "identifier": "launch.dashboard.rda-packs-view-deployed-artifacts",
+              "identifier": "launch.dashboard.rda-packs-view-customer-deployed-artifacts",
               "selectionType": "SINGLE",
               "title": "View Activation Status",
               "type": "GO_TO_APP_STATE",
@@ -877,7 +910,7 @@
             {
               "permission": "rda:rdapacks:deactivate",
               "selectionType": "SINGLE",
-              "title": "Disable Pack",
+              "title": "Disable Package",
               "type": "POPUP_FORM",
               "identifier": "saas-service-action:rda-packs-deactivate",
               "api-endpoint": {
@@ -946,7 +979,7 @@
             {
               "permission": "rda:rdapacks:activate",
               "selectionType": "SINGLE",
-              "title": "Enable Pack",
+              "title": "Enable Package",
               "type": "POPUP_FORM",
               "identifier": "saas-service-action:rda-packs-activate",
               "api-endpoint": {

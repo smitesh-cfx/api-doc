@@ -1,0 +1,14 @@
+{
+  "name": "rda_api_token_users",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "system_defined": "yes",
+    "unique_keys": [
+      "tokenUserId"
+    ]
+  },
+  "status": "Running",
+  "description": "System-defined persistent stream storing API token users including token Id, description, expiry date status, parent user id and other relevant information",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-ecaf4927-rda_api_token_users"
+}

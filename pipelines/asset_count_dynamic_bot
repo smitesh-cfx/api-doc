@@ -1,0 +1,4 @@
+
+ ## asset_count
+@dm:dynamic-bot bot_name="asset_count" and dataset_name="asset_count"
+ --> @rn:write-stream name = "asset_count"

@@ -1,0 +1,17 @@
+{
+  "name": "network_access_verification",
+  "datastore_type": "OS",
+  "read_only": false,
+  "attrs": {
+    "unique_keys": [
+      "ip_address",
+      "protocol",
+      "used_cred",
+      "customer_tag"
+    ],
+    "system_defined": "no"
+  },
+  "status": "Running",
+  "description": "",
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-f799596c-network_access_verification"
+}

@@ -20,5 +20,5 @@
   },
   "status": "Running",
   "description": "System-defined persistent stream 'rda_schedule_jobs' for internal operations",
-  "index_name": "1aef62f5872d416a8dd237483bfa58c9-stream-579fdc70-rda_schedule_jobs"
+  "index_name": "f54ffeb44dac435ba28e3dd3080446a5-stream-579fdc70-rda_schedule_jobs"
 }
